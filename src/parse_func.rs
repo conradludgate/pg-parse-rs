@@ -1,160 +1,161 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type AttrMissing;
-    pub type RelationData;
-    pub type QueryEnvironment;
-    fn abort() -> !;
-    fn memcmp(
-        _: *const libc::c_void,
-        _: *const libc::c_void,
-        _: libc::c_ulong,
-    ) -> libc::c_int;
-    fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn pfree(pointer: *mut libc::c_void);
-    fn stringToNode(str: *const libc::c_char) -> *mut libc::c_void;
-    fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
-    fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
-    fn list_truncate(list: *mut List, new_size: libc::c_int) -> *mut List;
-    fn list_delete_cell(list: *mut List, cell: *mut ListCell) -> *mut List;
-    fn list_copy_tail(list: *const List, nskip: libc::c_int) -> *mut List;
-    fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
-    fn bms_is_member(x: libc::c_int, a: *const Bitmapset) -> bool_0;
-    fn bms_free(a: *mut Bitmapset);
-    fn initStringInfo(str: StringInfo);
-    fn appendStringInfo(str: StringInfo, fmt: *const libc::c_char, _: ...);
-    fn appendStringInfoString(str: StringInfo, s: *const libc::c_char);
-    fn appendStringInfoChar(str: StringInfo, ch: libc::c_char);
-    fn get_expr_result_tupdesc(expr: *mut Node, noError: bool_0) -> TupleDesc;
-    fn makeTypeNameFromNameList(names: *mut List) -> *mut TypeName;
-    fn exprType(expr: *const Node) -> Oid;
-    fn exprLocation(expr: *const Node) -> libc::c_int;
-    fn setup_parser_errposition_callback(
-        pcbstate: *mut ParseCallbackState,
-        pstate: *mut ParseState,
-        location: libc::c_int,
-    );
-    fn cancel_parser_errposition_callback(pcbstate: *mut ParseCallbackState);
-    fn transformAggregateCall(
-        pstate: *mut ParseState,
-        agg: *mut Aggref,
-        args: *mut List,
-        aggorder: *mut List,
-        agg_distinct: bool_0,
-    );
-    fn transformWindowFuncCall(
-        pstate: *mut ParseState,
-        wfunc: *mut WindowFunc,
-        windef: *mut WindowDef,
-    );
-    fn transformWhereClause(
-        pstate: *mut ParseState,
-        clause: *mut Node,
-        exprKind: ParseExprKind,
-        constructName: *const libc::c_char,
-    ) -> *mut Node;
-    fn IsPreferredType(category: TYPCATEGORY, type_0: Oid) -> bool_0;
-    fn TypeCategory(type_0: Oid) -> TYPCATEGORY;
-    fn can_coerce_type(
-        nargs: libc::c_int,
-        input_typeids: *const Oid,
-        target_typeids: *const Oid,
-        ccontext: CoercionContext,
-    ) -> bool_0;
-    fn coerce_type(
-        pstate: *mut ParseState,
-        node: *mut Node,
-        inputTypeId: Oid,
-        targetTypeId: Oid,
-        targetTypeMod: int32,
-        ccontext: CoercionContext,
-        cformat: CoercionForm,
-        location: libc::c_int,
-    ) -> *mut Node;
-    fn select_common_type(
-        pstate: *mut ParseState,
-        exprs: *mut List,
-        context: *const libc::c_char,
-        which_expr: *mut *mut Node,
-    ) -> Oid;
-    fn select_common_typmod(
-        pstate: *mut ParseState,
-        exprs: *mut List,
-        common_type: Oid,
-    ) -> int32;
-    fn enforce_generic_type_consistency(
-        actual_arg_types: *const Oid,
-        declared_arg_types: *mut Oid,
-        nargs: libc::c_int,
-        rettype: Oid,
-        allow_poly: bool_0,
-    ) -> Oid;
-    fn find_coercion_pathway(
-        targetTypeId: Oid,
-        sourceTypeId: Oid,
-        ccontext: CoercionContext,
-        funcid: *mut Oid,
-    ) -> CoercionPathType;
-    fn FuncnameGetCandidates(
-        names: *mut List,
-        nargs: libc::c_int,
-        argnames: *mut List,
-        expand_variadic: bool_0,
-        expand_defaults: bool_0,
-        missing_ok: bool_0,
-    ) -> FuncCandidateList;
-    fn NameListToString(names: *mut List) -> *mut libc::c_char;
-    fn GetNSItemByRangeTablePosn(
-        pstate: *mut ParseState,
-        varno: libc::c_int,
-        sublevels_up: libc::c_int,
-    ) -> *mut ParseNamespaceItem;
-    fn scanNSItemForColumn(
-        pstate: *mut ParseState,
-        nsitem: *mut ParseNamespaceItem,
-        sublevels_up: libc::c_int,
-        colname: *const libc::c_char,
-        location: libc::c_int,
-    ) -> *mut Node;
-    fn expandRecordVariable(
-        pstate: *mut ParseState,
-        var: *mut Var,
-        levelsup: libc::c_int,
-    ) -> TupleDesc;
-    fn LookupTypeNameExtended(
-        pstate: *mut ParseState,
-        typeName: *const TypeName,
-        typmod_p: *mut int32,
-        temp_ok: bool_0,
-        missing_ok: bool_0,
-    ) -> Type;
-    fn LookupTypeNameOid(
-        pstate: *mut ParseState,
-        typeName: *const TypeName,
-        missing_ok: bool_0,
-    ) -> Oid;
-    fn typeTypeId(tp: Type) -> Oid;
-    fn typeTypeRelid(typ: Type) -> Oid;
-    fn text_to_cstring(t: *const text) -> *mut libc::c_char;
-    fn format_type_be(type_oid: Oid) -> *mut libc::c_char;
-    fn get_type_category_preferred(
-        typid: Oid,
-        typcategory: *mut libc::c_char,
-        typispreferred: *mut bool_0,
-    );
-    fn get_array_type(typid: Oid) -> Oid;
-    fn get_base_element_type(typid: Oid) -> Oid;
-    fn getBaseType(typid: Oid) -> Oid;
-    fn SearchSysCache1(cacheId: libc::c_int, key1: Datum) -> HeapTuple;
-    fn ReleaseSysCache(tuple: HeapTuple);
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type AttrMissing;
+//     pub type RelationData;
+//     pub type QueryEnvironment;
+//     fn abort() -> !;
+//     fn memcmp(
+//         _: *const libc::c_void,
+//         _: *const libc::c_void,
+//         _: libc::c_ulong,
+//     ) -> libc::c_int;
+//     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn pfree(pointer: *mut libc::c_void);
+//     fn stringToNode(str: *const libc::c_char) -> *mut libc::c_void;
+//     fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
+//     fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
+//     fn list_truncate(list: *mut List, new_size: libc::c_int) -> *mut List;
+//     fn list_delete_cell(list: *mut List, cell: *mut ListCell) -> *mut List;
+//     fn list_copy_tail(list: *const List, nskip: libc::c_int) -> *mut List;
+//     fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
+//     fn bms_is_member(x: libc::c_int, a: *const Bitmapset) -> bool_0;
+//     fn bms_free(a: *mut Bitmapset);
+//     fn initStringInfo(str: StringInfo);
+//     fn appendStringInfo(str: StringInfo, fmt: *const libc::c_char, _: ...);
+//     fn appendStringInfoString(str: StringInfo, s: *const libc::c_char);
+//     fn appendStringInfoChar(str: StringInfo, ch: libc::c_char);
+//     fn get_expr_result_tupdesc(expr: *mut Node, noError: bool_0) -> TupleDesc;
+//     fn makeTypeNameFromNameList(names: *mut List) -> *mut TypeName;
+//     fn exprType(expr: *const Node) -> Oid;
+//     fn exprLocation(expr: *const Node) -> libc::c_int;
+//     fn setup_parser_errposition_callback(
+//         pcbstate: *mut ParseCallbackState,
+//         pstate: *mut ParseState,
+//         location: libc::c_int,
+//     );
+//     fn cancel_parser_errposition_callback(pcbstate: *mut ParseCallbackState);
+//     fn transformAggregateCall(
+//         pstate: *mut ParseState,
+//         agg: *mut Aggref,
+//         args: *mut List,
+//         aggorder: *mut List,
+//         agg_distinct: bool_0,
+//     );
+//     fn transformWindowFuncCall(
+//         pstate: *mut ParseState,
+//         wfunc: *mut WindowFunc,
+//         windef: *mut WindowDef,
+//     );
+//     fn transformWhereClause(
+//         pstate: *mut ParseState,
+//         clause: *mut Node,
+//         exprKind: ParseExprKind,
+//         constructName: *const libc::c_char,
+//     ) -> *mut Node;
+//     fn IsPreferredType(category: TYPCATEGORY, type_0: Oid) -> bool_0;
+//     fn TypeCategory(type_0: Oid) -> TYPCATEGORY;
+//     fn can_coerce_type(
+//         nargs: libc::c_int,
+//         input_typeids: *const Oid,
+//         target_typeids: *const Oid,
+//         ccontext: CoercionContext,
+//     ) -> bool_0;
+//     fn coerce_type(
+//         pstate: *mut ParseState,
+//         node: *mut Node,
+//         inputTypeId: Oid,
+//         targetTypeId: Oid,
+//         targetTypeMod: int32,
+//         ccontext: CoercionContext,
+//         cformat: CoercionForm,
+//         location: libc::c_int,
+//     ) -> *mut Node;
+//     fn select_common_type(
+//         pstate: *mut ParseState,
+//         exprs: *mut List,
+//         context: *const libc::c_char,
+//         which_expr: *mut *mut Node,
+//     ) -> Oid;
+//     fn select_common_typmod(
+//         pstate: *mut ParseState,
+//         exprs: *mut List,
+//         common_type: Oid,
+//     ) -> int32;
+//     fn enforce_generic_type_consistency(
+//         actual_arg_types: *const Oid,
+//         declared_arg_types: *mut Oid,
+//         nargs: libc::c_int,
+//         rettype: Oid,
+//         allow_poly: bool_0,
+//     ) -> Oid;
+//     fn find_coercion_pathway(
+//         targetTypeId: Oid,
+//         sourceTypeId: Oid,
+//         ccontext: CoercionContext,
+//         funcid: *mut Oid,
+//     ) -> CoercionPathType;
+//     fn FuncnameGetCandidates(
+//         names: *mut List,
+//         nargs: libc::c_int,
+//         argnames: *mut List,
+//         expand_variadic: bool_0,
+//         expand_defaults: bool_0,
+//         missing_ok: bool_0,
+//     ) -> FuncCandidateList;
+//     fn NameListToString(names: *mut List) -> *mut libc::c_char;
+//     fn GetNSItemByRangeTablePosn(
+//         pstate: *mut ParseState,
+//         varno: libc::c_int,
+//         sublevels_up: libc::c_int,
+//     ) -> *mut ParseNamespaceItem;
+//     fn scanNSItemForColumn(
+//         pstate: *mut ParseState,
+//         nsitem: *mut ParseNamespaceItem,
+//         sublevels_up: libc::c_int,
+//         colname: *const libc::c_char,
+//         location: libc::c_int,
+//     ) -> *mut Node;
+//     fn expandRecordVariable(
+//         pstate: *mut ParseState,
+//         var: *mut Var,
+//         levelsup: libc::c_int,
+//     ) -> TupleDesc;
+//     fn LookupTypeNameExtended(
+//         pstate: *mut ParseState,
+//         typeName: *const TypeName,
+//         typmod_p: *mut int32,
+//         temp_ok: bool_0,
+//         missing_ok: bool_0,
+//     ) -> Type;
+//     fn LookupTypeNameOid(
+//         pstate: *mut ParseState,
+//         typeName: *const TypeName,
+//         missing_ok: bool_0,
+//     ) -> Oid;
+//     fn typeTypeId(tp: Type) -> Oid;
+//     fn typeTypeRelid(typ: Type) -> Oid;
+//     fn text_to_cstring(t: *const text) -> *mut libc::c_char;
+//     fn format_type_be(type_oid: Oid) -> *mut libc::c_char;
+//     fn get_type_category_preferred(
+//         typid: Oid,
+//         typcategory: *mut libc::c_char,
+//         typispreferred: *mut bool_0,
+//     );
+//     fn get_array_type(typid: Oid) -> Oid;
+//     fn get_base_element_type(typid: Oid) -> Oid;
+//     fn getBaseType(typid: Oid) -> Oid;
+//     fn SearchSysCache1(cacheId: libc::c_int, key1: Datum) -> HeapTuple;
+//     fn ReleaseSysCache(tuple: HeapTuple);
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type uintptr_t = libc::c_ulong;
 pub type bool_0 = libc::c_uchar;

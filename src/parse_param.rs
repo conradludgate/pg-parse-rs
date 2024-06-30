@@ -1,29 +1,30 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type RelationData;
-    pub type QueryEnvironment;
-    fn repalloc(pointer: *mut libc::c_void, size: Size) -> *mut libc::c_void;
-    fn palloc(size: Size) -> *mut libc::c_void;
-    fn memset(
-        _: *mut libc::c_void,
-        _: libc::c_int,
-        _: libc::c_ulong,
-    ) -> *mut libc::c_void;
-    fn abort() -> !;
-    fn expression_tree_walker(
-        node: *mut Node,
-        walker: Option::<unsafe extern "C" fn() -> bool_0>,
-        context: *mut libc::c_void,
-    ) -> bool_0;
-    fn query_tree_walker(
-        query: *mut Query,
-        walker: Option::<unsafe extern "C" fn() -> bool_0>,
-        context: *mut libc::c_void,
-        flags: libc::c_int,
-    ) -> bool_0;
-    fn get_typcollation(typid: Oid) -> Oid;
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type RelationData;
+//     pub type QueryEnvironment;
+//     fn repalloc(pointer: *mut libc::c_void, size: Size) -> *mut libc::c_void;
+//     fn palloc(size: Size) -> *mut libc::c_void;
+//     fn memset(
+//         _: *mut libc::c_void,
+//         _: libc::c_int,
+//         _: libc::c_ulong,
+//     ) -> *mut libc::c_void;
+//     fn abort() -> !;
+//     fn expression_tree_walker(
+//         node: *mut Node,
+//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         context: *mut libc::c_void,
+//     ) -> bool_0;
+//     fn query_tree_walker(
+//         query: *mut Query,
+//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         context: *mut libc::c_void,
+//         flags: libc::c_int,
+//     ) -> bool_0;
+//     fn get_typcollation(typid: Oid) -> Oid;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 pub type size_t = __darwin_size_t;

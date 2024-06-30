@@ -1,55 +1,56 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types, linkage)]
-extern "C" {
-    pub type SelectLimit;
-    pub type ImportQual;
-    pub type PrivTarget;
-    fn abort() -> !;
-    fn strlen(_: *const libc::c_char) -> libc::c_ulong;
-    static mut _DefaultRuneLocale: _RuneLocale;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errcode(sqlerrcode: libc::c_int) -> libc::c_int;
-    fn errmsg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn errhint(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn palloc(size: Size) -> *mut libc::c_void;
-    fn repalloc(pointer: *mut libc::c_void, size: Size) -> *mut libc::c_void;
-    fn pg_unicode_to_server(c: pg_wchar, s: *mut libc::c_uchar);
-    fn base_yyparse(yyscanner: core_yyscan_t) -> libc::c_int;
-    fn parser_init(yyext: *mut base_yy_extra_type);
-    fn scanner_yyerror(message: *const libc::c_char, yyscanner: core_yyscan_t) -> !;
-    fn cancel_scanner_errposition_callback(scbstate: *mut ScannerCallbackState);
-    fn setup_scanner_errposition_callback(
-        scbstate: *mut ScannerCallbackState,
-        yyscanner: core_yyscan_t,
-        location: libc::c_int,
-    );
-    fn scanner_errposition(
-        location: libc::c_int,
-        yyscanner: core_yyscan_t,
-    ) -> libc::c_int;
-    fn core_yylex(
-        lvalp: *mut core_YYSTYPE,
-        llocp: *mut libc::c_int,
-        yyscanner: core_yyscan_t,
-    ) -> libc::c_int;
-    fn scanner_finish(yyscanner: core_yyscan_t);
-    fn scanner_init(
-        str: *const libc::c_char,
-        yyext: *mut core_yy_extra_type,
-        keywordlist: *const ScanKeywordList,
-        keyword_tokens: *const uint16,
-    ) -> core_yyscan_t;
-    static ScanKeywordTokens: [uint16; 0];
-    static ScanKeywords: ScanKeywordList;
-    fn truncate_identifier(ident: *mut libc::c_char, len: libc::c_int, warn: bool_0);
-    fn scanner_isspace(ch: libc::c_char) -> bool_0;
-}
+// #![feature(extern_types, linkage)]
+// extern "C" {
+//     pub type SelectLimit;
+//     pub type ImportQual;
+//     pub type PrivTarget;
+//     fn abort() -> !;
+//     fn strlen(_: *const libc::c_char) -> libc::c_ulong;
+//     static mut _DefaultRuneLocale: _RuneLocale;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errcode(sqlerrcode: libc::c_int) -> libc::c_int;
+//     fn errmsg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn errhint(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn palloc(size: Size) -> *mut libc::c_void;
+//     fn repalloc(pointer: *mut libc::c_void, size: Size) -> *mut libc::c_void;
+//     fn pg_unicode_to_server(c: pg_wchar, s: *mut libc::c_uchar);
+//     fn base_yyparse(yyscanner: core_yyscan_t) -> libc::c_int;
+//     fn parser_init(yyext: *mut base_yy_extra_type);
+//     fn scanner_yyerror(message: *const libc::c_char, yyscanner: core_yyscan_t) -> !;
+//     fn cancel_scanner_errposition_callback(scbstate: *mut ScannerCallbackState);
+//     fn setup_scanner_errposition_callback(
+//         scbstate: *mut ScannerCallbackState,
+//         yyscanner: core_yyscan_t,
+//         location: libc::c_int,
+//     );
+//     fn scanner_errposition(
+//         location: libc::c_int,
+//         yyscanner: core_yyscan_t,
+//     ) -> libc::c_int;
+//     fn core_yylex(
+//         lvalp: *mut core_YYSTYPE,
+//         llocp: *mut libc::c_int,
+//         yyscanner: core_yyscan_t,
+//     ) -> libc::c_int;
+//     fn scanner_finish(yyscanner: core_yyscan_t);
+//     fn scanner_init(
+//         str: *const libc::c_char,
+//         yyext: *mut core_yy_extra_type,
+//         keywordlist: *const ScanKeywordList,
+//         keyword_tokens: *const uint16,
+//     ) -> core_yyscan_t;
+//     static ScanKeywordTokens: [uint16; 0];
+//     static ScanKeywords: ScanKeywordList;
+//     fn truncate_identifier(ident: *mut libc::c_char, len: libc::c_int, warn: bool_0);
+//     fn scanner_isspace(ch: libc::c_char) -> bool_0;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type __uint32_t = libc::c_uint;
 pub type __darwin_ct_rune_t = libc::c_int;

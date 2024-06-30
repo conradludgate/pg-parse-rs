@@ -1,110 +1,111 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type RelationData;
-    pub type QueryEnvironment;
-    fn abort() -> !;
-    fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
-    fn pfree(pointer: *mut libc::c_void);
-    fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
-    fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
-    fn equal(a: *const libc::c_void, b: *const libc::c_void) -> bool_0;
-    fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
-    fn list_member_int(list: *const List, datum: libc::c_int) -> bool_0;
-    fn list_truncate(list: *mut List, new_size: libc::c_int) -> *mut List;
-    fn list_concat(list1: *mut List, list2: *const List) -> *mut List;
-    fn lappend_oid(list: *mut List, datum: Oid) -> *mut List;
-    fn lappend_int(list: *mut List, datum: libc::c_int) -> *mut List;
-    fn list_intersection_int(list1: *const List, list2: *const List) -> *mut List;
-    fn list_union_int(list1: *const List, list2: *const List) -> *mut List;
-    fn list_copy_tail(list: *const List, nskip: libc::c_int) -> *mut List;
-    fn list_sort(list: *mut List, cmp: list_sort_comparator);
-    fn check_functional_grouping(
-        relid: Oid,
-        varno: Index,
-        varlevelsup: Index,
-        grouping_columns: *mut List,
-        constraintDeps: *mut *mut List,
-    ) -> bool_0;
-    fn makeFuncExpr(
-        funcid: Oid,
-        rettype: Oid,
-        args: *mut List,
-        funccollid: Oid,
-        inputcollid: Oid,
-        fformat: CoercionForm,
-    ) -> *mut FuncExpr;
-    fn makeTargetEntry(
-        expr: *mut Expr,
-        resno: AttrNumber,
-        resname: *mut libc::c_char,
-        resjunk: bool_0,
-    ) -> *mut TargetEntry;
-    fn exprType(expr: *const Node) -> Oid;
-    fn expression_tree_walker(
-        node: *mut Node,
-        walker: Option::<unsafe extern "C" fn() -> bool_0>,
-        context: *mut libc::c_void,
-    ) -> bool_0;
-    fn query_tree_walker(
-        query: *mut Query,
-        walker: Option::<unsafe extern "C" fn() -> bool_0>,
-        context: *mut libc::c_void,
-        flags: libc::c_int,
-    ) -> bool_0;
-    fn get_sortgroupclause_tle(
-        sgClause: *mut SortGroupClause,
-        targetList: *mut List,
-    ) -> *mut TargetEntry;
-    fn get_sortgroupclause_expr(
-        sgClause: *mut SortGroupClause,
-        targetList: *mut List,
-    ) -> *mut Node;
-    fn flatten_join_alias_vars(query: *mut Query, node: *mut Node) -> *mut Node;
-    fn transformSortClause(
-        pstate: *mut ParseState,
-        orderlist: *mut List,
-        targetlist: *mut *mut List,
-        exprKind: ParseExprKind,
-        useSQL99: bool_0,
-    ) -> *mut List;
-    fn transformDistinctClause(
-        pstate: *mut ParseState,
-        targetlist: *mut *mut List,
-        sortClause: *mut List,
-        is_agg: bool_0,
-    ) -> *mut List;
-    fn addTargetToSortList(
-        pstate: *mut ParseState,
-        tle: *mut TargetEntry,
-        sortlist: *mut List,
-        targetlist: *mut List,
-        sortby: *mut SortBy,
-    ) -> *mut List;
-    fn enforce_generic_type_consistency(
-        actual_arg_types: *const Oid,
-        declared_arg_types: *mut Oid,
-        nargs: libc::c_int,
-        rettype: Oid,
-        allow_poly: bool_0,
-    ) -> Oid;
-    fn transformExpr(
-        pstate: *mut ParseState,
-        expr: *mut Node,
-        exprKind: ParseExprKind,
-    ) -> *mut Node;
-    fn get_rte_attribute_name(
-        rte: *mut RangeTblEntry,
-        attnum: AttrNumber,
-    ) -> *mut libc::c_char;
-    fn locate_agg_of_level(node: *mut Node, levelsup: libc::c_int) -> libc::c_int;
-    fn contain_windowfuncs(node: *mut Node) -> bool_0;
-    fn get_func_signature(
-        funcid: Oid,
-        argtypes: *mut *mut Oid,
-        nargs: *mut libc::c_int,
-    ) -> Oid;
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type RelationData;
+//     pub type QueryEnvironment;
+//     fn abort() -> !;
+//     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
+//     fn pfree(pointer: *mut libc::c_void);
+//     fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
+//     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
+//     fn equal(a: *const libc::c_void, b: *const libc::c_void) -> bool_0;
+//     fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
+//     fn list_member_int(list: *const List, datum: libc::c_int) -> bool_0;
+//     fn list_truncate(list: *mut List, new_size: libc::c_int) -> *mut List;
+//     fn list_concat(list1: *mut List, list2: *const List) -> *mut List;
+//     fn lappend_oid(list: *mut List, datum: Oid) -> *mut List;
+//     fn lappend_int(list: *mut List, datum: libc::c_int) -> *mut List;
+//     fn list_intersection_int(list1: *const List, list2: *const List) -> *mut List;
+//     fn list_union_int(list1: *const List, list2: *const List) -> *mut List;
+//     fn list_copy_tail(list: *const List, nskip: libc::c_int) -> *mut List;
+//     fn list_sort(list: *mut List, cmp: list_sort_comparator);
+//     fn check_functional_grouping(
+//         relid: Oid,
+//         varno: Index,
+//         varlevelsup: Index,
+//         grouping_columns: *mut List,
+//         constraintDeps: *mut *mut List,
+//     ) -> bool_0;
+//     fn makeFuncExpr(
+//         funcid: Oid,
+//         rettype: Oid,
+//         args: *mut List,
+//         funccollid: Oid,
+//         inputcollid: Oid,
+//         fformat: CoercionForm,
+//     ) -> *mut FuncExpr;
+//     fn makeTargetEntry(
+//         expr: *mut Expr,
+//         resno: AttrNumber,
+//         resname: *mut libc::c_char,
+//         resjunk: bool_0,
+//     ) -> *mut TargetEntry;
+//     fn exprType(expr: *const Node) -> Oid;
+//     fn expression_tree_walker(
+//         node: *mut Node,
+//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         context: *mut libc::c_void,
+//     ) -> bool_0;
+//     fn query_tree_walker(
+//         query: *mut Query,
+//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         context: *mut libc::c_void,
+//         flags: libc::c_int,
+//     ) -> bool_0;
+//     fn get_sortgroupclause_tle(
+//         sgClause: *mut SortGroupClause,
+//         targetList: *mut List,
+//     ) -> *mut TargetEntry;
+//     fn get_sortgroupclause_expr(
+//         sgClause: *mut SortGroupClause,
+//         targetList: *mut List,
+//     ) -> *mut Node;
+//     fn flatten_join_alias_vars(query: *mut Query, node: *mut Node) -> *mut Node;
+//     fn transformSortClause(
+//         pstate: *mut ParseState,
+//         orderlist: *mut List,
+//         targetlist: *mut *mut List,
+//         exprKind: ParseExprKind,
+//         useSQL99: bool_0,
+//     ) -> *mut List;
+//     fn transformDistinctClause(
+//         pstate: *mut ParseState,
+//         targetlist: *mut *mut List,
+//         sortClause: *mut List,
+//         is_agg: bool_0,
+//     ) -> *mut List;
+//     fn addTargetToSortList(
+//         pstate: *mut ParseState,
+//         tle: *mut TargetEntry,
+//         sortlist: *mut List,
+//         targetlist: *mut List,
+//         sortby: *mut SortBy,
+//     ) -> *mut List;
+//     fn enforce_generic_type_consistency(
+//         actual_arg_types: *const Oid,
+//         declared_arg_types: *mut Oid,
+//         nargs: libc::c_int,
+//         rettype: Oid,
+//         allow_poly: bool_0,
+//     ) -> Oid;
+//     fn transformExpr(
+//         pstate: *mut ParseState,
+//         expr: *mut Node,
+//         exprKind: ParseExprKind,
+//     ) -> *mut Node;
+//     fn get_rte_attribute_name(
+//         rte: *mut RangeTblEntry,
+//         attnum: AttrNumber,
+//     ) -> *mut libc::c_char;
+//     fn locate_agg_of_level(node: *mut Node, levelsup: libc::c_int) -> libc::c_int;
+//     fn contain_windowfuncs(node: *mut Node) -> bool_0;
+//     fn get_func_signature(
+//         funcid: Oid,
+//         argtypes: *mut *mut Oid,
+//         nargs: *mut libc::c_int,
+//     ) -> Oid;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type bool_0 = libc::c_uchar;
 pub type int16 = libc::c_short;

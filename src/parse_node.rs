@@ -1,41 +1,42 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type RelationData;
-    pub type QueryEnvironment;
-    pub type SubscriptingRefState;
-    pub type SubscriptExecSteps;
-    fn abort() -> !;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn errposition(cursorpos: libc::c_int) -> libc::c_int;
-    static mut error_context_stack: *mut ErrorContextCallback;
-    fn palloc0(size: Size) -> *mut libc::c_void;
-    fn pfree(pointer: *mut libc::c_void);
-    fn Int64GetDatum(X: int64) -> Datum;
-    fn table_close(relation: Relation, lockmode: LOCKMODE);
-    fn pg_mbstrlen_with_len(mbstr: *const libc::c_char, len: libc::c_int) -> libc::c_int;
-    fn makeConst(
-        consttype: Oid,
-        consttypmod: int32,
-        constcollid: Oid,
-        constlen: libc::c_int,
-        constvalue: Datum,
-        constisnull: bool_0,
-        constbyval: bool_0,
-    ) -> *mut Const;
-    fn scanint8(str: *const libc::c_char, errorOK: bool_0, result: *mut int64) -> bool_0;
-    fn getSubscriptingRoutines(
-        typid: Oid,
-        typelemp: *mut Oid,
-    ) -> *const SubscriptRoutines;
-    fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut int32) -> Oid;
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type RelationData;
+//     pub type QueryEnvironment;
+//     pub type SubscriptingRefState;
+//     pub type SubscriptExecSteps;
+//     fn abort() -> !;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn errposition(cursorpos: libc::c_int) -> libc::c_int;
+//     static mut error_context_stack: *mut ErrorContextCallback;
+//     fn palloc0(size: Size) -> *mut libc::c_void;
+//     fn pfree(pointer: *mut libc::c_void);
+//     fn Int64GetDatum(X: int64) -> Datum;
+//     fn table_close(relation: Relation, lockmode: LOCKMODE);
+//     fn pg_mbstrlen_with_len(mbstr: *const libc::c_char, len: libc::c_int) -> libc::c_int;
+//     fn makeConst(
+//         consttype: Oid,
+//         consttypmod: int32,
+//         constcollid: Oid,
+//         constlen: libc::c_int,
+//         constvalue: Datum,
+//         constisnull: bool_0,
+//         constbyval: bool_0,
+//     ) -> *mut Const;
+//     fn scanint8(str: *const libc::c_char, errorOK: bool_0, result: *mut int64) -> bool_0;
+//     fn getSubscriptingRoutines(
+//         typid: Oid,
+//         typelemp: *mut Oid,
+//     ) -> *const SubscriptRoutines;
+//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut int32) -> Oid;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 pub type uintptr_t = libc::c_ulong;

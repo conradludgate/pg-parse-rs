@@ -1,14 +1,15 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type AttrMissing;
-    pub type QueryEnvironment;
-    pub type RelationData;
-    fn get_visible_ENR_metadata(
-        queryEnv: *mut QueryEnvironment,
-        refname: *const libc::c_char,
-    ) -> EphemeralNamedRelationMetadata;
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type AttrMissing;
+//     pub type QueryEnvironment;
+//     pub type RelationData;
+//     fn get_visible_ENR_metadata(
+//         queryEnv: *mut QueryEnvironment,
+//         refname: *const libc::c_char,
+//     ) -> EphemeralNamedRelationMetadata;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type bool_0 = libc::c_uchar;
 pub type int16 = libc::c_short;

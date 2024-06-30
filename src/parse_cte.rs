@@ -1,81 +1,82 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type MemoryContextData;
-    pub type AttrMissing;
-    pub type RelationData;
-    pub type QueryEnvironment;
-    pub type TypeCacheEnumData;
-    pub type DomainConstraintCache;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn abort() -> !;
-    fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
-    fn palloc0(size: Size) -> *mut libc::c_void;
-    fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
-    fn bms_is_empty(a: *const Bitmapset) -> bool_0;
-    fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
-    fn bms_del_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
-    fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
-    fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
-    fn lappend_int(list: *mut List, datum: libc::c_int) -> *mut List;
-    fn lappend_oid(list: *mut List, datum: Oid) -> *mut List;
-    fn lcons(datum: *mut libc::c_void, list: *mut List) -> *mut List;
-    fn list_member(list: *const List, datum: *const libc::c_void) -> bool_0;
-    fn list_delete_first(list: *mut List) -> *mut List;
-    fn list_copy(list: *const List) -> *mut List;
-    fn makeString(str: *mut libc::c_char) -> *mut Value;
-    fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
-    fn exprType(expr: *const Node) -> Oid;
-    fn exprTypmod(expr: *const Node) -> int32;
-    fn exprCollation(expr: *const Node) -> Oid;
-    fn raw_expression_tree_walker(
-        node: *mut Node,
-        walker: Option::<unsafe extern "C" fn() -> bool_0>,
-        context: *mut libc::c_void,
-    ) -> bool_0;
-    fn parse_sub_analyze(
-        parseTree: *mut Node,
-        parentParseState: *mut ParseState,
-        parentCTE: *mut CommonTableExpr,
-        locked_from_parent: bool_0,
-        resolve_unknowns: bool_0,
-    ) -> *mut Query;
-    fn select_common_type(
-        pstate: *mut ParseState,
-        exprs: *mut List,
-        context: *const libc::c_char,
-        which_expr: *mut *mut Node,
-    ) -> Oid;
-    fn coerce_to_common_type(
-        pstate: *mut ParseState,
-        node: *mut Node,
-        targetTypeId: Oid,
-        context: *const libc::c_char,
-    ) -> *mut Node;
-    fn select_common_typmod(
-        pstate: *mut ParseState,
-        exprs: *mut List,
-        common_type: Oid,
-    ) -> int32;
-    fn select_common_collation(
-        pstate: *mut ParseState,
-        exprs: *mut List,
-        none_ok: bool_0,
-    ) -> Oid;
-    fn transformExpr(
-        pstate: *mut ParseState,
-        expr: *mut Node,
-        exprKind: ParseExprKind,
-    ) -> *mut Node;
-    fn get_negator(opno: Oid) -> Oid;
-    fn lookup_type_cache(type_id: Oid, flags: libc::c_int) -> *mut TypeCacheEntry;
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type MemoryContextData;
+//     pub type AttrMissing;
+//     pub type RelationData;
+//     pub type QueryEnvironment;
+//     pub type TypeCacheEnumData;
+//     pub type DomainConstraintCache;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn abort() -> !;
+//     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
+//     fn palloc0(size: Size) -> *mut libc::c_void;
+//     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
+//     fn bms_is_empty(a: *const Bitmapset) -> bool_0;
+//     fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
+//     fn bms_del_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
+//     fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
+//     fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
+//     fn lappend_int(list: *mut List, datum: libc::c_int) -> *mut List;
+//     fn lappend_oid(list: *mut List, datum: Oid) -> *mut List;
+//     fn lcons(datum: *mut libc::c_void, list: *mut List) -> *mut List;
+//     fn list_member(list: *const List, datum: *const libc::c_void) -> bool_0;
+//     fn list_delete_first(list: *mut List) -> *mut List;
+//     fn list_copy(list: *const List) -> *mut List;
+//     fn makeString(str: *mut libc::c_char) -> *mut Value;
+//     fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
+//     fn exprType(expr: *const Node) -> Oid;
+//     fn exprTypmod(expr: *const Node) -> int32;
+//     fn exprCollation(expr: *const Node) -> Oid;
+//     fn raw_expression_tree_walker(
+//         node: *mut Node,
+//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         context: *mut libc::c_void,
+//     ) -> bool_0;
+//     fn parse_sub_analyze(
+//         parseTree: *mut Node,
+//         parentParseState: *mut ParseState,
+//         parentCTE: *mut CommonTableExpr,
+//         locked_from_parent: bool_0,
+//         resolve_unknowns: bool_0,
+//     ) -> *mut Query;
+//     fn select_common_type(
+//         pstate: *mut ParseState,
+//         exprs: *mut List,
+//         context: *const libc::c_char,
+//         which_expr: *mut *mut Node,
+//     ) -> Oid;
+//     fn coerce_to_common_type(
+//         pstate: *mut ParseState,
+//         node: *mut Node,
+//         targetTypeId: Oid,
+//         context: *const libc::c_char,
+//     ) -> *mut Node;
+//     fn select_common_typmod(
+//         pstate: *mut ParseState,
+//         exprs: *mut List,
+//         common_type: Oid,
+//     ) -> int32;
+//     fn select_common_collation(
+//         pstate: *mut ParseState,
+//         exprs: *mut List,
+//         none_ok: bool_0,
+//     ) -> Oid;
+//     fn transformExpr(
+//         pstate: *mut ParseState,
+//         expr: *mut Node,
+//         exprKind: ParseExprKind,
+//     ) -> *mut Node;
+//     fn get_negator(opno: Oid) -> Oid;
+//     fn lookup_type_cache(type_id: Oid, flags: libc::c_int) -> *mut TypeCacheEntry;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 pub type uintptr_t = libc::c_ulong;

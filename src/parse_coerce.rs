@@ -1,89 +1,90 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type AttrMissing;
-    pub type RelationData;
-    pub type QueryEnvironment;
-    fn abort() -> !;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
-    fn psprintf(fmt: *const libc::c_char, _: ...) -> *mut libc::c_char;
-    fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
-    fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
-    fn DecrTupleDescRefCount(tupdesc: TupleDesc);
-    fn pg_detoast_datum(datum: *mut varlena) -> *mut varlena;
-    fn typeInheritsFrom(subclassTypeId: Oid, superclassTypeId: Oid) -> bool_0;
-    fn makeFuncExpr(
-        funcid: Oid,
-        rettype: Oid,
-        args: *mut List,
-        funccollid: Oid,
-        inputcollid: Oid,
-        fformat: CoercionForm,
-    ) -> *mut FuncExpr;
-    fn makeRelabelType(
-        arg: *mut Expr,
-        rtype: Oid,
-        rtypmod: int32,
-        rcollid: Oid,
-        rformat: CoercionForm,
-    ) -> *mut RelabelType;
-    fn exprType(expr: *const Node) -> Oid;
-    fn exprTypmod(expr: *const Node) -> int32;
-    fn expression_returns_set(clause: *mut Node) -> bool_0;
-    fn exprLocation(expr: *const Node) -> libc::c_int;
-    fn parser_errposition(pstate: *mut ParseState, location: libc::c_int) -> libc::c_int;
-    fn setup_parser_errposition_callback(
-        pcbstate: *mut ParseCallbackState,
-        pstate: *mut ParseState,
-        location: libc::c_int,
-    );
-    fn cancel_parser_errposition_callback(pcbstate: *mut ParseCallbackState);
-    fn GetNSItemByRangeTablePosn(
-        pstate: *mut ParseState,
-        varno: libc::c_int,
-        sublevels_up: libc::c_int,
-    ) -> *mut ParseNamespaceItem;
-    fn expandNSItemVars(
-        nsitem: *mut ParseNamespaceItem,
-        sublevels_up: libc::c_int,
-        location: libc::c_int,
-        colnames: *mut *mut List,
-    ) -> *mut List;
-    fn typeidType(id: Oid) -> Type;
-    fn typeLen(t: Type) -> int16;
-    fn typeByVal(t: Type) -> bool_0;
-    fn typeTypeCollation(typ: Type) -> Oid;
-    fn stringTypeDatum(tp: Type, string: *mut libc::c_char, atttypmod: int32) -> Datum;
-    fn typeOrDomainTypeRelid(type_id: Oid) -> Oid;
-    fn format_type_be(type_oid: Oid) -> *mut libc::c_char;
-    fn type_is_enum(typid: Oid) -> bool_0;
-    fn type_is_range(typid: Oid) -> bool_0;
-    fn type_is_multirange(typid: Oid) -> bool_0;
-    fn get_type_category_preferred(
-        typid: Oid,
-        typcategory: *mut libc::c_char,
-        typispreferred: *mut bool_0,
-    );
-    fn get_element_type(typid: Oid) -> Oid;
-    fn get_array_type(typid: Oid) -> Oid;
-    fn get_base_element_type(typid: Oid) -> Oid;
-    fn getBaseType(typid: Oid) -> Oid;
-    fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut int32) -> Oid;
-    fn get_range_subtype(rangeOid: Oid) -> Oid;
-    fn get_range_multirange(rangeOid: Oid) -> Oid;
-    fn get_multirange_range(multirangeOid: Oid) -> Oid;
-    fn SearchSysCache1(cacheId: libc::c_int, key1: Datum) -> HeapTuple;
-    fn SearchSysCache2(cacheId: libc::c_int, key1: Datum, key2: Datum) -> HeapTuple;
-    fn ReleaseSysCache(tuple: HeapTuple);
-    fn lookup_rowtype_tupdesc(type_id: Oid, typmod: int32) -> TupleDesc;
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type AttrMissing;
+//     pub type RelationData;
+//     pub type QueryEnvironment;
+//     fn abort() -> !;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
+//     fn psprintf(fmt: *const libc::c_char, _: ...) -> *mut libc::c_char;
+//     fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
+//     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
+//     fn DecrTupleDescRefCount(tupdesc: TupleDesc);
+//     fn pg_detoast_datum(datum: *mut varlena) -> *mut varlena;
+//     fn typeInheritsFrom(subclassTypeId: Oid, superclassTypeId: Oid) -> bool_0;
+//     fn makeFuncExpr(
+//         funcid: Oid,
+//         rettype: Oid,
+//         args: *mut List,
+//         funccollid: Oid,
+//         inputcollid: Oid,
+//         fformat: CoercionForm,
+//     ) -> *mut FuncExpr;
+//     fn makeRelabelType(
+//         arg: *mut Expr,
+//         rtype: Oid,
+//         rtypmod: int32,
+//         rcollid: Oid,
+//         rformat: CoercionForm,
+//     ) -> *mut RelabelType;
+//     fn exprType(expr: *const Node) -> Oid;
+//     fn exprTypmod(expr: *const Node) -> int32;
+//     fn expression_returns_set(clause: *mut Node) -> bool_0;
+//     fn exprLocation(expr: *const Node) -> libc::c_int;
+//     fn parser_errposition(pstate: *mut ParseState, location: libc::c_int) -> libc::c_int;
+//     fn setup_parser_errposition_callback(
+//         pcbstate: *mut ParseCallbackState,
+//         pstate: *mut ParseState,
+//         location: libc::c_int,
+//     );
+//     fn cancel_parser_errposition_callback(pcbstate: *mut ParseCallbackState);
+//     fn GetNSItemByRangeTablePosn(
+//         pstate: *mut ParseState,
+//         varno: libc::c_int,
+//         sublevels_up: libc::c_int,
+//     ) -> *mut ParseNamespaceItem;
+//     fn expandNSItemVars(
+//         nsitem: *mut ParseNamespaceItem,
+//         sublevels_up: libc::c_int,
+//         location: libc::c_int,
+//         colnames: *mut *mut List,
+//     ) -> *mut List;
+//     fn typeidType(id: Oid) -> Type;
+//     fn typeLen(t: Type) -> int16;
+//     fn typeByVal(t: Type) -> bool_0;
+//     fn typeTypeCollation(typ: Type) -> Oid;
+//     fn stringTypeDatum(tp: Type, string: *mut libc::c_char, atttypmod: int32) -> Datum;
+//     fn typeOrDomainTypeRelid(type_id: Oid) -> Oid;
+//     fn format_type_be(type_oid: Oid) -> *mut libc::c_char;
+//     fn type_is_enum(typid: Oid) -> bool_0;
+//     fn type_is_range(typid: Oid) -> bool_0;
+//     fn type_is_multirange(typid: Oid) -> bool_0;
+//     fn get_type_category_preferred(
+//         typid: Oid,
+//         typcategory: *mut libc::c_char,
+//         typispreferred: *mut bool_0,
+//     );
+//     fn get_element_type(typid: Oid) -> Oid;
+//     fn get_array_type(typid: Oid) -> Oid;
+//     fn get_base_element_type(typid: Oid) -> Oid;
+//     fn getBaseType(typid: Oid) -> Oid;
+//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut int32) -> Oid;
+//     fn get_range_subtype(rangeOid: Oid) -> Oid;
+//     fn get_range_multirange(rangeOid: Oid) -> Oid;
+//     fn get_multirange_range(multirangeOid: Oid) -> Oid;
+//     fn SearchSysCache1(cacheId: libc::c_int, key1: Datum) -> HeapTuple;
+//     fn SearchSysCache2(cacheId: libc::c_int, key1: Datum, key2: Datum) -> HeapTuple;
+//     fn ReleaseSysCache(tuple: HeapTuple);
+//     fn lookup_rowtype_tupdesc(type_id: Oid, typmod: int32) -> TupleDesc;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type uintptr_t = libc::c_ulong;
 pub type bool_0 = libc::c_uchar;

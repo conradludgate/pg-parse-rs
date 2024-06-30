@@ -1,45 +1,46 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type RelationData;
-    pub type QueryEnvironment;
-    fn abort() -> !;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
-    fn lappend_oid(list: *mut List, datum: Oid) -> *mut List;
-    fn makeRelabelType(
-        arg: *mut Expr,
-        rtype: Oid,
-        rtypmod: int32,
-        rcollid: Oid,
-        rformat: CoercionForm,
-    ) -> *mut RelabelType;
-    fn exprType(expr: *const Node) -> Oid;
-    fn exprTypmod(expr: *const Node) -> int32;
-    fn exprCollation(expr: *const Node) -> Oid;
-    fn exprSetCollation(expr: *mut Node, collation: Oid);
-    fn exprSetInputCollation(expr: *mut Node, inputcollation: Oid);
-    fn exprLocation(expr: *const Node) -> libc::c_int;
-    fn expression_tree_walker(
-        node: *mut Node,
-        walker: Option::<unsafe extern "C" fn() -> bool_0>,
-        context: *mut libc::c_void,
-    ) -> bool_0;
-    fn query_tree_walker(
-        query: *mut Query,
-        walker: Option::<unsafe extern "C" fn() -> bool_0>,
-        context: *mut libc::c_void,
-        flags: libc::c_int,
-    ) -> bool_0;
-    fn get_func_variadictype(funcid: Oid) -> Oid;
-    fn get_typcollation(typid: Oid) -> Oid;
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type RelationData;
+//     pub type QueryEnvironment;
+//     fn abort() -> !;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
+//     fn lappend_oid(list: *mut List, datum: Oid) -> *mut List;
+//     fn makeRelabelType(
+//         arg: *mut Expr,
+//         rtype: Oid,
+//         rtypmod: int32,
+//         rcollid: Oid,
+//         rformat: CoercionForm,
+//     ) -> *mut RelabelType;
+//     fn exprType(expr: *const Node) -> Oid;
+//     fn exprTypmod(expr: *const Node) -> int32;
+//     fn exprCollation(expr: *const Node) -> Oid;
+//     fn exprSetCollation(expr: *mut Node, collation: Oid);
+//     fn exprSetInputCollation(expr: *mut Node, inputcollation: Oid);
+//     fn exprLocation(expr: *const Node) -> libc::c_int;
+//     fn expression_tree_walker(
+//         node: *mut Node,
+//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         context: *mut libc::c_void,
+//     ) -> bool_0;
+//     fn query_tree_walker(
+//         query: *mut Query,
+//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         context: *mut libc::c_void,
+//         flags: libc::c_int,
+//     ) -> bool_0;
+//     fn get_func_variadictype(funcid: Oid) -> Oid;
+//     fn get_typcollation(typid: Oid) -> Oid;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type bool_0 = libc::c_uchar;
 pub type int16 = libc::c_short;

@@ -1,332 +1,333 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type MemoryContextData;
-    pub type PartitionKeyData;
-    pub type PartitionDescData;
-    pub type AttrMissing;
-    pub type PgStat_TableStatus;
-    pub type FdwRoutine;
-    pub type IndexAmRoutine;
-    pub type TableAmRoutine;
-    pub type RowSecurityDesc;
-    pub type SMgrRelationData;
-    pub type QueryEnvironment;
-    fn abort() -> !;
-    fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
-    fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
-    fn pg_snprintf(
-        str: *mut libc::c_char,
-        count: size_t,
-        fmt: *const libc::c_char,
-        _: ...
-    ) -> libc::c_int;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn palloc0(size: Size) -> *mut libc::c_void;
-    fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
-    fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
-    fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
-    fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
-    fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
-    fn lappend_int(list: *mut List, datum: libc::c_int) -> *mut List;
-    fn lappend_oid(list: *mut List, datum: Oid) -> *mut List;
-    fn list_truncate(list: *mut List, new_size: libc::c_int) -> *mut List;
-    fn list_delete_first(list: *mut List) -> *mut List;
-    fn list_free(list: *mut List);
-    fn list_copy(list: *const List) -> *mut List;
-    fn makeString(str: *mut libc::c_char) -> *mut Value;
-    fn check_stack_depth();
-    fn makeAlias(aliasname: *const libc::c_char, colnames: *mut List) -> *mut Alias;
-    fn makeFromExpr(fromlist: *mut List, quals: *mut Node) -> *mut FromExpr;
-    fn makeTargetEntry(
-        expr: *mut Expr,
-        resno: AttrNumber,
-        resname: *mut libc::c_char,
-        resjunk: bool_0,
-    ) -> *mut TargetEntry;
-    fn makeVarFromTargetEntry(varno: Index, tle: *mut TargetEntry) -> *mut Var;
-    fn makeVar(
-        varno: Index,
-        varattno: AttrNumber,
-        vartype: Oid,
-        vartypmod: int32,
-        varcollid: Oid,
-        varlevelsup: Index,
-    ) -> *mut Var;
-    fn exprType(expr: *const Node) -> Oid;
-    fn exprTypmod(expr: *const Node) -> int32;
-    fn exprCollation(expr: *const Node) -> Oid;
-    fn exprLocation(expr: *const Node) -> libc::c_int;
-    fn contain_vars_of_level(node: *mut Node, levelsup: libc::c_int) -> bool_0;
-    fn make_parsestate(parentParseState: *mut ParseState) -> *mut ParseState;
-    fn free_parsestate(pstate: *mut ParseState);
-    fn setup_parser_errposition_callback(
-        pcbstate: *mut ParseCallbackState,
-        pstate: *mut ParseState,
-        location: libc::c_int,
-    );
-    fn cancel_parser_errposition_callback(pcbstate: *mut ParseCallbackState);
-    fn parseCheckAggregates(pstate: *mut ParseState, qry: *mut Query);
-    fn transformFromClause(pstate: *mut ParseState, frmList: *mut List);
-    fn setTargetTable(
-        pstate: *mut ParseState,
-        relation: *mut RangeVar,
-        inh: bool_0,
-        alsoSource: bool_0,
-        requiredPerms: AclMode,
-    ) -> libc::c_int;
-    fn transformWhereClause(
-        pstate: *mut ParseState,
-        clause: *mut Node,
-        exprKind: ParseExprKind,
-        constructName: *const libc::c_char,
-    ) -> *mut Node;
-    fn transformLimitClause(
-        pstate: *mut ParseState,
-        clause: *mut Node,
-        exprKind: ParseExprKind,
-        constructName: *const libc::c_char,
-        limitOption: LimitOption,
-    ) -> *mut Node;
-    fn transformGroupClause(
-        pstate: *mut ParseState,
-        grouplist: *mut List,
-        groupingSets: *mut *mut List,
-        targetlist: *mut *mut List,
-        sortClause: *mut List,
-        exprKind: ParseExprKind,
-        useSQL99: bool_0,
-    ) -> *mut List;
-    fn transformSortClause(
-        pstate: *mut ParseState,
-        orderlist: *mut List,
-        targetlist: *mut *mut List,
-        exprKind: ParseExprKind,
-        useSQL99: bool_0,
-    ) -> *mut List;
-    fn transformWindowDefinitions(
-        pstate: *mut ParseState,
-        windowdefs: *mut List,
-        targetlist: *mut *mut List,
-    ) -> *mut List;
-    fn transformDistinctClause(
-        pstate: *mut ParseState,
-        targetlist: *mut *mut List,
-        sortClause: *mut List,
-        is_agg: bool_0,
-    ) -> *mut List;
-    fn transformDistinctOnClause(
-        pstate: *mut ParseState,
-        distinctlist: *mut List,
-        targetlist: *mut *mut List,
-        sortClause: *mut List,
-    ) -> *mut List;
-    fn transformOnConflictArbiter(
-        pstate: *mut ParseState,
-        onConflictClause: *mut OnConflictClause,
-        arbiterExpr: *mut *mut List,
-        arbiterWhere: *mut *mut Node,
-        constraint: *mut Oid,
-    );
-    fn coerce_to_target_type(
-        pstate: *mut ParseState,
-        expr: *mut Node,
-        exprtype: Oid,
-        targettype: Oid,
-        targettypmod: int32,
-        ccontext: CoercionContext,
-        cformat: CoercionForm,
-        location: libc::c_int,
-    ) -> *mut Node;
-    fn select_common_type(
-        pstate: *mut ParseState,
-        exprs: *mut List,
-        context: *const libc::c_char,
-        which_expr: *mut *mut Node,
-    ) -> Oid;
-    fn coerce_to_common_type(
-        pstate: *mut ParseState,
-        node: *mut Node,
-        targetTypeId: Oid,
-        context: *const libc::c_char,
-    ) -> *mut Node;
-    fn select_common_typmod(
-        pstate: *mut ParseState,
-        exprs: *mut List,
-        common_type: Oid,
-    ) -> int32;
-    fn assign_query_collations(pstate: *mut ParseState, query: *mut Query);
-    fn assign_list_collations(pstate: *mut ParseState, exprs: *mut List);
-    fn assign_expr_collations(pstate: *mut ParseState, expr: *mut Node);
-    fn select_common_collation(
-        pstate: *mut ParseState,
-        exprs: *mut List,
-        none_ok: bool_0,
-    ) -> Oid;
-    fn transformWithClause(
-        pstate: *mut ParseState,
-        withClause: *mut WithClause,
-    ) -> *mut List;
-    fn analyzeCTETargetList(
-        pstate: *mut ParseState,
-        cte: *mut CommonTableExpr,
-        tlist: *mut List,
-    );
-    fn transformExpr(
-        pstate: *mut ParseState,
-        expr: *mut Node,
-        exprKind: ParseExprKind,
-    ) -> *mut Node;
-    fn ParseFuncOrColumn(
-        pstate: *mut ParseState,
-        funcname: *mut List,
-        fargs: *mut List,
-        last_srf: *mut Node,
-        fn_0: *mut FuncCall,
-        proc_call: bool_0,
-        location: libc::c_int,
-    ) -> *mut Node;
-    fn get_sort_group_operators(
-        argtype: Oid,
-        needLT: bool_0,
-        needEQ: bool_0,
-        needGT: bool_0,
-        ltOpr: *mut Oid,
-        eqOpr: *mut Oid,
-        gtOpr: *mut Oid,
-        isHashable: *mut bool_0,
-    );
-    fn parse_fixed_parameters(
-        pstate: *mut ParseState,
-        paramTypes: *mut Oid,
-        numParams: libc::c_int,
-    );
-    fn parse_variable_parameters(
-        pstate: *mut ParseState,
-        paramTypes: *mut *mut Oid,
-        numParams: *mut libc::c_int,
-    );
-    fn check_variable_parameters(pstate: *mut ParseState, query: *mut Query);
-    fn query_contains_extern_params(query: *mut Query) -> bool_0;
-    fn addRangeTableEntryForRelation(
-        pstate: *mut ParseState,
-        rel: Relation,
-        lockmode: libc::c_int,
-        alias: *mut Alias,
-        inh: bool_0,
-        inFromCl: bool_0,
-    ) -> *mut ParseNamespaceItem;
-    fn addRangeTableEntryForSubquery(
-        pstate: *mut ParseState,
-        subquery: *mut Query,
-        alias: *mut Alias,
-        lateral: bool_0,
-        inFromCl: bool_0,
-    ) -> *mut ParseNamespaceItem;
-    fn addRangeTableEntryForValues(
-        pstate: *mut ParseState,
-        exprs: *mut List,
-        coltypes: *mut List,
-        coltypmods: *mut List,
-        colcollations: *mut List,
-        alias: *mut Alias,
-        lateral: bool_0,
-        inFromCl: bool_0,
-    ) -> *mut ParseNamespaceItem;
-    fn addRangeTableEntryForJoin(
-        pstate: *mut ParseState,
-        colnames: *mut List,
-        nscolumns: *mut ParseNamespaceColumn,
-        jointype: JoinType,
-        nummergedcols: libc::c_int,
-        aliasvars: *mut List,
-        leftcols: *mut List,
-        rightcols: *mut List,
-        alias: *mut Alias,
-        inFromCl: bool_0,
-    ) -> *mut ParseNamespaceItem;
-    fn addNSItemToQuery(
-        pstate: *mut ParseState,
-        nsitem: *mut ParseNamespaceItem,
-        addToJoinList: bool_0,
-        addToRelNameSpace: bool_0,
-        addToVarNameSpace: bool_0,
-    );
-    fn expandNSItemVars(
-        nsitem: *mut ParseNamespaceItem,
-        sublevels_up: libc::c_int,
-        location: libc::c_int,
-        colnames: *mut *mut List,
-    ) -> *mut List;
-    fn expandNSItemAttrs(
-        pstate: *mut ParseState,
-        nsitem: *mut ParseNamespaceItem,
-        sublevels_up: libc::c_int,
-        location: libc::c_int,
-    ) -> *mut List;
-    fn attnameAttNum(
-        rd: Relation,
-        attname: *const libc::c_char,
-        sysColOK: bool_0,
-    ) -> libc::c_int;
-    fn isQueryUsingTempRelation(query: *mut Query) -> bool_0;
-    fn transformTargetList(
-        pstate: *mut ParseState,
-        targetlist: *mut List,
-        exprKind: ParseExprKind,
-    ) -> *mut List;
-    fn transformExpressionList(
-        pstate: *mut ParseState,
-        exprlist: *mut List,
-        exprKind: ParseExprKind,
-        allowDefault: bool_0,
-    ) -> *mut List;
-    fn resolveTargetListUnknowns(pstate: *mut ParseState, targetlist: *mut List);
-    fn markTargetListOrigins(pstate: *mut ParseState, targetlist: *mut List);
-    fn transformAssignedExpr(
-        pstate: *mut ParseState,
-        expr: *mut Expr,
-        exprKind: ParseExprKind,
-        colname: *const libc::c_char,
-        attrno: libc::c_int,
-        indirection: *mut List,
-        location: libc::c_int,
-    ) -> *mut Expr;
-    fn updateTargetListEntry(
-        pstate: *mut ParseState,
-        tle: *mut TargetEntry,
-        colname: *mut libc::c_char,
-        attrno: libc::c_int,
-        indirection: *mut List,
-        location: libc::c_int,
-    );
-    fn transformAssignmentIndirection(
-        pstate: *mut ParseState,
-        basenode: *mut Node,
-        targetName: *const libc::c_char,
-        targetIsSubscripting: bool_0,
-        targetTypeId: Oid,
-        targetTypMod: int32,
-        targetCollation: Oid,
-        indirection: *mut List,
-        indirection_cell: *mut ListCell,
-        rhs: *mut Node,
-        ccontext: CoercionContext,
-        location: libc::c_int,
-    ) -> *mut Node;
-    fn checkInsertTargets(
-        pstate: *mut ParseState,
-        cols: *mut List,
-        attrnos: *mut *mut List,
-    ) -> *mut List;
-    fn get_parse_rowmark(qry: *mut Query, rtindex: Index) -> *mut RowMarkClause;
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type MemoryContextData;
+//     pub type PartitionKeyData;
+//     pub type PartitionDescData;
+//     pub type AttrMissing;
+//     pub type PgStat_TableStatus;
+//     pub type FdwRoutine;
+//     pub type IndexAmRoutine;
+//     pub type TableAmRoutine;
+//     pub type RowSecurityDesc;
+//     pub type SMgrRelationData;
+//     pub type QueryEnvironment;
+//     fn abort() -> !;
+//     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
+//     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
+//     fn pg_snprintf(
+//         str: *mut libc::c_char,
+//         count: size_t,
+//         fmt: *const libc::c_char,
+//         _: ...
+//     ) -> libc::c_int;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn palloc0(size: Size) -> *mut libc::c_void;
+//     fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
+//     fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
+//     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
+//     fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
+//     fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
+//     fn lappend_int(list: *mut List, datum: libc::c_int) -> *mut List;
+//     fn lappend_oid(list: *mut List, datum: Oid) -> *mut List;
+//     fn list_truncate(list: *mut List, new_size: libc::c_int) -> *mut List;
+//     fn list_delete_first(list: *mut List) -> *mut List;
+//     fn list_free(list: *mut List);
+//     fn list_copy(list: *const List) -> *mut List;
+//     fn makeString(str: *mut libc::c_char) -> *mut Value;
+//     fn check_stack_depth();
+//     fn makeAlias(aliasname: *const libc::c_char, colnames: *mut List) -> *mut Alias;
+//     fn makeFromExpr(fromlist: *mut List, quals: *mut Node) -> *mut FromExpr;
+//     fn makeTargetEntry(
+//         expr: *mut Expr,
+//         resno: AttrNumber,
+//         resname: *mut libc::c_char,
+//         resjunk: bool_0,
+//     ) -> *mut TargetEntry;
+//     fn makeVarFromTargetEntry(varno: Index, tle: *mut TargetEntry) -> *mut Var;
+//     fn makeVar(
+//         varno: Index,
+//         varattno: AttrNumber,
+//         vartype: Oid,
+//         vartypmod: int32,
+//         varcollid: Oid,
+//         varlevelsup: Index,
+//     ) -> *mut Var;
+//     fn exprType(expr: *const Node) -> Oid;
+//     fn exprTypmod(expr: *const Node) -> int32;
+//     fn exprCollation(expr: *const Node) -> Oid;
+//     fn exprLocation(expr: *const Node) -> libc::c_int;
+//     fn contain_vars_of_level(node: *mut Node, levelsup: libc::c_int) -> bool_0;
+//     fn make_parsestate(parentParseState: *mut ParseState) -> *mut ParseState;
+//     fn free_parsestate(pstate: *mut ParseState);
+//     fn setup_parser_errposition_callback(
+//         pcbstate: *mut ParseCallbackState,
+//         pstate: *mut ParseState,
+//         location: libc::c_int,
+//     );
+//     fn cancel_parser_errposition_callback(pcbstate: *mut ParseCallbackState);
+//     fn parseCheckAggregates(pstate: *mut ParseState, qry: *mut Query);
+//     fn transformFromClause(pstate: *mut ParseState, frmList: *mut List);
+//     fn setTargetTable(
+//         pstate: *mut ParseState,
+//         relation: *mut RangeVar,
+//         inh: bool_0,
+//         alsoSource: bool_0,
+//         requiredPerms: AclMode,
+//     ) -> libc::c_int;
+//     fn transformWhereClause(
+//         pstate: *mut ParseState,
+//         clause: *mut Node,
+//         exprKind: ParseExprKind,
+//         constructName: *const libc::c_char,
+//     ) -> *mut Node;
+//     fn transformLimitClause(
+//         pstate: *mut ParseState,
+//         clause: *mut Node,
+//         exprKind: ParseExprKind,
+//         constructName: *const libc::c_char,
+//         limitOption: LimitOption,
+//     ) -> *mut Node;
+//     fn transformGroupClause(
+//         pstate: *mut ParseState,
+//         grouplist: *mut List,
+//         groupingSets: *mut *mut List,
+//         targetlist: *mut *mut List,
+//         sortClause: *mut List,
+//         exprKind: ParseExprKind,
+//         useSQL99: bool_0,
+//     ) -> *mut List;
+//     fn transformSortClause(
+//         pstate: *mut ParseState,
+//         orderlist: *mut List,
+//         targetlist: *mut *mut List,
+//         exprKind: ParseExprKind,
+//         useSQL99: bool_0,
+//     ) -> *mut List;
+//     fn transformWindowDefinitions(
+//         pstate: *mut ParseState,
+//         windowdefs: *mut List,
+//         targetlist: *mut *mut List,
+//     ) -> *mut List;
+//     fn transformDistinctClause(
+//         pstate: *mut ParseState,
+//         targetlist: *mut *mut List,
+//         sortClause: *mut List,
+//         is_agg: bool_0,
+//     ) -> *mut List;
+//     fn transformDistinctOnClause(
+//         pstate: *mut ParseState,
+//         distinctlist: *mut List,
+//         targetlist: *mut *mut List,
+//         sortClause: *mut List,
+//     ) -> *mut List;
+//     fn transformOnConflictArbiter(
+//         pstate: *mut ParseState,
+//         onConflictClause: *mut OnConflictClause,
+//         arbiterExpr: *mut *mut List,
+//         arbiterWhere: *mut *mut Node,
+//         constraint: *mut Oid,
+//     );
+//     fn coerce_to_target_type(
+//         pstate: *mut ParseState,
+//         expr: *mut Node,
+//         exprtype: Oid,
+//         targettype: Oid,
+//         targettypmod: int32,
+//         ccontext: CoercionContext,
+//         cformat: CoercionForm,
+//         location: libc::c_int,
+//     ) -> *mut Node;
+//     fn select_common_type(
+//         pstate: *mut ParseState,
+//         exprs: *mut List,
+//         context: *const libc::c_char,
+//         which_expr: *mut *mut Node,
+//     ) -> Oid;
+//     fn coerce_to_common_type(
+//         pstate: *mut ParseState,
+//         node: *mut Node,
+//         targetTypeId: Oid,
+//         context: *const libc::c_char,
+//     ) -> *mut Node;
+//     fn select_common_typmod(
+//         pstate: *mut ParseState,
+//         exprs: *mut List,
+//         common_type: Oid,
+//     ) -> int32;
+//     fn assign_query_collations(pstate: *mut ParseState, query: *mut Query);
+//     fn assign_list_collations(pstate: *mut ParseState, exprs: *mut List);
+//     fn assign_expr_collations(pstate: *mut ParseState, expr: *mut Node);
+//     fn select_common_collation(
+//         pstate: *mut ParseState,
+//         exprs: *mut List,
+//         none_ok: bool_0,
+//     ) -> Oid;
+//     fn transformWithClause(
+//         pstate: *mut ParseState,
+//         withClause: *mut WithClause,
+//     ) -> *mut List;
+//     fn analyzeCTETargetList(
+//         pstate: *mut ParseState,
+//         cte: *mut CommonTableExpr,
+//         tlist: *mut List,
+//     );
+//     fn transformExpr(
+//         pstate: *mut ParseState,
+//         expr: *mut Node,
+//         exprKind: ParseExprKind,
+//     ) -> *mut Node;
+//     fn ParseFuncOrColumn(
+//         pstate: *mut ParseState,
+//         funcname: *mut List,
+//         fargs: *mut List,
+//         last_srf: *mut Node,
+//         fn_0: *mut FuncCall,
+//         proc_call: bool_0,
+//         location: libc::c_int,
+//     ) -> *mut Node;
+//     fn get_sort_group_operators(
+//         argtype: Oid,
+//         needLT: bool_0,
+//         needEQ: bool_0,
+//         needGT: bool_0,
+//         ltOpr: *mut Oid,
+//         eqOpr: *mut Oid,
+//         gtOpr: *mut Oid,
+//         isHashable: *mut bool_0,
+//     );
+//     fn parse_fixed_parameters(
+//         pstate: *mut ParseState,
+//         paramTypes: *mut Oid,
+//         numParams: libc::c_int,
+//     );
+//     fn parse_variable_parameters(
+//         pstate: *mut ParseState,
+//         paramTypes: *mut *mut Oid,
+//         numParams: *mut libc::c_int,
+//     );
+//     fn check_variable_parameters(pstate: *mut ParseState, query: *mut Query);
+//     fn query_contains_extern_params(query: *mut Query) -> bool_0;
+//     fn addRangeTableEntryForRelation(
+//         pstate: *mut ParseState,
+//         rel: Relation,
+//         lockmode: libc::c_int,
+//         alias: *mut Alias,
+//         inh: bool_0,
+//         inFromCl: bool_0,
+//     ) -> *mut ParseNamespaceItem;
+//     fn addRangeTableEntryForSubquery(
+//         pstate: *mut ParseState,
+//         subquery: *mut Query,
+//         alias: *mut Alias,
+//         lateral: bool_0,
+//         inFromCl: bool_0,
+//     ) -> *mut ParseNamespaceItem;
+//     fn addRangeTableEntryForValues(
+//         pstate: *mut ParseState,
+//         exprs: *mut List,
+//         coltypes: *mut List,
+//         coltypmods: *mut List,
+//         colcollations: *mut List,
+//         alias: *mut Alias,
+//         lateral: bool_0,
+//         inFromCl: bool_0,
+//     ) -> *mut ParseNamespaceItem;
+//     fn addRangeTableEntryForJoin(
+//         pstate: *mut ParseState,
+//         colnames: *mut List,
+//         nscolumns: *mut ParseNamespaceColumn,
+//         jointype: JoinType,
+//         nummergedcols: libc::c_int,
+//         aliasvars: *mut List,
+//         leftcols: *mut List,
+//         rightcols: *mut List,
+//         alias: *mut Alias,
+//         inFromCl: bool_0,
+//     ) -> *mut ParseNamespaceItem;
+//     fn addNSItemToQuery(
+//         pstate: *mut ParseState,
+//         nsitem: *mut ParseNamespaceItem,
+//         addToJoinList: bool_0,
+//         addToRelNameSpace: bool_0,
+//         addToVarNameSpace: bool_0,
+//     );
+//     fn expandNSItemVars(
+//         nsitem: *mut ParseNamespaceItem,
+//         sublevels_up: libc::c_int,
+//         location: libc::c_int,
+//         colnames: *mut *mut List,
+//     ) -> *mut List;
+//     fn expandNSItemAttrs(
+//         pstate: *mut ParseState,
+//         nsitem: *mut ParseNamespaceItem,
+//         sublevels_up: libc::c_int,
+//         location: libc::c_int,
+//     ) -> *mut List;
+//     fn attnameAttNum(
+//         rd: Relation,
+//         attname: *const libc::c_char,
+//         sysColOK: bool_0,
+//     ) -> libc::c_int;
+//     fn isQueryUsingTempRelation(query: *mut Query) -> bool_0;
+//     fn transformTargetList(
+//         pstate: *mut ParseState,
+//         targetlist: *mut List,
+//         exprKind: ParseExprKind,
+//     ) -> *mut List;
+//     fn transformExpressionList(
+//         pstate: *mut ParseState,
+//         exprlist: *mut List,
+//         exprKind: ParseExprKind,
+//         allowDefault: bool_0,
+//     ) -> *mut List;
+//     fn resolveTargetListUnknowns(pstate: *mut ParseState, targetlist: *mut List);
+//     fn markTargetListOrigins(pstate: *mut ParseState, targetlist: *mut List);
+//     fn transformAssignedExpr(
+//         pstate: *mut ParseState,
+//         expr: *mut Expr,
+//         exprKind: ParseExprKind,
+//         colname: *const libc::c_char,
+//         attrno: libc::c_int,
+//         indirection: *mut List,
+//         location: libc::c_int,
+//     ) -> *mut Expr;
+//     fn updateTargetListEntry(
+//         pstate: *mut ParseState,
+//         tle: *mut TargetEntry,
+//         colname: *mut libc::c_char,
+//         attrno: libc::c_int,
+//         indirection: *mut List,
+//         location: libc::c_int,
+//     );
+//     fn transformAssignmentIndirection(
+//         pstate: *mut ParseState,
+//         basenode: *mut Node,
+//         targetName: *const libc::c_char,
+//         targetIsSubscripting: bool_0,
+//         targetTypeId: Oid,
+//         targetTypMod: int32,
+//         targetCollation: Oid,
+//         indirection: *mut List,
+//         indirection_cell: *mut ListCell,
+//         rhs: *mut Node,
+//         ccontext: CoercionContext,
+//         location: libc::c_int,
+//     ) -> *mut Node;
+//     fn checkInsertTargets(
+//         pstate: *mut ParseState,
+//         cols: *mut List,
+//         attrnos: *mut *mut List,
+//     ) -> *mut List;
+//     fn get_parse_rowmark(qry: *mut Query, rtindex: Index) -> *mut RowMarkClause;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 pub type uintptr_t = libc::c_ulong;

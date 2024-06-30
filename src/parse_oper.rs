@@ -1,116 +1,117 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type MemoryContextData;
-    pub type AttrMissing;
-    pub type RelationData;
-    pub type QueryEnvironment;
-    pub type HASHHDR;
-    pub type HTAB;
-    pub type TypeCacheEnumData;
-    pub type DomainConstraintCache;
-    fn abort() -> !;
-    fn memset(
-        _: *mut libc::c_void,
-        _: libc::c_int,
-        _: libc::c_ulong,
-    ) -> *mut libc::c_void;
-    fn strlcpy(
-        _: *mut libc::c_char,
-        _: *const libc::c_char,
-        _: libc::c_ulong,
-    ) -> libc::c_ulong;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
-    fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
-    fn exprType(expr: *const Node) -> Oid;
-    fn IsBinaryCoercible(srctype: Oid, targettype: Oid) -> bool_0;
-    fn enforce_generic_type_consistency(
-        actual_arg_types: *const Oid,
-        declared_arg_types: *mut Oid,
-        nargs: libc::c_int,
-        rettype: Oid,
-        allow_poly: bool_0,
-    ) -> Oid;
-    fn setup_parser_errposition_callback(
-        pcbstate: *mut ParseCallbackState,
-        pstate: *mut ParseState,
-        location: libc::c_int,
-    );
-    fn cancel_parser_errposition_callback(pcbstate: *mut ParseCallbackState);
-    fn hash_create(
-        tabname: *const libc::c_char,
-        nelem: libc::c_long,
-        info: *const HASHCTL,
-        flags: libc::c_int,
-    ) -> *mut HTAB;
-    fn hash_search(
-        hashp: *mut HTAB,
-        keyPtr: *const libc::c_void,
-        action: HASHACTION,
-        foundPtr: *mut bool_0,
-    ) -> *mut libc::c_void;
-    fn hash_seq_init(status: *mut HASH_SEQ_STATUS, hashp: *mut HTAB);
-    fn hash_seq_search(status: *mut HASH_SEQ_STATUS) -> *mut libc::c_void;
-    fn OpernameGetOprid(names: *mut List, oprleft: Oid, oprright: Oid) -> Oid;
-    fn OpernameGetCandidates(
-        names: *mut List,
-        oprkind: libc::c_char,
-        missing_schema_ok: bool_0,
-    ) -> FuncCandidateList;
-    fn DeconstructQualifiedName(
-        names: *mut List,
-        nspname_p: *mut *mut libc::c_char,
-        objname_p: *mut *mut libc::c_char,
-    );
-    fn LookupExplicitNamespace(nspname: *const libc::c_char, missing_ok: bool_0) -> Oid;
-    fn fetch_search_path_array(sarray: *mut Oid, sarray_len: libc::c_int) -> libc::c_int;
-    fn func_match_argtypes(
-        nargs: libc::c_int,
-        input_typeids: *mut Oid,
-        raw_candidates: FuncCandidateList,
-        candidates: *mut FuncCandidateList,
-    ) -> libc::c_int;
-    fn func_select_candidate(
-        nargs: libc::c_int,
-        input_typeids: *mut Oid,
-        candidates: FuncCandidateList,
-    ) -> FuncCandidateList;
-    fn make_fn_arguments(
-        pstate: *mut ParseState,
-        fargs: *mut List,
-        actual_arg_types: *mut Oid,
-        declared_arg_types: *mut Oid,
-    );
-    fn check_srf_call_placement(
-        pstate: *mut ParseState,
-        last_srf: *mut Node,
-        location: libc::c_int,
-    );
-    fn LookupTypeNameOid(
-        pstate: *mut ParseState,
-        typeName: *const TypeName,
-        missing_ok: bool_0,
-    ) -> Oid;
-    fn CacheRegisterSyscacheCallback(
-        cacheid: libc::c_int,
-        func: SyscacheCallbackFunction,
-        arg: Datum,
-    );
-    fn get_func_retset(funcid: Oid) -> bool_0;
-    fn get_array_type(typid: Oid) -> Oid;
-    fn get_base_element_type(typid: Oid) -> Oid;
-    fn getBaseType(typid: Oid) -> Oid;
-    fn SearchSysCache1(cacheId: libc::c_int, key1: Datum) -> HeapTuple;
-    fn ReleaseSysCache(tuple: HeapTuple);
-    fn lookup_type_cache(type_id: Oid, flags: libc::c_int) -> *mut TypeCacheEntry;
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type MemoryContextData;
+//     pub type AttrMissing;
+//     pub type RelationData;
+//     pub type QueryEnvironment;
+//     pub type HASHHDR;
+//     pub type HTAB;
+//     pub type TypeCacheEnumData;
+//     pub type DomainConstraintCache;
+//     fn abort() -> !;
+//     fn memset(
+//         _: *mut libc::c_void,
+//         _: libc::c_int,
+//         _: libc::c_ulong,
+//     ) -> *mut libc::c_void;
+//     fn strlcpy(
+//         _: *mut libc::c_char,
+//         _: *const libc::c_char,
+//         _: libc::c_ulong,
+//     ) -> libc::c_ulong;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
+//     fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
+//     fn exprType(expr: *const Node) -> Oid;
+//     fn IsBinaryCoercible(srctype: Oid, targettype: Oid) -> bool_0;
+//     fn enforce_generic_type_consistency(
+//         actual_arg_types: *const Oid,
+//         declared_arg_types: *mut Oid,
+//         nargs: libc::c_int,
+//         rettype: Oid,
+//         allow_poly: bool_0,
+//     ) -> Oid;
+//     fn setup_parser_errposition_callback(
+//         pcbstate: *mut ParseCallbackState,
+//         pstate: *mut ParseState,
+//         location: libc::c_int,
+//     );
+//     fn cancel_parser_errposition_callback(pcbstate: *mut ParseCallbackState);
+//     fn hash_create(
+//         tabname: *const libc::c_char,
+//         nelem: libc::c_long,
+//         info: *const HASHCTL,
+//         flags: libc::c_int,
+//     ) -> *mut HTAB;
+//     fn hash_search(
+//         hashp: *mut HTAB,
+//         keyPtr: *const libc::c_void,
+//         action: HASHACTION,
+//         foundPtr: *mut bool_0,
+//     ) -> *mut libc::c_void;
+//     fn hash_seq_init(status: *mut HASH_SEQ_STATUS, hashp: *mut HTAB);
+//     fn hash_seq_search(status: *mut HASH_SEQ_STATUS) -> *mut libc::c_void;
+//     fn OpernameGetOprid(names: *mut List, oprleft: Oid, oprright: Oid) -> Oid;
+//     fn OpernameGetCandidates(
+//         names: *mut List,
+//         oprkind: libc::c_char,
+//         missing_schema_ok: bool_0,
+//     ) -> FuncCandidateList;
+//     fn DeconstructQualifiedName(
+//         names: *mut List,
+//         nspname_p: *mut *mut libc::c_char,
+//         objname_p: *mut *mut libc::c_char,
+//     );
+//     fn LookupExplicitNamespace(nspname: *const libc::c_char, missing_ok: bool_0) -> Oid;
+//     fn fetch_search_path_array(sarray: *mut Oid, sarray_len: libc::c_int) -> libc::c_int;
+//     fn func_match_argtypes(
+//         nargs: libc::c_int,
+//         input_typeids: *mut Oid,
+//         raw_candidates: FuncCandidateList,
+//         candidates: *mut FuncCandidateList,
+//     ) -> libc::c_int;
+//     fn func_select_candidate(
+//         nargs: libc::c_int,
+//         input_typeids: *mut Oid,
+//         candidates: FuncCandidateList,
+//     ) -> FuncCandidateList;
+//     fn make_fn_arguments(
+//         pstate: *mut ParseState,
+//         fargs: *mut List,
+//         actual_arg_types: *mut Oid,
+//         declared_arg_types: *mut Oid,
+//     );
+//     fn check_srf_call_placement(
+//         pstate: *mut ParseState,
+//         last_srf: *mut Node,
+//         location: libc::c_int,
+//     );
+//     fn LookupTypeNameOid(
+//         pstate: *mut ParseState,
+//         typeName: *const TypeName,
+//         missing_ok: bool_0,
+//     ) -> Oid;
+//     fn CacheRegisterSyscacheCallback(
+//         cacheid: libc::c_int,
+//         func: SyscacheCallbackFunction,
+//         arg: Datum,
+//     );
+//     fn get_func_retset(funcid: Oid) -> bool_0;
+//     fn get_array_type(typid: Oid) -> Oid;
+//     fn get_base_element_type(typid: Oid) -> Oid;
+//     fn getBaseType(typid: Oid) -> Oid;
+//     fn SearchSysCache1(cacheId: libc::c_int, key1: Datum) -> HeapTuple;
+//     fn ReleaseSysCache(tuple: HeapTuple);
+//     fn lookup_type_cache(type_id: Oid, flags: libc::c_int) -> *mut TypeCacheEntry;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 pub type uintptr_t = libc::c_ulong;

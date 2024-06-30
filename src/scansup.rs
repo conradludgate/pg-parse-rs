@@ -1,26 +1,27 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(linkage)]
-extern "C" {
-    fn abort() -> !;
-    static mut _DefaultRuneLocale: _RuneLocale;
-    fn __maskrune(_: __darwin_ct_rune_t, _: libc::c_ulong) -> libc::c_int;
-    fn __tolower(_: __darwin_ct_rune_t) -> __darwin_ct_rune_t;
-    fn palloc(size: Size) -> *mut libc::c_void;
-    fn errmsg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn errcode(sqlerrcode: libc::c_int) -> libc::c_int;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn pg_mbcliplen(
-        mbstr: *const libc::c_char,
-        len: libc::c_int,
-        limit: libc::c_int,
-    ) -> libc::c_int;
-    fn pg_database_encoding_max_length() -> libc::c_int;
-}
+// #![feature(linkage)]
+// extern "C" {
+//     fn abort() -> !;
+//     static mut _DefaultRuneLocale: _RuneLocale;
+//     fn __maskrune(_: __darwin_ct_rune_t, _: libc::c_ulong) -> libc::c_int;
+//     fn __tolower(_: __darwin_ct_rune_t) -> __darwin_ct_rune_t;
+//     fn palloc(size: Size) -> *mut libc::c_void;
+//     fn errmsg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn errcode(sqlerrcode: libc::c_int) -> libc::c_int;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn pg_mbcliplen(
+//         mbstr: *const libc::c_char,
+//         len: libc::c_int,
+//         limit: libc::c_int,
+//     ) -> libc::c_int;
+//     fn pg_database_encoding_max_length() -> libc::c_int;
+// }
+use super::*;
 pub type __uint32_t = libc::c_uint;
 pub type __darwin_ct_rune_t = libc::c_int;
 pub type __darwin_size_t = libc::c_ulong;

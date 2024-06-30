@@ -1,72 +1,73 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type RelationData;
-    pub type QueryEnvironment;
-    fn abort() -> !;
-    fn strlen(_: *const libc::c_char) -> libc::c_ulong;
-    fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errmsg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn psprintf(fmt: *const libc::c_char, _: ...) -> *mut libc::c_char;
-    fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
-    fn palloc(size: Size) -> *mut libc::c_void;
-    fn pfree(pointer: *mut libc::c_void);
-    fn errcontext_msg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn set_errcontext_domain(domain: *const libc::c_char) -> libc::c_int;
-    static mut error_context_stack: *mut ErrorContextCallback;
-    fn OidFunctionCall1Coll(functionId: Oid, collation: Oid, arg1: Datum) -> Datum;
-    fn OidInputFunctionCall(
-        functionId: Oid,
-        str: *mut libc::c_char,
-        typioparam: Oid,
-        typmod: int32,
-    ) -> Datum;
-    fn RangeVarGetRelidExtended(
-        relation: *const RangeVar,
-        lockmode: LOCKMODE,
-        flags: uint32,
-        callback: RangeVarGetRelidCallback,
-        callback_arg: *mut libc::c_void,
-    ) -> Oid;
-    fn TypenameGetTypidExtended(typname: *const libc::c_char, temp_ok: bool_0) -> Oid;
-    fn DeconstructQualifiedName(
-        names: *mut List,
-        nspname_p: *mut *mut libc::c_char,
-        objname_p: *mut *mut libc::c_char,
-    );
-    fn get_collation_oid(collname: *mut List, missing_ok: bool_0) -> Oid;
-    fn LookupExplicitNamespace(nspname: *const libc::c_char, missing_ok: bool_0) -> Oid;
-    fn initStringInfo(str: StringInfo);
-    fn appendStringInfoString(str: StringInfo, s: *const libc::c_char);
-    fn appendStringInfoChar(str: StringInfo, ch: libc::c_char);
-    fn makeRangeVar(
-        schemaname: *mut libc::c_char,
-        relname: *mut libc::c_char,
-        location: libc::c_int,
-    ) -> *mut RangeVar;
-    fn setup_parser_errposition_callback(
-        pcbstate: *mut ParseCallbackState,
-        pstate: *mut ParseState,
-        location: libc::c_int,
-    );
-    fn cancel_parser_errposition_callback(pcbstate: *mut ParseCallbackState);
-    fn raw_parser(str: *const libc::c_char, mode: RawParseMode) -> *mut List;
-    fn format_type_be(type_oid: Oid) -> *mut libc::c_char;
-    fn get_attnum(relid: Oid, attname: *const libc::c_char) -> AttrNumber;
-    fn get_atttype(relid: Oid, attnum: AttrNumber) -> Oid;
-    fn getTypeIOParam(typeTuple: HeapTuple) -> Oid;
-    fn get_array_type(typid: Oid) -> Oid;
-    fn get_typcollation(typid: Oid) -> Oid;
-    fn SearchSysCache1(cacheId: libc::c_int, key1: Datum) -> HeapTuple;
-    fn ReleaseSysCache(tuple: HeapTuple);
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type RelationData;
+//     pub type QueryEnvironment;
+//     fn abort() -> !;
+//     fn strlen(_: *const libc::c_char) -> libc::c_ulong;
+//     fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errmsg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn psprintf(fmt: *const libc::c_char, _: ...) -> *mut libc::c_char;
+//     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
+//     fn palloc(size: Size) -> *mut libc::c_void;
+//     fn pfree(pointer: *mut libc::c_void);
+//     fn errcontext_msg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn set_errcontext_domain(domain: *const libc::c_char) -> libc::c_int;
+//     static mut error_context_stack: *mut ErrorContextCallback;
+//     fn OidFunctionCall1Coll(functionId: Oid, collation: Oid, arg1: Datum) -> Datum;
+//     fn OidInputFunctionCall(
+//         functionId: Oid,
+//         str: *mut libc::c_char,
+//         typioparam: Oid,
+//         typmod: int32,
+//     ) -> Datum;
+//     fn RangeVarGetRelidExtended(
+//         relation: *const RangeVar,
+//         lockmode: LOCKMODE,
+//         flags: uint32,
+//         callback: RangeVarGetRelidCallback,
+//         callback_arg: *mut libc::c_void,
+//     ) -> Oid;
+//     fn TypenameGetTypidExtended(typname: *const libc::c_char, temp_ok: bool_0) -> Oid;
+//     fn DeconstructQualifiedName(
+//         names: *mut List,
+//         nspname_p: *mut *mut libc::c_char,
+//         objname_p: *mut *mut libc::c_char,
+//     );
+//     fn get_collation_oid(collname: *mut List, missing_ok: bool_0) -> Oid;
+//     fn LookupExplicitNamespace(nspname: *const libc::c_char, missing_ok: bool_0) -> Oid;
+//     fn initStringInfo(str: StringInfo);
+//     fn appendStringInfoString(str: StringInfo, s: *const libc::c_char);
+//     fn appendStringInfoChar(str: StringInfo, ch: libc::c_char);
+//     fn makeRangeVar(
+//         schemaname: *mut libc::c_char,
+//         relname: *mut libc::c_char,
+//         location: libc::c_int,
+//     ) -> *mut RangeVar;
+//     fn setup_parser_errposition_callback(
+//         pcbstate: *mut ParseCallbackState,
+//         pstate: *mut ParseState,
+//         location: libc::c_int,
+//     );
+//     fn cancel_parser_errposition_callback(pcbstate: *mut ParseCallbackState);
+//     fn raw_parser(str: *const libc::c_char, mode: RawParseMode) -> *mut List;
+//     fn format_type_be(type_oid: Oid) -> *mut libc::c_char;
+//     fn get_attnum(relid: Oid, attname: *const libc::c_char) -> AttrNumber;
+//     fn get_atttype(relid: Oid, attnum: AttrNumber) -> Oid;
+//     fn getTypeIOParam(typeTuple: HeapTuple) -> Oid;
+//     fn get_array_type(typid: Oid) -> Oid;
+//     fn get_typcollation(typid: Oid) -> Oid;
+//     fn SearchSysCache1(cacheId: libc::c_int, key1: Datum) -> HeapTuple;
+//     fn ReleaseSysCache(tuple: HeapTuple);
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 pub type uintptr_t = libc::c_ulong;

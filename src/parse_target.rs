@@ -1,177 +1,178 @@
 #![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
-#![feature(extern_types)]
-extern "C" {
-    pub type PartitionKeyData;
-    pub type PartitionDescData;
-    pub type AttrMissing;
-    pub type PgStat_TableStatus;
-    pub type FdwRoutine;
-    pub type IndexAmRoutine;
-    pub type TableAmRoutine;
-    pub type RowSecurityDesc;
-    pub type SMgrRelationData;
-    pub type QueryEnvironment;
-    fn abort() -> !;
-    fn memset(
-        _: *mut libc::c_void,
-        _: libc::c_int,
-        _: libc::c_ulong,
-    ) -> *mut libc::c_void;
-    fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
-    fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
-    fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
-    fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
-    fn bms_is_member(x: libc::c_int, a: *const Bitmapset) -> bool_0;
-    fn lappend_int(list: *mut List, datum: libc::c_int) -> *mut List;
-    fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
-    fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
-    fn CreateTemplateTupleDesc(natts: libc::c_int) -> TupleDesc;
-    fn TupleDescInitEntry(
-        desc: TupleDesc,
-        attributeNumber: AttrNumber,
-        attributeName: *const libc::c_char,
-        oidtypeid: Oid,
-        typmod: int32,
-        attdim: libc::c_int,
-    );
-    fn TupleDescInitEntryCollation(
-        desc: TupleDesc,
-        attributeNumber: AttrNumber,
-        collationid: Oid,
-    );
-    fn list_truncate(list: *mut List, new_size: libc::c_int) -> *mut List;
-    fn list_concat(list1: *mut List, list2: *const List) -> *mut List;
-    fn transformContainerSubscripts(
-        pstate: *mut ParseState,
-        containerBase: *mut Node,
-        containerType: Oid,
-        containerTypMod: int32,
-        indirection: *mut List,
-        isAssignment: bool_0,
-    ) -> *mut SubscriptingRef;
-    fn transformContainerType(containerType: *mut Oid, containerTypmod: *mut int32);
-    fn get_database_name(dbid: Oid) -> *mut libc::c_char;
-    fn get_expr_result_tupdesc(expr: *mut Node, noError: bool_0) -> TupleDesc;
-    static mut MyDatabaseId: Oid;
-    fn makeVar(
-        varno: Index,
-        varattno: AttrNumber,
-        vartype: Oid,
-        vartypmod: int32,
-        varcollid: Oid,
-        varlevelsup: Index,
-    ) -> *mut Var;
-    fn makeTargetEntry(
-        expr: *mut Expr,
-        resno: AttrNumber,
-        resname: *mut libc::c_char,
-        resjunk: bool_0,
-    ) -> *mut TargetEntry;
-    fn makeNullConst(consttype: Oid, consttypmod: int32, constcollid: Oid) -> *mut Const;
-    fn makeRangeVar(
-        schemaname: *mut libc::c_char,
-        relname: *mut libc::c_char,
-        location: libc::c_int,
-    ) -> *mut RangeVar;
-    fn exprType(expr: *const Node) -> Oid;
-    fn exprTypmod(expr: *const Node) -> int32;
-    fn exprCollation(expr: *const Node) -> Oid;
-    fn coerce_to_target_type(
-        pstate: *mut ParseState,
-        expr: *mut Node,
-        exprtype: Oid,
-        targettype: Oid,
-        targettypmod: int32,
-        ccontext: CoercionContext,
-        cformat: CoercionForm,
-        location: libc::c_int,
-    ) -> *mut Node;
-    fn coerce_to_domain(
-        arg: *mut Node,
-        baseTypeId: Oid,
-        baseTypeMod: int32,
-        typeId: Oid,
-        ccontext: CoercionContext,
-        cformat: CoercionForm,
-        location: libc::c_int,
-        hideInputCoercion: bool_0,
-    ) -> *mut Node;
-    fn transformExpr(
-        pstate: *mut ParseState,
-        expr: *mut Node,
-        exprKind: ParseExprKind,
-    ) -> *mut Node;
-    fn refnameNamespaceItem(
-        pstate: *mut ParseState,
-        schemaname: *const libc::c_char,
-        refname: *const libc::c_char,
-        location: libc::c_int,
-        sublevels_up: *mut libc::c_int,
-    ) -> *mut ParseNamespaceItem;
-    fn GetNSItemByRangeTablePosn(
-        pstate: *mut ParseState,
-        varno: libc::c_int,
-        sublevels_up: libc::c_int,
-    ) -> *mut ParseNamespaceItem;
-    fn GetRTEByRangeTablePosn(
-        pstate: *mut ParseState,
-        varno: libc::c_int,
-        sublevels_up: libc::c_int,
-    ) -> *mut RangeTblEntry;
-    fn GetCTEForRTE(
-        pstate: *mut ParseState,
-        rte: *mut RangeTblEntry,
-        rtelevelsup: libc::c_int,
-    ) -> *mut CommonTableExpr;
-    fn markVarForSelectPriv(pstate: *mut ParseState, var: *mut Var);
-    fn errorMissingRTE(pstate: *mut ParseState, relation: *mut RangeVar) -> !;
-    fn expandRTE(
-        rte: *mut RangeTblEntry,
-        rtindex: libc::c_int,
-        sublevels_up: libc::c_int,
-        location: libc::c_int,
-        include_dropped: bool_0,
-        colnames: *mut *mut List,
-        colvars: *mut *mut List,
-    );
-    fn expandNSItemVars(
-        nsitem: *mut ParseNamespaceItem,
-        sublevels_up: libc::c_int,
-        location: libc::c_int,
-        colnames: *mut *mut List,
-    ) -> *mut List;
-    fn expandNSItemAttrs(
-        pstate: *mut ParseState,
-        nsitem: *mut ParseNamespaceItem,
-        sublevels_up: libc::c_int,
-        location: libc::c_int,
-    ) -> *mut List;
-    fn attnameAttNum(
-        rd: Relation,
-        attname: *const libc::c_char,
-        sysColOK: bool_0,
-    ) -> libc::c_int;
-    fn attnumTypeId(rd: Relation, attid: libc::c_int) -> Oid;
-    fn typeidTypeRelid(type_id: Oid) -> Oid;
-    fn get_tle_by_resno(tlist: *mut List, resno: AttrNumber) -> *mut TargetEntry;
-    fn get_attnum(relid: Oid, attname: *const libc::c_char) -> AttrNumber;
-    fn get_atttypetypmodcoll(
-        relid: Oid,
-        attnum: AttrNumber,
-        typid: *mut Oid,
-        typmod: *mut int32,
-        collid: *mut Oid,
-    );
-    fn get_typcollation(typid: Oid) -> Oid;
-    fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut int32) -> Oid;
-}
+// #![feature(extern_types)]
+// extern "C" {
+//     pub type PartitionKeyData;
+//     pub type PartitionDescData;
+//     pub type AttrMissing;
+//     pub type PgStat_TableStatus;
+//     pub type FdwRoutine;
+//     pub type IndexAmRoutine;
+//     pub type TableAmRoutine;
+//     pub type RowSecurityDesc;
+//     pub type SMgrRelationData;
+//     pub type QueryEnvironment;
+//     fn abort() -> !;
+//     fn memset(
+//         _: *mut libc::c_void,
+//         _: libc::c_int,
+//         _: libc::c_ulong,
+//     ) -> *mut libc::c_void;
+//     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
+//     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errfinish(
+//         filename: *const libc::c_char,
+//         lineno: libc::c_int,
+//         funcname: *const libc::c_char,
+//     );
+//     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+//     fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
+//     fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
+//     fn bms_is_member(x: libc::c_int, a: *const Bitmapset) -> bool_0;
+//     fn lappend_int(list: *mut List, datum: libc::c_int) -> *mut List;
+//     fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
+//     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
+//     fn CreateTemplateTupleDesc(natts: libc::c_int) -> TupleDesc;
+//     fn TupleDescInitEntry(
+//         desc: TupleDesc,
+//         attributeNumber: AttrNumber,
+//         attributeName: *const libc::c_char,
+//         oidtypeid: Oid,
+//         typmod: int32,
+//         attdim: libc::c_int,
+//     );
+//     fn TupleDescInitEntryCollation(
+//         desc: TupleDesc,
+//         attributeNumber: AttrNumber,
+//         collationid: Oid,
+//     );
+//     fn list_truncate(list: *mut List, new_size: libc::c_int) -> *mut List;
+//     fn list_concat(list1: *mut List, list2: *const List) -> *mut List;
+//     fn transformContainerSubscripts(
+//         pstate: *mut ParseState,
+//         containerBase: *mut Node,
+//         containerType: Oid,
+//         containerTypMod: int32,
+//         indirection: *mut List,
+//         isAssignment: bool_0,
+//     ) -> *mut SubscriptingRef;
+//     fn transformContainerType(containerType: *mut Oid, containerTypmod: *mut int32);
+//     fn get_database_name(dbid: Oid) -> *mut libc::c_char;
+//     fn get_expr_result_tupdesc(expr: *mut Node, noError: bool_0) -> TupleDesc;
+//     static mut MyDatabaseId: Oid;
+//     fn makeVar(
+//         varno: Index,
+//         varattno: AttrNumber,
+//         vartype: Oid,
+//         vartypmod: int32,
+//         varcollid: Oid,
+//         varlevelsup: Index,
+//     ) -> *mut Var;
+//     fn makeTargetEntry(
+//         expr: *mut Expr,
+//         resno: AttrNumber,
+//         resname: *mut libc::c_char,
+//         resjunk: bool_0,
+//     ) -> *mut TargetEntry;
+//     fn makeNullConst(consttype: Oid, consttypmod: int32, constcollid: Oid) -> *mut Const;
+//     fn makeRangeVar(
+//         schemaname: *mut libc::c_char,
+//         relname: *mut libc::c_char,
+//         location: libc::c_int,
+//     ) -> *mut RangeVar;
+//     fn exprType(expr: *const Node) -> Oid;
+//     fn exprTypmod(expr: *const Node) -> int32;
+//     fn exprCollation(expr: *const Node) -> Oid;
+//     fn coerce_to_target_type(
+//         pstate: *mut ParseState,
+//         expr: *mut Node,
+//         exprtype: Oid,
+//         targettype: Oid,
+//         targettypmod: int32,
+//         ccontext: CoercionContext,
+//         cformat: CoercionForm,
+//         location: libc::c_int,
+//     ) -> *mut Node;
+//     fn coerce_to_domain(
+//         arg: *mut Node,
+//         baseTypeId: Oid,
+//         baseTypeMod: int32,
+//         typeId: Oid,
+//         ccontext: CoercionContext,
+//         cformat: CoercionForm,
+//         location: libc::c_int,
+//         hideInputCoercion: bool_0,
+//     ) -> *mut Node;
+//     fn transformExpr(
+//         pstate: *mut ParseState,
+//         expr: *mut Node,
+//         exprKind: ParseExprKind,
+//     ) -> *mut Node;
+//     fn refnameNamespaceItem(
+//         pstate: *mut ParseState,
+//         schemaname: *const libc::c_char,
+//         refname: *const libc::c_char,
+//         location: libc::c_int,
+//         sublevels_up: *mut libc::c_int,
+//     ) -> *mut ParseNamespaceItem;
+//     fn GetNSItemByRangeTablePosn(
+//         pstate: *mut ParseState,
+//         varno: libc::c_int,
+//         sublevels_up: libc::c_int,
+//     ) -> *mut ParseNamespaceItem;
+//     fn GetRTEByRangeTablePosn(
+//         pstate: *mut ParseState,
+//         varno: libc::c_int,
+//         sublevels_up: libc::c_int,
+//     ) -> *mut RangeTblEntry;
+//     fn GetCTEForRTE(
+//         pstate: *mut ParseState,
+//         rte: *mut RangeTblEntry,
+//         rtelevelsup: libc::c_int,
+//     ) -> *mut CommonTableExpr;
+//     fn markVarForSelectPriv(pstate: *mut ParseState, var: *mut Var);
+//     fn errorMissingRTE(pstate: *mut ParseState, relation: *mut RangeVar) -> !;
+//     fn expandRTE(
+//         rte: *mut RangeTblEntry,
+//         rtindex: libc::c_int,
+//         sublevels_up: libc::c_int,
+//         location: libc::c_int,
+//         include_dropped: bool_0,
+//         colnames: *mut *mut List,
+//         colvars: *mut *mut List,
+//     );
+//     fn expandNSItemVars(
+//         nsitem: *mut ParseNamespaceItem,
+//         sublevels_up: libc::c_int,
+//         location: libc::c_int,
+//         colnames: *mut *mut List,
+//     ) -> *mut List;
+//     fn expandNSItemAttrs(
+//         pstate: *mut ParseState,
+//         nsitem: *mut ParseNamespaceItem,
+//         sublevels_up: libc::c_int,
+//         location: libc::c_int,
+//     ) -> *mut List;
+//     fn attnameAttNum(
+//         rd: Relation,
+//         attname: *const libc::c_char,
+//         sysColOK: bool_0,
+//     ) -> libc::c_int;
+//     fn attnumTypeId(rd: Relation, attid: libc::c_int) -> Oid;
+//     fn typeidTypeRelid(type_id: Oid) -> Oid;
+//     fn get_tle_by_resno(tlist: *mut List, resno: AttrNumber) -> *mut TargetEntry;
+//     fn get_attnum(relid: Oid, attname: *const libc::c_char) -> AttrNumber;
+//     fn get_atttypetypmodcoll(
+//         relid: Oid,
+//         attnum: AttrNumber,
+//         typid: *mut Oid,
+//         typmod: *mut int32,
+//         collid: *mut Oid,
+//     );
+//     fn get_typcollation(typid: Oid) -> Oid;
+//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut int32) -> Oid;
+// }
+use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 pub type uintptr_t = libc::c_ulong;
