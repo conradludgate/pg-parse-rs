@@ -26,7 +26,7 @@ extern "C" {
     pub type SMgrRelationData;
     fn abort() -> !;
     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
-    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+    fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
     fn errfinish(
         filename: *const libc::c_char,
         lineno: libc::c_int,
@@ -44,16 +44,16 @@ extern "C" {
     fn lappend_oid(list: *mut List, datum: Oid) -> *mut List;
     fn list_concat(list1: *mut List, list2: *const List) -> *mut List;
     fn list_truncate(list: *mut List, new_size: libc::c_int) -> *mut List;
-    fn list_member_int(list: *const List, datum: libc::c_int) -> bool_0;
+    fn list_member_int(list: *const List, datum: libc::c_int) -> bool;
     fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
-    fn equal(a: *const libc::c_void, b: *const libc::c_void) -> bool_0;
-    fn bms_is_member(x: libc::c_int, a: *const Bitmapset) -> bool_0;
+    fn equal(a: *const libc::c_void, b: *const libc::c_void) -> bool;
+    fn bms_is_member(x: libc::c_int, a: *const Bitmapset) -> bool;
     fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
     fn bms_add_members(a: *mut Bitmapset, b: *const Bitmapset) -> *mut Bitmapset;
     fn makeString(str: *mut libc::c_char) -> *mut Value;
     fn table_close(relation: Relation, lockmode: LOCKMODE);
     fn GetTsmRoutine(tsmhandler: Oid) -> *mut TsmRoutine;
-    fn IsCatalogRelation(relation: Relation) -> bool_0;
+    fn IsCatalogRelation(relation: Relation) -> bool;
     fn setup_parser_errposition_callback(
         pcbstate: *mut ParseCallbackState,
         pstate: *mut ParseState,
@@ -63,7 +63,7 @@ extern "C" {
     fn get_relation_constraint_attnos(
         relid: Oid,
         conname: *const libc::c_char,
-        missing_ok: bool_0,
+        missing_ok: bool,
         constraintOid: *mut Oid,
     ) -> *mut Bitmapset;
     fn check_stack_depth();
@@ -78,7 +78,7 @@ extern "C" {
         varno: Index,
         varattno: AttrNumber,
         vartype: Oid,
-        vartypmod: int32,
+        vartypmod: i32,
         varcollid: Oid,
         varlevelsup: Index,
     ) -> *mut Var;
@@ -90,7 +90,7 @@ extern "C" {
     fn makeRelabelType(
         arg: *mut Expr,
         rtype: Oid,
-        rtypmod: int32,
+        rtypmod: i32,
         rcollid: Oid,
         rformat: CoercionForm,
     ) -> *mut RelabelType;
@@ -106,7 +106,7 @@ extern "C" {
         location: libc::c_int,
     ) -> *mut GroupingSet;
     fn exprType(expr: *const Node) -> Oid;
-    fn exprTypmod(expr: *const Node) -> int32;
+    fn exprTypmod(expr: *const Node) -> i32;
     fn strip_implicit_coercions(node: *mut Node) -> *mut Node;
     fn exprCollation(expr: *const Node) -> Oid;
     fn exprLocation(expr: *const Node) -> libc::c_int;
@@ -119,26 +119,26 @@ extern "C" {
         sgClause: *mut SortGroupClause,
         targetList: *mut List,
     ) -> *mut Node;
-    fn contain_vars_of_level(node: *mut Node, levelsup: libc::c_int) -> bool_0;
+    fn contain_vars_of_level(node: *mut Node, levelsup: libc::c_int) -> bool;
     fn parse_sub_analyze(
         parseTree: *mut Node,
         parentParseState: *mut ParseState,
         parentCTE: *mut CommonTableExpr,
-        locked_from_parent: bool_0,
-        resolve_unknowns: bool_0,
+        locked_from_parent: bool,
+        resolve_unknowns: bool,
     ) -> *mut Query;
     fn can_coerce_type(
         nargs: libc::c_int,
         input_typeids: *const Oid,
         target_typeids: *const Oid,
         ccontext: CoercionContext,
-    ) -> bool_0;
+    ) -> bool;
     fn coerce_type(
         pstate: *mut ParseState,
         node: *mut Node,
         inputTypeId: Oid,
         targetTypeId: Oid,
-        targetTypeMod: int32,
+        targetTypeMod: i32,
         ccontext: CoercionContext,
         cformat: CoercionForm,
         location: libc::c_int,
@@ -158,7 +158,7 @@ extern "C" {
         pstate: *mut ParseState,
         node: *mut Node,
         targetTypeId: Oid,
-        targetTypmod: int32,
+        targetTypmod: i32,
         constructName: *const libc::c_char,
     ) -> *mut Node;
     fn select_common_type(
@@ -171,7 +171,7 @@ extern "C" {
         pstate: *mut ParseState,
         exprs: *mut List,
         common_type: Oid,
-    ) -> int32;
+    ) -> i32;
     fn assign_list_collations(pstate: *mut ParseState, exprs: *mut List);
     fn assign_expr_collations(pstate: *mut ParseState, expr: *mut Node);
     fn transformExpr(
@@ -183,19 +183,19 @@ extern "C" {
         funcname: *mut List,
         nargs: libc::c_int,
         argtypes: *const Oid,
-        missing_ok: bool_0,
+        missing_ok: bool,
     ) -> Oid;
     fn get_sort_group_operators(
         argtype: Oid,
-        needLT: bool_0,
-        needEQ: bool_0,
-        needGT: bool_0,
+        needLT: bool,
+        needEQ: bool,
+        needGT: bool,
         ltOpr: *mut Oid,
         eqOpr: *mut Oid,
         gtOpr: *mut Oid,
-        isHashable: *mut bool_0,
+        isHashable: *mut bool,
     );
-    fn compatible_oper_opid(op: *mut List, arg1: Oid, arg2: Oid, noError: bool_0) -> Oid;
+    fn compatible_oper_opid(op: *mut List, arg1: Oid, arg2: Oid, noError: bool) -> Oid;
     fn scanNameSpaceForCTE(
         pstate: *mut ParseState,
         refname: *const libc::c_char,
@@ -204,7 +204,7 @@ extern "C" {
     fn scanNameSpaceForENR(
         pstate: *mut ParseState,
         refname: *const libc::c_char,
-    ) -> bool_0;
+    ) -> bool;
     fn checkNameSpaceConflicts(
         pstate: *mut ParseState,
         namespace1: *mut List,
@@ -213,7 +213,7 @@ extern "C" {
     fn colNameToVar(
         pstate: *mut ParseState,
         colname: *const libc::c_char,
-        localonly: bool_0,
+        localonly: bool,
         location: libc::c_int,
     ) -> *mut Node;
     fn markVarForSelectPriv(pstate: *mut ParseState, var: *mut Var);
@@ -226,23 +226,23 @@ extern "C" {
         pstate: *mut ParseState,
         relation: *mut RangeVar,
         alias: *mut Alias,
-        inh: bool_0,
-        inFromCl: bool_0,
+        inh: bool,
+        inFromCl: bool,
     ) -> *mut ParseNamespaceItem;
     fn addRangeTableEntryForRelation(
         pstate: *mut ParseState,
         rel: Relation,
         lockmode: libc::c_int,
         alias: *mut Alias,
-        inh: bool_0,
-        inFromCl: bool_0,
+        inh: bool,
+        inFromCl: bool,
     ) -> *mut ParseNamespaceItem;
     fn addRangeTableEntryForSubquery(
         pstate: *mut ParseState,
         subquery: *mut Query,
         alias: *mut Alias,
-        lateral: bool_0,
-        inFromCl: bool_0,
+        lateral: bool,
+        inFromCl: bool,
     ) -> *mut ParseNamespaceItem;
     fn addRangeTableEntryForFunction(
         pstate: *mut ParseState,
@@ -250,15 +250,15 @@ extern "C" {
         funcexprs: *mut List,
         coldeflists: *mut List,
         rangefunc: *mut RangeFunction,
-        lateral: bool_0,
-        inFromCl: bool_0,
+        lateral: bool,
+        inFromCl: bool,
     ) -> *mut ParseNamespaceItem;
     fn addRangeTableEntryForTableFunc(
         pstate: *mut ParseState,
         tf: *mut TableFunc,
         alias: *mut Alias,
-        lateral: bool_0,
-        inFromCl: bool_0,
+        lateral: bool,
+        inFromCl: bool,
     ) -> *mut ParseNamespaceItem;
     fn addRangeTableEntryForJoin(
         pstate: *mut ParseState,
@@ -270,27 +270,27 @@ extern "C" {
         leftcols: *mut List,
         rightcols: *mut List,
         alias: *mut Alias,
-        inFromCl: bool_0,
+        inFromCl: bool,
     ) -> *mut ParseNamespaceItem;
     fn addRangeTableEntryForCTE(
         pstate: *mut ParseState,
         cte: *mut CommonTableExpr,
         levelsup: Index,
         rv: *mut RangeVar,
-        inFromCl: bool_0,
+        inFromCl: bool,
     ) -> *mut ParseNamespaceItem;
     fn addRangeTableEntryForENR(
         pstate: *mut ParseState,
         rv: *mut RangeVar,
-        inFromCl: bool_0,
+        inFromCl: bool,
     ) -> *mut ParseNamespaceItem;
-    fn isLockedRefname(pstate: *mut ParseState, refname: *const libc::c_char) -> bool_0;
+    fn isLockedRefname(pstate: *mut ParseState, refname: *const libc::c_char) -> bool;
     fn addNSItemToQuery(
         pstate: *mut ParseState,
         nsitem: *mut ParseNamespaceItem,
-        addToJoinList: bool_0,
-        addToRelNameSpace: bool_0,
-        addToVarNameSpace: bool_0,
+        addToJoinList: bool,
+        addToRelNameSpace: bool,
+        addToVarNameSpace: bool,
     );
     fn transformTargetEntry(
         pstate: *mut ParseState,
@@ -298,14 +298,14 @@ extern "C" {
         expr: *mut Node,
         exprKind: ParseExprKind,
         colname: *mut libc::c_char,
-        resjunk: bool_0,
+        resjunk: bool,
     ) -> *mut TargetEntry;
     fn FigureColname(node: *mut Node) -> *mut libc::c_char;
     fn typenameTypeIdAndMod(
         pstate: *mut ParseState,
         typeName: *const TypeName,
         typeid_p: *mut Oid,
-        typmod_p: *mut int32,
+        typmod_p: *mut i32,
     );
     fn LookupCollation(
         pstate: *mut ParseState,
@@ -313,17 +313,17 @@ extern "C" {
         location: libc::c_int,
     ) -> Oid;
     fn SystemFuncName(name: *mut libc::c_char) -> *mut List;
-    fn contain_aggs_of_level(node: *mut Node, levelsup: libc::c_int) -> bool_0;
-    fn contain_windowfuncs(node: *mut Node) -> bool_0;
+    fn contain_aggs_of_level(node: *mut Node, levelsup: libc::c_int) -> bool;
+    fn contain_windowfuncs(node: *mut Node) -> bool;
     fn ReleaseCatCacheList(list: *mut CatCList);
     fn get_ordering_op_properties(
         opno: Oid,
         opfamily: *mut Oid,
         opcintype: *mut Oid,
-        strategy: *mut int16,
-    ) -> bool_0;
-    fn get_equality_op_for_ordering_op(opno: Oid, reverse: *mut bool_0) -> Oid;
-    fn op_hashjoinable(opno: Oid, inputtype: Oid) -> bool_0;
+        strategy: *mut i16,
+    ) -> bool;
+    fn get_equality_op_for_ordering_op(opno: Oid, reverse: *mut bool) -> Oid;
+    fn op_hashjoinable(opno: Oid, inputtype: Oid) -> bool;
     fn get_commutator(opno: Oid) -> Oid;
     fn get_typcollation(typid: Oid) -> Oid;
     fn SearchSysCacheList(

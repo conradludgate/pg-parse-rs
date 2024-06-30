@@ -13,7 +13,7 @@
 //         lineno: libc::c_int,
 //         funcname: *const libc::c_char,
 //     );
-//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
 //     fn pg_mbcliplen(
 //         mbstr: *const libc::c_char,
 //         len: libc::c_int,
@@ -22,21 +22,21 @@
 //     fn pg_database_encoding_max_length() -> libc::c_int;
 // }
 use super::*;
-pub type __uint32_t = libc::c_uint;
+pub type __u32_t = libc::c_uint;
 pub type __darwin_ct_rune_t = libc::c_int;
 pub type __darwin_size_t = libc::c_ulong;
 pub type __darwin_wchar_t = libc::c_int;
 pub type __darwin_rune_t = __darwin_wchar_t;
-pub type size_t = __darwin_size_t;
-pub type bool_0 = libc::c_uchar;
-pub type Size = size_t;
+// pub type isize = __darwin_size_t;
+// pub type bool = libc::c_uchar;
+pub type Size = isize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct _RuneEntry {
     pub __min: __darwin_rune_t,
     pub __max: __darwin_rune_t,
     pub __map: __darwin_rune_t,
-    pub __types: *mut __uint32_t,
+    pub __types: *mut __u32_t,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -48,7 +48,7 @@ pub struct _RuneRange {
 #[repr(C)]
 pub struct _RuneCharClass {
     pub __name: [libc::c_char; 14],
-    pub __mask: __uint32_t,
+    pub __mask: __u32_t,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -71,7 +71,7 @@ pub struct _RuneLocale {
         ) -> libc::c_int,
     >,
     pub __invalid_rune: __darwin_rune_t,
-    pub __runetype: [__uint32_t; 256],
+    pub __runetype: [__u32_t; 256],
     pub __maplower: [__darwin_rune_t; 256],
     pub __mapupper: [__darwin_rune_t; 256],
     pub __runetype_ext: _RuneRange,
@@ -114,23 +114,23 @@ pub unsafe extern "C" fn tolower(mut _c: libc::c_int) -> libc::c_int {
 pub unsafe extern "C" fn downcase_truncate_identifier(
     mut ident: *const libc::c_char,
     mut len: libc::c_int,
-    mut warn: bool_0,
+    mut warn: bool,
 ) -> *mut libc::c_char {
-    return downcase_identifier(ident, len, warn, 1 as libc::c_int as bool_0);
+    return downcase_identifier(ident, len, warn, true);
 }
 #[no_mangle]
 pub unsafe extern "C" fn downcase_identifier(
     mut ident: *const libc::c_char,
     mut len: libc::c_int,
-    mut warn: bool_0,
-    mut truncate: bool_0,
+    mut warn: bool,
+    mut truncate: bool,
 ) -> *mut libc::c_char {
     let mut result: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: libc::c_int = 0;
-    let mut enc_is_single_byte: bool_0 = 0;
+    let mut enc_is_single_byte: bool = 0;
     result = palloc((len + 1 as libc::c_int) as Size) as *mut libc::c_char;
     enc_is_single_byte = (pg_database_encoding_max_length() == 1 as libc::c_int)
-        as libc::c_int as bool_0;
+        as libc::c_int as bool;
     i = 0 as libc::c_int;
     while i < len {
         let mut ch: libc::c_uchar = *ident.offset(i as isize) as libc::c_uchar;
@@ -156,7 +156,7 @@ pub unsafe extern "C" fn downcase_identifier(
 pub unsafe extern "C" fn truncate_identifier(
     mut ident: *mut libc::c_char,
     mut len: libc::c_int,
-    mut warn: bool_0,
+    mut warn: bool,
 ) {
     if len >= 64 as libc::c_int {
         len = pg_mbcliplen(ident, len, 64 as libc::c_int - 1 as libc::c_int);
@@ -197,12 +197,12 @@ pub unsafe extern "C" fn truncate_identifier(
     }
 }
 #[no_mangle]
-pub unsafe extern "C" fn scanner_isspace(mut ch: libc::c_char) -> bool_0 {
+pub unsafe extern "C" fn scanner_isspace(mut ch: libc::c_char) -> bool {
     if ch as libc::c_int == ' ' as i32 || ch as libc::c_int == '\t' as i32
         || ch as libc::c_int == '\n' as i32 || ch as libc::c_int == '\r' as i32
         || ch as libc::c_int == '\u{c}' as i32
     {
-        return 1 as libc::c_int as bool_0;
+        return true;
     }
-    return 0 as libc::c_int as bool_0;
+    return false;
 }

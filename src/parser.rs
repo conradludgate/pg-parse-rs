@@ -7,7 +7,7 @@
 //     fn abort() -> !;
 //     fn strlen(_: *const libc::c_char) -> libc::c_ulong;
 //     static mut _DefaultRuneLocale: _RuneLocale;
-//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
 //     fn errfinish(
 //         filename: *const libc::c_char,
 //         lineno: libc::c_int,
@@ -43,32 +43,32 @@
 //         str: *const libc::c_char,
 //         yyext: *mut core_yy_extra_type,
 //         keywordlist: *const ScanKeywordList,
-//         keyword_tokens: *const uint16,
+//         keyword_tokens: *const u16,
 //     ) -> core_yyscan_t;
-//     static ScanKeywordTokens: [uint16; 0];
+//     static ScanKeywordTokens: [u16; 0];
 //     static ScanKeywords: ScanKeywordList;
-//     fn truncate_identifier(ident: *mut libc::c_char, len: libc::c_int, warn: bool_0);
-//     fn scanner_isspace(ch: libc::c_char) -> bool_0;
+//     fn truncate_identifier(ident: *mut libc::c_char, len: libc::c_int, warn: bool);
+//     fn scanner_isspace(ch: libc::c_char) -> bool;
 // }
 use super::*;
 pub type Oid = libc::c_uint;
-pub type __uint32_t = libc::c_uint;
+pub type __u32_t = libc::c_uint;
 pub type __darwin_ct_rune_t = libc::c_int;
 pub type __darwin_size_t = libc::c_ulong;
 pub type __darwin_wchar_t = libc::c_int;
 pub type __darwin_rune_t = __darwin_wchar_t;
-pub type size_t = __darwin_size_t;
-pub type bool_0 = libc::c_uchar;
-pub type int32 = libc::c_int;
-pub type uint16 = libc::c_ushort;
-pub type Size = size_t;
+// pub type isize = __darwin_size_t;
+// pub type bool = libc::c_uchar;
+// pub type i32 = libc::c_int;
+// pub type u16 = libc::c_ushort;
+pub type Size = isize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct _RuneEntry {
     pub __min: __darwin_rune_t,
     pub __max: __darwin_rune_t,
     pub __map: __darwin_rune_t,
-    pub __types: *mut __uint32_t,
+    pub __types: *mut __u32_t,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -80,7 +80,7 @@ pub struct _RuneRange {
 #[repr(C)]
 pub struct _RuneCharClass {
     pub __name: [libc::c_char; 14],
-    pub __mask: __uint32_t,
+    pub __mask: __u32_t,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -103,7 +103,7 @@ pub struct _RuneLocale {
         ) -> libc::c_int,
     >,
     pub __invalid_rune: __darwin_rune_t,
-    pub __runetype: [__uint32_t; 256],
+    pub __runetype: [__u32_t; 256],
     pub __maplower: [__darwin_rune_t; 256],
     pub __mapupper: [__darwin_rune_t; 256],
     pub __runetype_ext: _RuneRange,
@@ -602,7 +602,7 @@ pub struct RangeVar {
     pub catalogname: *mut libc::c_char,
     pub schemaname: *mut libc::c_char,
     pub relname: *mut libc::c_char,
-    pub inh: bool_0,
+    pub inh: bool,
     pub relpersistence: libc::c_char,
     pub alias: *mut Alias,
     pub location: libc::c_int,
@@ -618,14 +618,14 @@ pub struct IntoClause {
     pub onCommit: OnCommitAction,
     pub tableSpaceName: *mut libc::c_char,
     pub viewQuery: *mut Node,
-    pub skipData: bool_0,
+    pub skipData: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct JoinExpr {
     pub type_0: NodeTag,
     pub jointype: JoinType,
-    pub isNatural: bool_0,
+    pub isNatural: bool,
     pub larg: *mut Node,
     pub rarg: *mut Node,
     pub usingClause: *mut List,
@@ -650,7 +650,7 @@ pub union ValUnion {
 pub struct PartitionBoundSpec {
     pub type_0: NodeTag,
     pub strategy: libc::c_char,
-    pub is_default: bool_0,
+    pub is_default: bool,
     pub modulus: libc::c_int,
     pub remainder: libc::c_int,
     pub listdatums: *mut List,
@@ -677,10 +677,10 @@ pub struct TypeName {
     pub type_0: NodeTag,
     pub names: *mut List,
     pub typeOid: Oid,
-    pub setof: bool_0,
-    pub pct_type: bool_0,
+    pub setof: bool,
+    pub pct_type: bool,
     pub typmods: *mut List,
-    pub typemod: int32,
+    pub typemod: i32,
     pub arrayBounds: *mut List,
     pub location: libc::c_int,
 }
@@ -715,7 +715,7 @@ pub struct WindowDef {
 #[repr(C)]
 pub struct A_Indices {
     pub type_0: NodeTag,
-    pub is_slice: bool_0,
+    pub is_slice: bool,
     pub lidx: *mut Node,
     pub uidx: *mut Node,
 }
@@ -789,7 +789,7 @@ pub struct PartitionSpec {
 pub struct WithClause {
     pub type_0: NodeTag,
     pub ctes: *mut List,
-    pub recursive: bool_0,
+    pub recursive: bool,
     pub location: libc::c_int,
 }
 #[derive(Copy, Clone)]
@@ -883,7 +883,7 @@ pub struct ObjectWithArgs {
     pub type_0: NodeTag,
     pub objname: *mut List,
     pub objargs: *mut List,
-    pub args_unspecified: bool_0,
+    pub args_unspecified: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -906,7 +906,7 @@ pub struct VariableSetStmt {
     pub kind: VariableSetKind,
     pub name: *mut libc::c_char,
     pub args: *mut List,
-    pub is_local: bool_0,
+    pub is_local: bool,
 }
 pub type FunctionParameterMode = libc::c_uint;
 pub const FUNC_PARAM_TABLE: FunctionParameterMode = 116;
@@ -924,13 +924,13 @@ pub struct FunctionParameter {
     pub defexpr: *mut Node,
 }
 pub type ScanKeywordHashFunc = Option::<
-    unsafe extern "C" fn(*const libc::c_void, size_t) -> libc::c_int,
+    unsafe extern "C" fn(*const libc::c_void, isize) -> libc::c_int,
 >;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ScanKeywordList {
     pub kw_string: *const libc::c_char,
-    pub kw_offsets: *const uint16,
+    pub kw_offsets: *const u16,
     pub hash: ScanKeywordHashFunc,
     pub num_keywords: libc::c_int,
     pub max_kw_len: libc::c_int,
@@ -948,10 +948,10 @@ pub struct core_yy_extra_type {
     pub scanbuf: *mut libc::c_char,
     pub scanbuflen: Size,
     pub keywordlist: *const ScanKeywordList,
-    pub keyword_tokens: *const uint16,
+    pub keyword_tokens: *const u16,
     pub backslash_quote: libc::c_int,
-    pub escape_string_warning: bool_0,
-    pub standard_conforming_strings: bool_0,
+    pub escape_string_warning: bool,
+    pub standard_conforming_strings: bool,
     pub literalbuf: *mut libc::c_char,
     pub literallen: libc::c_int,
     pub literalalloc: libc::c_int,
@@ -959,9 +959,9 @@ pub struct core_yy_extra_type {
     pub xcdepth: libc::c_int,
     pub dolqstart: *mut libc::c_char,
     pub save_yylloc: libc::c_int,
-    pub utf16_first_part: int32,
-    pub warn_on_first_escape: bool_0,
-    pub saw_non_ascii: bool_0,
+    pub utf16_first_part: i32,
+    pub warn_on_first_escape: bool,
+    pub saw_non_ascii: bool,
 }
 pub type core_yyscan_t = *mut libc::c_void;
 #[derive(Copy, Clone)]
@@ -979,7 +979,7 @@ pub union YYSTYPE {
     pub str_0: *mut libc::c_char,
     pub keyword: *const libc::c_char,
     pub chr: libc::c_char,
-    pub boolean: bool_0,
+    pub boolean: bool,
     pub jtype: JoinType,
     pub dbehavior: DropBehavior,
     pub oncommit: OnCommitAction,
@@ -1019,7 +1019,7 @@ pub union YYSTYPE {
 #[repr(C)]
 pub struct base_yy_extra_type {
     pub core_yy_extra: core_yy_extra_type,
-    pub have_lookahead: bool_0,
+    pub have_lookahead: bool,
     pub lookahead_token: libc::c_int,
     pub lookahead_yylval: core_YYSTYPE,
     pub lookahead_yylloc: libc::c_int,
@@ -1053,19 +1053,19 @@ pub unsafe extern "C" fn isxdigit(mut _c: libc::c_int) -> libc::c_int {
     return __isctype(_c, 0x10000 as libc::c_long as libc::c_ulong);
 }
 #[inline]
-unsafe extern "C" fn is_valid_unicode_codepoint(mut c: pg_wchar) -> bool_0 {
+unsafe extern "C" fn is_valid_unicode_codepoint(mut c: pg_wchar) -> bool {
     return (c > 0 as libc::c_int as pg_wchar && c <= 0x10ffff as libc::c_int as pg_wchar)
-        as libc::c_int as bool_0;
+        as libc::c_int as bool;
 }
 #[inline]
-unsafe extern "C" fn is_utf16_surrogate_first(mut c: pg_wchar) -> bool_0 {
+unsafe extern "C" fn is_utf16_surrogate_first(mut c: pg_wchar) -> bool {
     return (c >= 0xd800 as libc::c_int as pg_wchar
-        && c <= 0xdbff as libc::c_int as pg_wchar) as libc::c_int as bool_0;
+        && c <= 0xdbff as libc::c_int as pg_wchar) as libc::c_int as bool;
 }
 #[inline]
-unsafe extern "C" fn is_utf16_surrogate_second(mut c: pg_wchar) -> bool_0 {
+unsafe extern "C" fn is_utf16_surrogate_second(mut c: pg_wchar) -> bool {
     return (c >= 0xdc00 as libc::c_int as pg_wchar
-        && c <= 0xdfff as libc::c_int as pg_wchar) as libc::c_int as bool_0;
+        && c <= 0xdfff as libc::c_int as pg_wchar) as libc::c_int as bool;
 }
 #[inline]
 unsafe extern "C" fn surrogate_pair_to_codepoint(
@@ -1087,7 +1087,7 @@ pub unsafe extern "C" fn raw_parser(
             scanbuf: 0 as *mut libc::c_char,
             scanbuflen: 0,
             keywordlist: 0 as *const ScanKeywordList,
-            keyword_tokens: 0 as *const uint16,
+            keyword_tokens: 0 as *const u16,
             backslash_quote: 0,
             escape_string_warning: 0,
             standard_conforming_strings: 0,
@@ -1118,7 +1118,7 @@ pub unsafe extern "C" fn raw_parser(
         ScanKeywordTokens.as_ptr(),
     );
     if mode as libc::c_uint == RAW_PARSE_DEFAULT as libc::c_int as libc::c_uint {
-        yyextra.have_lookahead = 0 as libc::c_int as bool_0;
+        yyextra.have_lookahead = false;
     } else {
         static mut mode_token: [libc::c_int; 6] = [
             0 as libc::c_int,
@@ -1128,7 +1128,7 @@ pub unsafe extern "C" fn raw_parser(
             733 as libc::c_int,
             734 as libc::c_int,
         ];
-        yyextra.have_lookahead = 1 as libc::c_int as bool_0;
+        yyextra.have_lookahead = true;
         yyextra.lookahead_token = mode_token[mode as usize];
         yyextra.lookahead_yylloc = 0 as libc::c_int;
         yyextra.lookahead_end = 0 as *mut libc::c_char;
@@ -1160,7 +1160,7 @@ pub unsafe extern "C" fn base_yylex(
         if !((*yyextra).lookahead_end).is_null() {
             *(*yyextra).lookahead_end = (*yyextra).lookahead_hold_char;
         }
-        (*yyextra).have_lookahead = 0 as libc::c_int as bool_0;
+        (*yyextra).have_lookahead = false;
     } else {
         cur_token = core_yylex(&mut (*lvalp).core_yystype, llocp, yyscanner);
     }
@@ -1192,7 +1192,7 @@ pub unsafe extern "C" fn base_yylex(
     *llocp = cur_yylloc;
     (*yyextra).lookahead_hold_char = *(*yyextra).lookahead_end;
     *(*yyextra).lookahead_end = '\0' as i32 as libc::c_char;
-    (*yyextra).have_lookahead = 1 as libc::c_int as bool_0;
+    (*yyextra).have_lookahead = true;
     match cur_token {
         520 => {
             match next_token {
@@ -1256,7 +1256,7 @@ pub unsafe extern "C" fn base_yylex(
                     *llocp,
                     yyscanner,
                 );
-                (*yyextra).have_lookahead = 0 as libc::c_int as bool_0;
+                (*yyextra).have_lookahead = false;
             } else {
                 (*lvalp)
                     .core_yystype
@@ -1271,7 +1271,7 @@ pub unsafe extern "C" fn base_yylex(
                 truncate_identifier(
                     (*lvalp).core_yystype.str_0,
                     strlen((*lvalp).core_yystype.str_0) as libc::c_int,
-                    1 as libc::c_int as bool_0,
+                    true,
                 );
                 cur_token = 258 as libc::c_int;
             } else if cur_token == 262 as libc::c_int {
@@ -1341,14 +1341,14 @@ unsafe extern "C" fn check_unicode_value(mut c: pg_wchar) {
         }
     }
 }
-unsafe extern "C" fn check_uescapechar(mut escape: libc::c_uchar) -> bool_0 {
+unsafe extern "C" fn check_uescapechar(mut escape: libc::c_uchar) -> bool {
     if isxdigit(escape as libc::c_int) != 0 || escape as libc::c_int == '+' as i32
         || escape as libc::c_int == '\'' as i32 || escape as libc::c_int == '"' as i32
         || scanner_isspace(escape as libc::c_char) as libc::c_int != 0
     {
-        return 0 as libc::c_int as bool_0
+        return false
     } else {
-        return 1 as libc::c_int as bool_0
+        return true
     };
 }
 unsafe extern "C" fn str_udeescape(
@@ -1361,7 +1361,7 @@ unsafe extern "C" fn str_udeescape(
     let mut in_0: *const libc::c_char = 0 as *const libc::c_char;
     let mut new: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut out: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut new_len: size_t = 0;
+    let mut new_len: isize = 0;
     let mut pair_first: pg_wchar = 0 as libc::c_int as pg_wchar;
     let mut scbstate: ScannerCallbackState = ScannerCallbackState {
         yyscanner: 0 as *mut libc::c_void,
@@ -1383,11 +1383,11 @@ unsafe extern "C" fn str_udeescape(
             current_block = 9627623479216730126;
             break;
         }
-        let mut out_dist: size_t = out.offset_from(new) as libc::c_long as size_t;
+        let mut out_dist: isize = out.offset_from(new) as libc::c_long as isize;
         if out_dist
-            > new_len.wrapping_sub((16 as libc::c_int + 1 as libc::c_int) as size_t)
+            > new_len.wrapping_sub((16 as libc::c_int + 1 as libc::c_int) as isize)
         {
-            new_len = new_len * 2 as libc::c_int as size_t;
+            new_len = new_len * 2 as libc::c_int as isize;
             new = repalloc(new as *mut libc::c_void, new_len) as *mut libc::c_char;
             out = new.offset(out_dist as isize);
         }

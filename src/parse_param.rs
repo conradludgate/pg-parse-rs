@@ -13,27 +13,27 @@
 //     fn abort() -> !;
 //     fn expression_tree_walker(
 //         node: *mut Node,
-//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         walker: Option::<unsafe extern "C" fn() -> bool>,
 //         context: *mut libc::c_void,
-//     ) -> bool_0;
+//     ) -> bool;
 //     fn query_tree_walker(
 //         query: *mut Query,
-//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         walker: Option::<unsafe extern "C" fn() -> bool>,
 //         context: *mut libc::c_void,
 //         flags: libc::c_int,
-//     ) -> bool_0;
+//     ) -> bool;
 //     fn get_typcollation(typid: Oid) -> Oid;
 // }
 use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
-pub type size_t = __darwin_size_t;
-pub type bool_0 = libc::c_uchar;
-pub type int16 = libc::c_short;
-pub type int32 = libc::c_int;
-pub type uint32 = libc::c_uint;
-pub type uint64 = libc::c_ulong;
-pub type Size = size_t;
+// pub type isize = __darwin_size_t;
+// pub type bool = libc::c_uchar;
+// pub type i16 = libc::c_short;
+// pub type i32 = libc::c_int;
+// pub type u32 = libc::c_uint;
+// pub type uint64 = libc::c_ulong;
+pub type Size = isize;
 pub type Index = libc::c_uint;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -478,14 +478,14 @@ pub const T_ProjectionInfo: NodeTag = 3;
 pub const T_ExprContext: NodeTag = 2;
 pub const T_IndexInfo: NodeTag = 1;
 pub const T_Invalid: NodeTag = 0;
-pub type bitmapword = uint32;
+pub type bitmapword = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Bitmapset {
     pub nwords: libc::c_int,
     pub words: [bitmapword; 0],
 }
-pub type AttrNumber = int16;
+pub type AttrNumber = i16;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Node {
@@ -558,7 +558,7 @@ pub struct Param {
     pub paramkind: ParamKind,
     pub paramid: libc::c_int,
     pub paramtype: Oid,
-    pub paramtypmod: int32,
+    pub paramtypmod: i32,
     pub paramcollid: Oid,
     pub location: libc::c_int,
 }
@@ -592,7 +592,7 @@ pub const QSRC_QUAL_INSTEAD_RULE: QuerySource = 3;
 pub const QSRC_INSTEAD_RULE: QuerySource = 2;
 pub const QSRC_PARSER: QuerySource = 1;
 pub const QSRC_ORIGINAL: QuerySource = 0;
-pub type AclMode = uint32;
+pub type AclMode = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Query {
@@ -600,18 +600,18 @@ pub struct Query {
     pub commandType: CmdType,
     pub querySource: QuerySource,
     pub queryId: uint64,
-    pub canSetTag: bool_0,
+    pub canSetTag: bool,
     pub utilityStmt: *mut Node,
     pub resultRelation: libc::c_int,
-    pub hasAggs: bool_0,
-    pub hasWindowFuncs: bool_0,
-    pub hasTargetSRFs: bool_0,
-    pub hasSubLinks: bool_0,
-    pub hasDistinctOn: bool_0,
-    pub hasRecursive: bool_0,
-    pub hasModifyingCTE: bool_0,
-    pub hasForUpdate: bool_0,
-    pub hasRowSecurity: bool_0,
+    pub hasAggs: bool,
+    pub hasWindowFuncs: bool,
+    pub hasTargetSRFs: bool,
+    pub hasSubLinks: bool,
+    pub hasDistinctOn: bool,
+    pub hasRecursive: bool,
+    pub hasModifyingCTE: bool,
+    pub hasForUpdate: bool,
+    pub hasRowSecurity: bool,
     pub cteList: *mut List,
     pub rtable: *mut List,
     pub jointree: *mut FromExpr,
@@ -669,19 +669,19 @@ pub struct RangeTblEntry {
     pub rellockmode: libc::c_int,
     pub tablesample: *mut TableSampleClause,
     pub subquery: *mut Query,
-    pub security_barrier: bool_0,
+    pub security_barrier: bool,
     pub jointype: JoinType,
     pub joinmergedcols: libc::c_int,
     pub joinaliasvars: *mut List,
     pub joinleftcols: *mut List,
     pub joinrightcols: *mut List,
     pub functions: *mut List,
-    pub funcordinality: bool_0,
+    pub funcordinality: bool,
     pub tablefunc: *mut TableFunc,
     pub values_lists: *mut List,
     pub ctename: *mut libc::c_char,
     pub ctelevelsup: Index,
-    pub self_reference: bool_0,
+    pub self_reference: bool,
     pub coltypes: *mut List,
     pub coltypmods: *mut List,
     pub colcollations: *mut List,
@@ -689,9 +689,9 @@ pub struct RangeTblEntry {
     pub enrtuples: libc::c_double,
     pub alias: *mut Alias,
     pub eref: *mut Alias,
-    pub lateral: bool_0,
-    pub inh: bool_0,
-    pub inFromCl: bool_0,
+    pub lateral: bool,
+    pub inh: bool,
+    pub inFromCl: bool,
     pub requiredPerms: AclMode,
     pub checkAsUser: Oid,
     pub selectedCols: *mut Bitmapset,
@@ -717,7 +717,7 @@ pub const CTEMaterializeDefault: CTEMaterialize = 0;
 pub struct CTESearchClause {
     pub type_0: NodeTag,
     pub search_col_list: *mut List,
-    pub search_breadth_first: bool_0,
+    pub search_breadth_first: bool,
     pub search_seq_column: *mut libc::c_char,
     pub location: libc::c_int,
 }
@@ -747,7 +747,7 @@ pub struct CommonTableExpr {
     pub search_clause: *mut CTESearchClause,
     pub cycle_clause: *mut CTECycleClause,
     pub location: libc::c_int,
-    pub cterecursive: bool_0,
+    pub cterecursive: bool,
     pub cterefcount: libc::c_int,
     pub ctecolnames: *mut List,
     pub ctecoltypes: *mut List,
@@ -755,48 +755,13 @@ pub struct CommonTableExpr {
     pub ctecolcollations: *mut List,
 }
 pub type Relation = *mut RelationData;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseState {
-    pub parentParseState: *mut ParseState,
-    pub p_sourcetext: *const libc::c_char,
-    pub p_rtable: *mut List,
-    pub p_joinexprs: *mut List,
-    pub p_joinlist: *mut List,
-    pub p_namespace: *mut List,
-    pub p_lateral_active: bool_0,
-    pub p_ctenamespace: *mut List,
-    pub p_future_ctes: *mut List,
-    pub p_parent_cte: *mut CommonTableExpr,
-    pub p_target_relation: Relation,
-    pub p_target_nsitem: *mut ParseNamespaceItem,
-    pub p_is_insert: bool_0,
-    pub p_windowdefs: *mut List,
-    pub p_expr_kind: ParseExprKind,
-    pub p_next_resno: libc::c_int,
-    pub p_multiassign_exprs: *mut List,
-    pub p_locking_clause: *mut List,
-    pub p_locked_from_parent: bool_0,
-    pub p_resolve_unknowns: bool_0,
-    pub p_queryEnv: *mut QueryEnvironment,
-    pub p_hasAggs: bool_0,
-    pub p_hasWindowFuncs: bool_0,
-    pub p_hasTargetSRFs: bool_0,
-    pub p_hasSubLinks: bool_0,
-    pub p_hasModifyingCTE: bool_0,
-    pub p_last_srf: *mut Node,
-    pub p_pre_columnref_hook: PreParseColumnRefHook,
-    pub p_post_columnref_hook: PostParseColumnRefHook,
-    pub p_paramref_hook: ParseParamRefHook,
-    pub p_coerce_param_hook: CoerceParamHook,
-    pub p_ref_hook_state: *mut libc::c_void,
-}
+
 pub type CoerceParamHook = Option::<
     unsafe extern "C" fn(
         *mut ParseState,
         *mut Param,
         Oid,
-        int32,
+        i32,
         libc::c_int,
     ) -> *mut Node,
 >;
@@ -858,10 +823,10 @@ pub struct ParseNamespaceItem {
     pub p_rte: *mut RangeTblEntry,
     pub p_rtindex: libc::c_int,
     pub p_nscolumns: *mut ParseNamespaceColumn,
-    pub p_rel_visible: bool_0,
-    pub p_cols_visible: bool_0,
-    pub p_lateral_only: bool_0,
-    pub p_lateral_ok: bool_0,
+    pub p_rel_visible: bool,
+    pub p_cols_visible: bool,
+    pub p_lateral_only: bool,
+    pub p_lateral_ok: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -869,11 +834,11 @@ pub struct ParseNamespaceColumn {
     pub p_varno: Index,
     pub p_varattno: AttrNumber,
     pub p_vartype: Oid,
-    pub p_vartypmod: int32,
+    pub p_vartypmod: i32,
     pub p_varcollid: Oid,
     pub p_varnosyn: Index,
     pub p_varattnosyn: AttrNumber,
-    pub p_dontexpand: bool_0,
+    pub p_dontexpand: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -929,7 +894,7 @@ pub unsafe extern "C" fn parse_variable_parameters(
                 *mut ParseState,
                 *mut Param,
                 Oid,
-                int32,
+                i32,
                 libc::c_int,
             ) -> *mut Node,
     );
@@ -944,7 +909,7 @@ unsafe extern "C" fn fixed_paramref_hook(
     let mut param: *mut Param = 0 as *mut Param;
     if paramno <= 0 as libc::c_int || paramno > (*parstate).numParams
         || (*((*parstate).paramTypes).offset((paramno - 1 as libc::c_int) as isize)
-            != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0
+            != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
     {
         let elevel_: libc::c_int = 21 as libc::c_int;
         let mut __error: libc::c_int = 0;
@@ -978,12 +943,12 @@ pub unsafe extern "C" fn check_variable_parameters(
         query_tree_walker(
             query,
             ::core::mem::transmute::<
-                Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool_0>,
-                Option::<unsafe extern "C" fn() -> bool_0>,
+                Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
+                Option::<unsafe extern "C" fn() -> bool>,
             >(
                 Some(
                     check_parameter_resolution_walker
-                        as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool_0,
+                        as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
                 ),
             ),
             pstate as *mut libc::c_void,
@@ -994,9 +959,9 @@ pub unsafe extern "C" fn check_variable_parameters(
 unsafe extern "C" fn check_parameter_resolution_walker(
     mut node: *mut Node,
     mut pstate: *mut ParseState,
-) -> bool_0 {
+) -> bool {
     if node.is_null() {
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_Param as libc::c_int as libc::c_uint
@@ -1026,7 +991,7 @@ unsafe extern "C" fn check_parameter_resolution_walker(
                 }
             }
         }
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_Query as libc::c_int as libc::c_uint
@@ -1034,12 +999,12 @@ unsafe extern "C" fn check_parameter_resolution_walker(
         return query_tree_walker(
             node as *mut Query,
             ::core::mem::transmute::<
-                Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool_0>,
-                Option::<unsafe extern "C" fn() -> bool_0>,
+                Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
+                Option::<unsafe extern "C" fn() -> bool>,
             >(
                 Some(
                     check_parameter_resolution_walker
-                        as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool_0,
+                        as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
                 ),
             ),
             pstate as *mut libc::c_void,
@@ -1049,28 +1014,28 @@ unsafe extern "C" fn check_parameter_resolution_walker(
     return expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool_0>,
-            Option::<unsafe extern "C" fn() -> bool_0>,
+            Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
+            Option::<unsafe extern "C" fn() -> bool>,
         >(
             Some(
                 check_parameter_resolution_walker
-                    as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool_0,
+                    as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
             ),
         ),
         pstate as *mut libc::c_void,
     );
 }
 #[no_mangle]
-pub unsafe extern "C" fn query_contains_extern_params(mut query: *mut Query) -> bool_0 {
+pub unsafe extern "C" fn query_contains_extern_params(mut query: *mut Query) -> bool {
     return query_tree_walker(
         query,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool_0>,
-            Option::<unsafe extern "C" fn() -> bool_0>,
+            Option::<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool>,
+            Option::<unsafe extern "C" fn() -> bool>,
         >(
             Some(
                 query_contains_extern_params_walker
-                    as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool_0,
+                    as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool,
             ),
         ),
         0 as *mut libc::c_void,
@@ -1080,9 +1045,9 @@ pub unsafe extern "C" fn query_contains_extern_params(mut query: *mut Query) -> 
 unsafe extern "C" fn query_contains_extern_params_walker(
     mut node: *mut Node,
     mut context: *mut libc::c_void,
-) -> bool_0 {
+) -> bool {
     if node.is_null() {
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_Param as libc::c_int as libc::c_uint
@@ -1091,9 +1056,9 @@ unsafe extern "C" fn query_contains_extern_params_walker(
         if (*param).paramkind as libc::c_uint
             == PARAM_EXTERN as libc::c_int as libc::c_uint
         {
-            return 1 as libc::c_int as bool_0;
+            return true;
         }
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_Query as libc::c_int as libc::c_uint
@@ -1101,12 +1066,12 @@ unsafe extern "C" fn query_contains_extern_params_walker(
         return query_tree_walker(
             node as *mut Query,
             ::core::mem::transmute::<
-                Option::<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool_0>,
-                Option::<unsafe extern "C" fn() -> bool_0>,
+                Option::<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool>,
+                Option::<unsafe extern "C" fn() -> bool>,
             >(
                 Some(
                     query_contains_extern_params_walker
-                        as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool_0,
+                        as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool,
                 ),
             ),
             context,
@@ -1116,12 +1081,12 @@ unsafe extern "C" fn query_contains_extern_params_walker(
     return expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool_0>,
-            Option::<unsafe extern "C" fn() -> bool_0>,
+            Option::<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool>,
+            Option::<unsafe extern "C" fn() -> bool>,
         >(
             Some(
                 query_contains_extern_params_walker
-                    as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool_0,
+                    as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool,
             ),
         ),
         context,

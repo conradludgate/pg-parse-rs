@@ -20,7 +20,7 @@
 //         _: *const libc::c_char,
 //         _: libc::c_ulong,
 //     ) -> libc::c_ulong;
-//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
 //     fn errfinish(
 //         filename: *const libc::c_char,
 //         lineno: libc::c_int,
@@ -30,13 +30,13 @@
 //     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
 //     fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
 //     fn exprType(expr: *const Node) -> Oid;
-//     fn IsBinaryCoercible(srctype: Oid, targettype: Oid) -> bool_0;
+//     fn IsBinaryCoercible(srctype: Oid, targettype: Oid) -> bool;
 //     fn enforce_generic_type_consistency(
 //         actual_arg_types: *const Oid,
 //         declared_arg_types: *mut Oid,
 //         nargs: libc::c_int,
 //         rettype: Oid,
-//         allow_poly: bool_0,
+//         allow_poly: bool,
 //     ) -> Oid;
 //     fn setup_parser_errposition_callback(
 //         pcbstate: *mut ParseCallbackState,
@@ -54,7 +54,7 @@
 //         hashp: *mut HTAB,
 //         keyPtr: *const libc::c_void,
 //         action: HASHACTION,
-//         foundPtr: *mut bool_0,
+//         foundPtr: *mut bool,
 //     ) -> *mut libc::c_void;
 //     fn hash_seq_init(status: *mut HASH_SEQ_STATUS, hashp: *mut HTAB);
 //     fn hash_seq_search(status: *mut HASH_SEQ_STATUS) -> *mut libc::c_void;
@@ -62,14 +62,14 @@
 //     fn OpernameGetCandidates(
 //         names: *mut List,
 //         oprkind: libc::c_char,
-//         missing_schema_ok: bool_0,
+//         missing_schema_ok: bool,
 //     ) -> FuncCandidateList;
 //     fn DeconstructQualifiedName(
 //         names: *mut List,
 //         nspname_p: *mut *mut libc::c_char,
 //         objname_p: *mut *mut libc::c_char,
 //     );
-//     fn LookupExplicitNamespace(nspname: *const libc::c_char, missing_ok: bool_0) -> Oid;
+//     fn LookupExplicitNamespace(nspname: *const libc::c_char, missing_ok: bool) -> Oid;
 //     fn fetch_search_path_array(sarray: *mut Oid, sarray_len: libc::c_int) -> libc::c_int;
 //     fn func_match_argtypes(
 //         nargs: libc::c_int,
@@ -96,14 +96,14 @@
 //     fn LookupTypeNameOid(
 //         pstate: *mut ParseState,
 //         typeName: *const TypeName,
-//         missing_ok: bool_0,
+//         missing_ok: bool,
 //     ) -> Oid;
 //     fn CacheRegisterSyscacheCallback(
 //         cacheid: libc::c_int,
 //         func: SyscacheCallbackFunction,
 //         arg: Datum,
 //     );
-//     fn get_func_retset(funcid: Oid) -> bool_0;
+//     fn get_func_retset(funcid: Oid) -> bool;
 //     fn get_array_type(typid: Oid) -> Oid;
 //     fn get_base_element_type(typid: Oid) -> Oid;
 //     fn getBaseType(typid: Oid) -> Oid;
@@ -114,21 +114,21 @@
 use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
-pub type uintptr_t = libc::c_ulong;
-pub type size_t = __darwin_size_t;
-pub type bool_0 = libc::c_uchar;
-pub type int16 = libc::c_short;
-pub type int32 = libc::c_int;
-pub type uint8 = libc::c_uchar;
-pub type uint16 = libc::c_ushort;
-pub type uint32 = libc::c_uint;
-pub type bits8 = uint8;
-pub type uint64 = libc::c_ulong;
-pub type Size = size_t;
+// pub type usize = libc::c_ulong;
+// pub type isize = __darwin_size_t;
+// pub type bool = libc::c_uchar;
+// pub type i16 = libc::c_short;
+// pub type i32 = libc::c_int;
+// pub type u8 = libc::c_uchar;
+// pub type u16 = libc::c_ushort;
+// pub type u32 = libc::c_uint;
+pub type bits8 = u8;
+// pub type uint64 = libc::c_ulong;
+pub type Size = isize;
 pub type Index = libc::c_uint;
 pub type regproc = Oid;
-pub type TransactionId = uint32;
-pub type CommandId = uint32;
+pub type TransactionId = u32;
+pub type CommandId = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct nameData {
@@ -143,20 +143,20 @@ pub struct ErrorContextCallback {
     pub arg: *mut libc::c_void,
 }
 pub type MemoryContext = *mut MemoryContextData;
-pub type Datum = uintptr_t;
+pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct NullableDatum {
     pub value: Datum,
-    pub isnull: bool_0,
+    pub isnull: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct BlockIdData {
-    pub bi_hi: uint16,
-    pub bi_lo: uint16,
+    pub bi_hi: u16,
+    pub bi_lo: u16,
 }
-pub type OffsetNumber = uint16;
+pub type OffsetNumber = u16;
 #[derive(Copy, Clone)]
 #[repr(C, align(2))]
 pub struct ItemPointerData(pub ItemPointerData_Inner);
@@ -174,9 +174,9 @@ const ItemPointerData_PADDING: usize = ::core::mem::size_of::<ItemPointerData>()
 pub struct HeapTupleHeaderData {
     pub t_choice: C2RustUnnamed,
     pub t_ctid: ItemPointerData,
-    pub t_infomask2: uint16,
-    pub t_infomask: uint16,
-    pub t_hoff: uint8,
+    pub t_infomask2: u16,
+    pub t_infomask: u16,
+    pub t_hoff: u8,
     pub t_bits: [bits8; 0],
 }
 #[derive(Copy, Clone)]
@@ -188,8 +188,8 @@ pub union C2RustUnnamed {
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct DatumTupleFields {
-    pub datum_len_: int32,
-    pub datum_typmod: int32,
+    pub datum_len_: i32,
+    pub datum_typmod: i32,
     pub datum_typeid: Oid,
 }
 #[derive(Copy, Clone)]
@@ -209,36 +209,36 @@ pub type HeapTupleHeader = *mut HeapTupleHeaderData;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HeapTupleData {
-    pub t_len: uint32,
+    pub t_len: u32,
     pub t_self: ItemPointerData,
     pub t_tableOid: Oid,
     pub t_data: HeapTupleHeader,
 }
 pub type HeapTuple = *mut HeapTupleData;
-pub type AttrNumber = int16;
+pub type AttrNumber = i16;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct FormData_pg_attribute {
     pub attrelid: Oid,
     pub attname: NameData,
     pub atttypid: Oid,
-    pub attstattarget: int32,
-    pub attlen: int16,
-    pub attnum: int16,
-    pub attndims: int32,
-    pub attcacheoff: int32,
-    pub atttypmod: int32,
-    pub attbyval: bool_0,
+    pub attstattarget: i32,
+    pub attlen: i16,
+    pub attnum: i16,
+    pub attndims: i32,
+    pub attcacheoff: i32,
+    pub atttypmod: i32,
+    pub attbyval: bool,
     pub attstorage: libc::c_char,
     pub attalign: libc::c_char,
-    pub attnotnull: bool_0,
-    pub atthasdef: bool_0,
-    pub atthasmissing: bool_0,
+    pub attnotnull: bool,
+    pub atthasdef: bool,
+    pub atthasmissing: bool,
     pub attidentity: libc::c_char,
     pub attgenerated: libc::c_char,
-    pub attisdropped: bool_0,
-    pub attislocal: bool_0,
-    pub attinhcount: int32,
+    pub attisdropped: bool,
+    pub attislocal: bool,
+    pub attinhcount: i32,
     pub attcollation: Oid,
 }
 pub type NodeTag = libc::c_uint;
@@ -679,7 +679,7 @@ pub struct Bitmapset {
     pub nwords: libc::c_int,
     pub words: [bitmapword; 0],
 }
-pub type bitmapword = uint32;
+pub type bitmapword = u32;
 pub type CmdType = libc::c_uint;
 pub const CMD_NOTHING: CmdType = 6;
 pub const CMD_UTILITY: CmdType = 5;
@@ -732,8 +732,8 @@ pub struct AttrDefault {
 pub struct ConstrCheck {
     pub ccname: *mut libc::c_char,
     pub ccbin: *mut libc::c_char,
-    pub ccvalid: bool_0,
-    pub ccnoinherit: bool_0,
+    pub ccvalid: bool,
+    pub ccnoinherit: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -741,17 +741,17 @@ pub struct TupleConstr {
     pub defval: *mut AttrDefault,
     pub check: *mut ConstrCheck,
     pub missing: *mut AttrMissing,
-    pub num_defval: uint16,
-    pub num_check: uint16,
-    pub has_not_null: bool_0,
-    pub has_generated_stored: bool_0,
+    pub num_defval: u16,
+    pub num_check: u16,
+    pub has_not_null: bool,
+    pub has_generated_stored: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct TupleDescData {
     pub natts: libc::c_int,
     pub tdtypeid: Oid,
-    pub tdtypmod: int32,
+    pub tdtypmod: i32,
     pub tdrefcount: libc::c_int,
     pub constr: *mut TupleConstr,
     pub attrs: [FormData_pg_attribute; 0],
@@ -799,7 +799,7 @@ pub struct Param {
     pub paramkind: ParamKind,
     pub paramid: libc::c_int,
     pub paramtype: Oid,
-    pub paramtypmod: int32,
+    pub paramtypmod: i32,
     pub paramcollid: Oid,
     pub location: libc::c_int,
 }
@@ -810,7 +810,7 @@ pub struct OpExpr {
     pub opno: Oid,
     pub opfuncid: Oid,
     pub opresulttype: Oid,
-    pub opretset: bool_0,
+    pub opretset: bool,
     pub opcollid: Oid,
     pub inputcollid: Oid,
     pub args: *mut List,
@@ -822,7 +822,7 @@ pub struct ScalarArrayOpExpr {
     pub xpr: Expr,
     pub opno: Oid,
     pub opfuncid: Oid,
-    pub useOr: bool_0,
+    pub useOr: bool,
     pub inputcollid: Oid,
     pub args: *mut List,
     pub location: libc::c_int,
@@ -857,7 +857,7 @@ pub const QSRC_QUAL_INSTEAD_RULE: QuerySource = 3;
 pub const QSRC_INSTEAD_RULE: QuerySource = 2;
 pub const QSRC_PARSER: QuerySource = 1;
 pub const QSRC_ORIGINAL: QuerySource = 0;
-pub type AclMode = uint32;
+pub type AclMode = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Query {
@@ -865,18 +865,18 @@ pub struct Query {
     pub commandType: CmdType,
     pub querySource: QuerySource,
     pub queryId: uint64,
-    pub canSetTag: bool_0,
+    pub canSetTag: bool,
     pub utilityStmt: *mut Node,
     pub resultRelation: libc::c_int,
-    pub hasAggs: bool_0,
-    pub hasWindowFuncs: bool_0,
-    pub hasTargetSRFs: bool_0,
-    pub hasSubLinks: bool_0,
-    pub hasDistinctOn: bool_0,
-    pub hasRecursive: bool_0,
-    pub hasModifyingCTE: bool_0,
-    pub hasForUpdate: bool_0,
-    pub hasRowSecurity: bool_0,
+    pub hasAggs: bool,
+    pub hasWindowFuncs: bool,
+    pub hasTargetSRFs: bool,
+    pub hasSubLinks: bool,
+    pub hasDistinctOn: bool,
+    pub hasRecursive: bool,
+    pub hasModifyingCTE: bool,
+    pub hasForUpdate: bool,
+    pub hasRowSecurity: bool,
     pub cteList: *mut List,
     pub rtable: *mut List,
     pub jointree: *mut FromExpr,
@@ -906,10 +906,10 @@ pub struct TypeName {
     pub type_0: NodeTag,
     pub names: *mut List,
     pub typeOid: Oid,
-    pub setof: bool_0,
-    pub pct_type: bool_0,
+    pub setof: bool,
+    pub pct_type: bool,
     pub typmods: *mut List,
-    pub typemod: int32,
+    pub typemod: i32,
     pub arrayBounds: *mut List,
     pub location: libc::c_int,
 }
@@ -947,19 +947,19 @@ pub struct RangeTblEntry {
     pub rellockmode: libc::c_int,
     pub tablesample: *mut TableSampleClause,
     pub subquery: *mut Query,
-    pub security_barrier: bool_0,
+    pub security_barrier: bool,
     pub jointype: JoinType,
     pub joinmergedcols: libc::c_int,
     pub joinaliasvars: *mut List,
     pub joinleftcols: *mut List,
     pub joinrightcols: *mut List,
     pub functions: *mut List,
-    pub funcordinality: bool_0,
+    pub funcordinality: bool,
     pub tablefunc: *mut TableFunc,
     pub values_lists: *mut List,
     pub ctename: *mut libc::c_char,
     pub ctelevelsup: Index,
-    pub self_reference: bool_0,
+    pub self_reference: bool,
     pub coltypes: *mut List,
     pub coltypmods: *mut List,
     pub colcollations: *mut List,
@@ -967,9 +967,9 @@ pub struct RangeTblEntry {
     pub enrtuples: libc::c_double,
     pub alias: *mut Alias,
     pub eref: *mut Alias,
-    pub lateral: bool_0,
-    pub inh: bool_0,
-    pub inFromCl: bool_0,
+    pub lateral: bool,
+    pub inh: bool,
+    pub inFromCl: bool,
     pub requiredPerms: AclMode,
     pub checkAsUser: Oid,
     pub selectedCols: *mut Bitmapset,
@@ -995,7 +995,7 @@ pub const CTEMaterializeDefault: CTEMaterialize = 0;
 pub struct CTESearchClause {
     pub type_0: NodeTag,
     pub search_col_list: *mut List,
-    pub search_breadth_first: bool_0,
+    pub search_breadth_first: bool,
     pub search_seq_column: *mut libc::c_char,
     pub location: libc::c_int,
 }
@@ -1025,7 +1025,7 @@ pub struct CommonTableExpr {
     pub search_clause: *mut CTESearchClause,
     pub cycle_clause: *mut CTECycleClause,
     pub location: libc::c_int,
-    pub cterecursive: bool_0,
+    pub cterecursive: bool,
     pub cterefcount: libc::c_int,
     pub ctecolnames: *mut List,
     pub ctecoltypes: *mut List,
@@ -1038,7 +1038,7 @@ pub struct ObjectWithArgs {
     pub type_0: NodeTag,
     pub objname: *mut List,
     pub objargs: *mut List,
-    pub args_unspecified: bool_0,
+    pub args_unspecified: bool,
 }
 pub type Relation = *mut RelationData;
 #[derive(Copy, Clone)]
@@ -1049,8 +1049,8 @@ pub struct FormData_pg_operator {
     pub oprnamespace: Oid,
     pub oprowner: Oid,
     pub oprkind: libc::c_char,
-    pub oprcanmerge: bool_0,
-    pub oprcanhash: bool_0,
+    pub oprcanmerge: bool,
+    pub oprcanhash: bool,
     pub oprleft: Oid,
     pub oprright: Oid,
     pub oprresult: Oid,
@@ -1061,48 +1061,13 @@ pub struct FormData_pg_operator {
     pub oprjoin: regproc,
 }
 pub type Form_pg_operator = *mut FormData_pg_operator;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseState {
-    pub parentParseState: *mut ParseState,
-    pub p_sourcetext: *const libc::c_char,
-    pub p_rtable: *mut List,
-    pub p_joinexprs: *mut List,
-    pub p_joinlist: *mut List,
-    pub p_namespace: *mut List,
-    pub p_lateral_active: bool_0,
-    pub p_ctenamespace: *mut List,
-    pub p_future_ctes: *mut List,
-    pub p_parent_cte: *mut CommonTableExpr,
-    pub p_target_relation: Relation,
-    pub p_target_nsitem: *mut ParseNamespaceItem,
-    pub p_is_insert: bool_0,
-    pub p_windowdefs: *mut List,
-    pub p_expr_kind: ParseExprKind,
-    pub p_next_resno: libc::c_int,
-    pub p_multiassign_exprs: *mut List,
-    pub p_locking_clause: *mut List,
-    pub p_locked_from_parent: bool_0,
-    pub p_resolve_unknowns: bool_0,
-    pub p_queryEnv: *mut QueryEnvironment,
-    pub p_hasAggs: bool_0,
-    pub p_hasWindowFuncs: bool_0,
-    pub p_hasTargetSRFs: bool_0,
-    pub p_hasSubLinks: bool_0,
-    pub p_hasModifyingCTE: bool_0,
-    pub p_last_srf: *mut Node,
-    pub p_pre_columnref_hook: PreParseColumnRefHook,
-    pub p_post_columnref_hook: PostParseColumnRefHook,
-    pub p_paramref_hook: ParseParamRefHook,
-    pub p_coerce_param_hook: CoerceParamHook,
-    pub p_ref_hook_state: *mut libc::c_void,
-}
+
 pub type CoerceParamHook = Option::<
     unsafe extern "C" fn(
         *mut ParseState,
         *mut Param,
         Oid,
-        int32,
+        i32,
         libc::c_int,
     ) -> *mut Node,
 >;
@@ -1164,10 +1129,10 @@ pub struct ParseNamespaceItem {
     pub p_rte: *mut RangeTblEntry,
     pub p_rtindex: libc::c_int,
     pub p_nscolumns: *mut ParseNamespaceColumn,
-    pub p_rel_visible: bool_0,
-    pub p_cols_visible: bool_0,
-    pub p_lateral_only: bool_0,
-    pub p_lateral_ok: bool_0,
+    pub p_rel_visible: bool,
+    pub p_cols_visible: bool,
+    pub p_lateral_only: bool,
+    pub p_lateral_ok: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1175,11 +1140,11 @@ pub struct ParseNamespaceColumn {
     pub p_varno: Index,
     pub p_varattno: AttrNumber,
     pub p_vartype: Oid,
-    pub p_vartypmod: int32,
+    pub p_vartypmod: i32,
     pub p_varcollid: Oid,
     pub p_varnosyn: Index,
     pub p_varattnosyn: AttrNumber,
-    pub p_dontexpand: bool_0,
+    pub p_dontexpand: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1189,7 +1154,7 @@ pub struct ParseCallbackState {
     pub errcallback: ErrorContextCallback,
 }
 pub type HashValueFunc = Option::<
-    unsafe extern "C" fn(*const libc::c_void, Size) -> uint32,
+    unsafe extern "C" fn(*const libc::c_void, Size) -> u32,
 >;
 pub type HashCompareFunc = Option::<
     unsafe extern "C" fn(*const libc::c_void, *const libc::c_void, Size) -> libc::c_int,
@@ -1206,7 +1171,7 @@ pub type HashAllocFunc = Option::<unsafe extern "C" fn(Size) -> *mut libc::c_voi
 #[repr(C)]
 pub struct HASHELEMENT {
     pub link: *mut HASHELEMENT,
-    pub hashvalue: uint32,
+    pub hashvalue: u32,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1233,7 +1198,7 @@ pub const HASH_FIND: HASHACTION = 0;
 #[repr(C)]
 pub struct HASH_SEQ_STATUS {
     pub hashp: *mut HTAB,
-    pub curBucket: uint32,
+    pub curBucket: u32,
     pub curEntry: *mut HASHELEMENT,
 }
 pub type fmNodePtr = *mut Node;
@@ -1244,7 +1209,7 @@ pub struct FunctionCallInfoBaseData {
     pub context: fmNodePtr,
     pub resultinfo: fmNodePtr,
     pub fncollation: Oid,
-    pub isnull: bool_0,
+    pub isnull: bool,
     pub nargs: libc::c_short,
     pub args: [NullableDatum; 0],
 }
@@ -1254,8 +1219,8 @@ pub struct FmgrInfo {
     pub fn_addr: PGFunction,
     pub fn_oid: Oid,
     pub fn_nargs: libc::c_short,
-    pub fn_strict: bool_0,
-    pub fn_retset: bool_0,
+    pub fn_strict: bool,
+    pub fn_retset: bool,
     pub fn_stats: libc::c_uchar,
     pub fn_extra: *mut libc::c_void,
     pub fn_mcxt: MemoryContext,
@@ -1302,16 +1267,16 @@ pub struct OprCacheEntry {
 pub const OPEROID: SysCacheIdentifier = 38;
 pub const CASTSOURCETARGET: SysCacheIdentifier = 12;
 pub type SyscacheCallbackFunction = Option::<
-    unsafe extern "C" fn(Datum, libc::c_int, uint32) -> (),
+    unsafe extern "C" fn(Datum, libc::c_int, u32) -> (),
 >;
 pub const OPERNAMENSP: SysCacheIdentifier = 37;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct TypeCacheEntry {
     pub type_id: Oid,
-    pub type_id_hash: uint32,
-    pub typlen: int16,
-    pub typbyval: bool_0,
+    pub type_id_hash: u32,
+    pub typlen: i16,
+    pub typbyval: bool,
     pub typalign: libc::c_char,
     pub typstorage: libc::c_char,
     pub typtype: libc::c_char,
@@ -1342,7 +1307,7 @@ pub struct TypeCacheEntry {
     pub rng_subdiff_finfo: FmgrInfo,
     pub rngtype: *mut TypeCacheEntry,
     pub domainBaseType: Oid,
-    pub domainBaseTypmod: int32,
+    pub domainBaseTypmod: i32,
     pub domainData: *mut DomainConstraintCache,
     pub flags: libc::c_int,
     pub enumData: *mut TypeCacheEnumData,
@@ -1438,19 +1403,19 @@ pub unsafe extern "C" fn LookupOperName(
     mut opername: *mut List,
     mut oprleft: Oid,
     mut oprright: Oid,
-    mut noError: bool_0,
+    mut noError: bool,
     mut location: libc::c_int,
 ) -> Oid {
     let mut result: Oid = 0;
     result = OpernameGetOprid(opername, oprleft, oprright);
-    if (result != 0 as libc::c_int as Oid) as libc::c_int as bool_0 != 0 {
+    if (result != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
         return result;
     }
     if noError == 0 {
         let mut oprkind: libc::c_char = 0;
-        if (oprleft != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0 {
+        if (oprleft != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
             oprkind = 'l' as i32 as libc::c_char;
-        } else if (oprright != 0 as libc::c_int as Oid) as libc::c_int as bool_0 != 0 {
+        } else if (oprright != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
             oprkind = 'b' as i32 as libc::c_char;
         } else {
             let elevel_: libc::c_int = 21 as libc::c_int;
@@ -1471,7 +1436,7 @@ pub unsafe extern "C" fn LookupOperName(
 #[no_mangle]
 pub unsafe extern "C" fn LookupOperWithArgs(
     mut oper_0: *mut ObjectWithArgs,
-    mut noError: bool_0,
+    mut noError: bool,
 ) -> Oid {
     let mut oprleft: *mut TypeName = 0 as *mut TypeName;
     let mut oprright: *mut TypeName = 0 as *mut TypeName;
@@ -1503,20 +1468,20 @@ pub unsafe extern "C" fn LookupOperWithArgs(
 #[no_mangle]
 pub unsafe extern "C" fn get_sort_group_operators(
     mut argtype: Oid,
-    mut needLT: bool_0,
-    mut needEQ: bool_0,
-    mut needGT: bool_0,
+    mut needLT: bool,
+    mut needEQ: bool,
+    mut needGT: bool,
     mut ltOpr: *mut Oid,
     mut eqOpr: *mut Oid,
     mut gtOpr: *mut Oid,
-    mut isHashable: *mut bool_0,
+    mut isHashable: *mut bool,
 ) {
     let mut typentry: *mut TypeCacheEntry = 0 as *mut TypeCacheEntry;
     let mut cache_flags: libc::c_int = 0;
     let mut lt_opr: Oid = 0;
     let mut eq_opr: Oid = 0;
     let mut gt_opr: Oid = 0;
-    let mut hashable: bool_0 = 0;
+    let mut hashable: bool = 0;
     if !isHashable.is_null() {
         cache_flags = 0x2 as libc::c_int | 0x1 as libc::c_int | 0x4 as libc::c_int
             | 0x10 as libc::c_int;
@@ -1528,11 +1493,11 @@ pub unsafe extern "C" fn get_sort_group_operators(
     eq_opr = (*typentry).eq_opr;
     gt_opr = (*typentry).gt_opr;
     hashable = ((*typentry).hash_proc != 0 as libc::c_int as Oid) as libc::c_int
-        as bool_0;
+        as bool;
     if needLT as libc::c_int != 0
-        && (lt_opr != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0
+        && (lt_opr != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
         || needGT as libc::c_int != 0
-            && (gt_opr != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0
+            && (gt_opr != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
     {
         let elevel_: libc::c_int = 21 as libc::c_int;
         let mut __error: libc::c_int = 0;
@@ -1541,7 +1506,7 @@ pub unsafe extern "C" fn get_sort_group_operators(
         }
     }
     if needEQ as libc::c_int != 0
-        && (eq_opr != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0
+        && (eq_opr != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
     {
         let elevel__0: libc::c_int = 21 as libc::c_int;
         let mut __error_0: libc::c_int = 0;
@@ -1604,7 +1569,7 @@ pub unsafe extern "C" fn oper(
     mut opname: *mut List,
     mut ltypeId: Oid,
     mut rtypeId: Oid,
-    mut noError: bool_0,
+    mut noError: bool,
     mut location: libc::c_int,
 ) -> Operator {
     let mut operOid: Oid = 0;
@@ -1614,13 +1579,13 @@ pub unsafe extern "C" fn oper(
         right_arg: 0,
         search_path: [0; 16],
     };
-    let mut key_ok: bool_0 = 0;
+    let mut key_ok: bool = 0;
     let mut fdresult: FuncDetailCode = FUNCDETAIL_NOTFOUND;
     let mut tup: HeapTuple = 0 as HeapTuple;
     key_ok = make_oper_cache_key(pstate, &mut key, opname, ltypeId, rtypeId, location);
     if key_ok != 0 {
         operOid = find_oper_cache_entry(&mut key);
-        if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool_0 != 0 {
+        if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
             tup = SearchSysCache1(OPEROID as libc::c_int, operOid as Datum);
             if !(tup as *const libc::c_void).is_null() {
                 return tup;
@@ -1628,12 +1593,12 @@ pub unsafe extern "C" fn oper(
         }
     }
     operOid = binary_oper_exact(opname, ltypeId, rtypeId);
-    if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0 {
+    if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
         let mut clist: FuncCandidateList = 0 as *mut _FuncCandidateList;
         clist = OpernameGetCandidates(
             opname,
             'b' as i32 as libc::c_char,
-            0 as libc::c_int as bool_0,
+            false,
         );
         if !clist.is_null() {
             let mut inputOids: [Oid; 2] = [0; 2];
@@ -1652,7 +1617,7 @@ pub unsafe extern "C" fn oper(
             );
         }
     }
-    if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool_0 != 0 {
+    if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
         tup = SearchSysCache1(OPEROID as libc::c_int, operOid as Datum);
     }
     if !(tup as *const libc::c_void).is_null() {
@@ -1678,7 +1643,7 @@ pub unsafe extern "C" fn compatible_oper(
     mut op: *mut List,
     mut arg1: Oid,
     mut arg2: Oid,
-    mut noError: bool_0,
+    mut noError: bool,
     mut location: libc::c_int,
 ) -> Operator {
     let mut optup: Operator = 0 as *mut HeapTupleData;
@@ -1709,7 +1674,7 @@ pub unsafe extern "C" fn compatible_oper_opid(
     mut op: *mut List,
     mut arg1: Oid,
     mut arg2: Oid,
-    mut noError: bool_0,
+    mut noError: bool,
 ) -> Oid {
     let mut optup: Operator = 0 as *mut HeapTupleData;
     let mut result: Oid = 0;
@@ -1733,7 +1698,7 @@ pub unsafe extern "C" fn left_oper(
     mut pstate: *mut ParseState,
     mut op: *mut List,
     mut arg: Oid,
-    mut noError: bool_0,
+    mut noError: bool,
     mut location: libc::c_int,
 ) -> Operator {
     let mut operOid: Oid = 0;
@@ -1743,7 +1708,7 @@ pub unsafe extern "C" fn left_oper(
         right_arg: 0,
         search_path: [0; 16],
     };
-    let mut key_ok: bool_0 = 0;
+    let mut key_ok: bool = 0;
     let mut fdresult: FuncDetailCode = FUNCDETAIL_NOTFOUND;
     let mut tup: HeapTuple = 0 as HeapTuple;
     key_ok = make_oper_cache_key(
@@ -1756,7 +1721,7 @@ pub unsafe extern "C" fn left_oper(
     );
     if key_ok != 0 {
         operOid = find_oper_cache_entry(&mut key);
-        if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool_0 != 0 {
+        if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
             tup = SearchSysCache1(OPEROID as libc::c_int, operOid as Datum);
             if !(tup as *const libc::c_void).is_null() {
                 return tup;
@@ -1764,12 +1729,12 @@ pub unsafe extern "C" fn left_oper(
         }
     }
     operOid = OpernameGetOprid(op, 0 as libc::c_int as Oid, arg);
-    if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0 {
+    if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
         let mut clist: FuncCandidateList = 0 as *mut _FuncCandidateList;
         clist = OpernameGetCandidates(
             op,
             'l' as i32 as libc::c_char,
-            0 as libc::c_int as bool_0,
+            false,
         );
         if !clist.is_null() {
             let mut clisti: FuncCandidateList = 0 as *mut _FuncCandidateList;
@@ -1790,7 +1755,7 @@ pub unsafe extern "C" fn left_oper(
             );
         }
     }
-    if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool_0 != 0 {
+    if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
         tup = SearchSysCache1(OPEROID as libc::c_int, operOid as Datum);
     }
     if !(tup as *const libc::c_void).is_null() {
@@ -1862,7 +1827,7 @@ pub unsafe extern "C" fn make_op(
     if ltree.is_null() {
         rtypeId = exprType(rtree);
         ltypeId = 0 as libc::c_int as Oid;
-        tup = left_oper(pstate, opname, rtypeId, 0 as libc::c_int as bool_0, location);
+        tup = left_oper(pstate, opname, rtypeId, false, location);
     } else {
         ltypeId = exprType(ltree);
         rtypeId = exprType(rtree);
@@ -1871,13 +1836,13 @@ pub unsafe extern "C" fn make_op(
             opname,
             ltypeId,
             rtypeId,
-            0 as libc::c_int as bool_0,
+            false,
             location,
         );
     }
     opform = ((*tup).t_data as *mut libc::c_char)
         .offset((*(*tup).t_data).t_hoff as libc::c_int as isize) as Form_pg_operator;
-    if ((*opform).oprcode != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0 {
+    if ((*opform).oprcode != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
         let elevel__0: libc::c_int = 21 as libc::c_int;
         let mut __error_0: libc::c_int = 0;
         if elevel__0 >= 21 as libc::c_int {
@@ -1915,7 +1880,7 @@ pub unsafe extern "C" fn make_op(
         declared_arg_types.as_mut_ptr(),
         nargs,
         (*opform).oprresult,
-        0 as libc::c_int as bool_0,
+        false,
     );
     make_fn_arguments(
         pstate,
@@ -1971,7 +1936,7 @@ unsafe extern "C" fn find_oper_cache_entry(mut key: *mut OprCacheKey) -> Oid {
             OPERNAMENSP as libc::c_int,
             Some(
                 InvalidateOprCacheCallBack
-                    as unsafe extern "C" fn(Datum, libc::c_int, uint32) -> (),
+                    as unsafe extern "C" fn(Datum, libc::c_int, u32) -> (),
             ),
             0 as libc::c_int as Datum,
         );
@@ -1979,7 +1944,7 @@ unsafe extern "C" fn find_oper_cache_entry(mut key: *mut OprCacheKey) -> Oid {
             CASTSOURCETARGET as libc::c_int,
             Some(
                 InvalidateOprCacheCallBack
-                    as unsafe extern "C" fn(Datum, libc::c_int, uint32) -> (),
+                    as unsafe extern "C" fn(Datum, libc::c_int, u32) -> (),
             ),
             0 as libc::c_int as Datum,
         );
@@ -1988,7 +1953,7 @@ unsafe extern "C" fn find_oper_cache_entry(mut key: *mut OprCacheKey) -> Oid {
         OprCacheHash,
         key as *mut libc::c_void,
         HASH_FIND,
-        0 as *mut bool_0,
+        0 as *mut bool,
     ) as *mut OprCacheEntry;
     if oprentry.is_null() {
         return 0 as libc::c_int as Oid;
@@ -2001,14 +1966,14 @@ unsafe extern "C" fn make_oper_cache_entry(mut key: *mut OprCacheKey, mut opr_oi
         OprCacheHash,
         key as *mut libc::c_void,
         HASH_ENTER,
-        0 as *mut bool_0,
+        0 as *mut bool,
     ) as *mut OprCacheEntry;
     (*oprentry).opr_oid = opr_oid;
 }
 unsafe extern "C" fn InvalidateOprCacheCallBack(
     mut arg: Datum,
     mut cacheid: libc::c_int,
-    mut hashvalue: uint32,
+    mut hashvalue: u32,
 ) {
     let mut status: HASH_SEQ_STATUS = HASH_SEQ_STATUS {
         hashp: 0 as *mut HTAB,
@@ -2026,7 +1991,7 @@ unsafe extern "C" fn InvalidateOprCacheCallBack(
             OprCacheHash,
             &mut (*hentry).key as *mut OprCacheKey as *mut libc::c_void,
             HASH_REMOVE,
-            0 as *mut bool_0,
+            0 as *mut bool,
         ))
             .is_null()
         {

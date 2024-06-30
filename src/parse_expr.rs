@@ -7,11 +7,11 @@
 //     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
 //     fn pg_snprintf(
 //         str: *mut libc::c_char,
-//         count: size_t,
+//         count: isize,
 //         fmt: *const libc::c_char,
 //         _: ...
 //     ) -> libc::c_int;
-//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
 //     fn errfinish(
 //         filename: *const libc::c_char,
 //         lineno: libc::c_int,
@@ -36,9 +36,9 @@
 //         pstate: *mut ParseState,
 //         containerBase: *mut Node,
 //         containerType: Oid,
-//         containerTypMod: int32,
+//         containerTypMod: i32,
 //         indirection: *mut List,
-//         isAssignment: bool_0,
+//         isAssignment: bool,
 //     ) -> *mut SubscriptingRef;
 //     fn make_const(
 //         pstate: *mut ParseState,
@@ -58,18 +58,18 @@
 //         args: *mut List,
 //         location: libc::c_int,
 //     ) -> *mut Expr;
-//     fn makeBoolConst(value: bool_0, isnull: bool_0) -> *mut Node;
+//     fn makeBoolConst(value: bool, isnull: bool) -> *mut Node;
 //     fn makeTargetEntry(
 //         expr: *mut Expr,
 //         resno: AttrNumber,
 //         resname: *mut libc::c_char,
-//         resjunk: bool_0,
+//         resjunk: bool,
 //     ) -> *mut TargetEntry;
 //     fn makeWholeRowVar(
 //         rte: *mut RangeTblEntry,
 //         varno: Index,
 //         varlevelsup: Index,
-//         allowScalar: bool_0,
+//         allowScalar: bool,
 //     ) -> *mut Var;
 //     fn makeSimpleA_Expr(
 //         kind: A_Expr_Kind,
@@ -79,18 +79,18 @@
 //         location: libc::c_int,
 //     ) -> *mut A_Expr;
 //     fn exprType(expr: *const Node) -> Oid;
-//     fn exprTypmod(expr: *const Node) -> int32;
-//     fn expression_returns_set(clause: *mut Node) -> bool_0;
+//     fn exprTypmod(expr: *const Node) -> i32;
+//     fn expression_returns_set(clause: *mut Node) -> bool;
 //     fn exprCollation(expr: *const Node) -> Oid;
 //     fn exprLocation(expr: *const Node) -> libc::c_int;
 //     fn count_nonjunk_tlist_entries(tlist: *mut List) -> libc::c_int;
-//     fn contain_vars_of_level(node: *mut Node, levelsup: libc::c_int) -> bool_0;
+//     fn contain_vars_of_level(node: *mut Node, levelsup: libc::c_int) -> bool;
 //     fn parse_sub_analyze(
 //         parseTree: *mut Node,
 //         parentParseState: *mut ParseState,
 //         parentCTE: *mut CommonTableExpr,
-//         locked_from_parent: bool_0,
-//         resolve_unknowns: bool_0,
+//         locked_from_parent: bool,
+//         resolve_unknowns: bool,
 //     ) -> *mut Query;
 //     fn transformGroupingFunc(pstate: *mut ParseState, g: *mut GroupingFunc) -> *mut Node;
 //     fn coerce_to_target_type(
@@ -98,7 +98,7 @@
 //         expr: *mut Node,
 //         exprtype: Oid,
 //         targettype: Oid,
-//         targettypmod: int32,
+//         targettypmod: i32,
 //         ccontext: CoercionContext,
 //         cformat: CoercionForm,
 //         location: libc::c_int,
@@ -121,14 +121,14 @@
 //         context: *const libc::c_char,
 //     ) -> *mut Node;
 //     fn assign_expr_collations(pstate: *mut ParseState, expr: *mut Node);
-//     fn anytimestamp_typmod_check(istz: bool_0, typmod: int32) -> int32;
+//     fn anytimestamp_typmod_check(istz: bool, typmod: i32) -> i32;
 //     fn ParseFuncOrColumn(
 //         pstate: *mut ParseState,
 //         funcname: *mut List,
 //         fargs: *mut List,
 //         last_srf: *mut Node,
 //         fn_0: *mut FuncCall,
-//         proc_call: bool_0,
+//         proc_call: bool,
 //         location: libc::c_int,
 //     ) -> *mut Node;
 //     fn make_op(
@@ -142,7 +142,7 @@
 //     fn make_scalar_array_op(
 //         pstate: *mut ParseState,
 //         opname: *mut List,
-//         useOr: bool_0,
+//         useOr: bool,
 //         ltree: *mut Node,
 //         rtree: *mut Node,
 //         location: libc::c_int,
@@ -169,7 +169,7 @@
 //     fn colNameToVar(
 //         pstate: *mut ParseState,
 //         colname: *const libc::c_char,
-//         localonly: bool_0,
+//         localonly: bool,
 //         location: libc::c_int,
 //     ) -> *mut Node;
 //     fn markVarForSelectPriv(pstate: *mut ParseState, var: *mut Var);
@@ -184,14 +184,14 @@
 //         pstate: *mut ParseState,
 //         exprlist: *mut List,
 //         exprKind: ParseExprKind,
-//         allowDefault: bool_0,
+//         allowDefault: bool,
 //     ) -> *mut List;
 //     fn FigureColname(node: *mut Node) -> *mut libc::c_char;
 //     fn typenameTypeIdAndMod(
 //         pstate: *mut ParseState,
 //         typeName: *const TypeName,
 //         typeid_p: *mut Oid,
-//         typmod_p: *mut int32,
+//         typmod_p: *mut i32,
 //     );
 //     fn LookupCollation(
 //         pstate: *mut ParseState,
@@ -199,31 +199,31 @@
 //         location: libc::c_int,
 //     ) -> Oid;
 //     fn typeOrDomainTypeRelid(type_id: Oid) -> Oid;
-//     fn anytime_typmod_check(istz: bool_0, typmod: int32) -> int32;
+//     fn anytime_typmod_check(istz: bool, typmod: i32) -> i32;
 //     fn get_op_btree_interpretation(opno: Oid) -> *mut List;
-//     fn type_is_rowtype(typid: Oid) -> bool_0;
+//     fn type_is_rowtype(typid: Oid) -> bool;
 //     fn get_element_type(typid: Oid) -> Oid;
 //     fn get_array_type(typid: Oid) -> Oid;
-//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut int32) -> Oid;
+//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut i32) -> Oid;
 //     fn map_sql_identifier_to_xml_name(
 //         ident: *const libc::c_char,
-//         fully_escaped: bool_0,
-//         escape_period: bool_0,
+//         fully_escaped: bool,
+//         escape_period: bool,
 //     ) -> *mut libc::c_char;
 // }
 use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
-pub type uintptr_t = libc::c_ulong;
-pub type size_t = __darwin_size_t;
-pub type bool_0 = libc::c_uchar;
-pub type int16 = libc::c_short;
-pub type int32 = libc::c_int;
-pub type uint32 = libc::c_uint;
-pub type uint64 = libc::c_ulong;
-pub type Size = size_t;
+// pub type usize = libc::c_ulong;
+// pub type isize = __darwin_size_t;
+// pub type bool = libc::c_uchar;
+// pub type i16 = libc::c_short;
+// pub type i32 = libc::c_int;
+// pub type u32 = libc::c_uint;
+// pub type uint64 = libc::c_ulong;
+pub type Size = isize;
 pub type Index = libc::c_uint;
-pub type Datum = uintptr_t;
+pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct List {
@@ -667,14 +667,14 @@ pub const T_ProjectionInfo: NodeTag = 3;
 pub const T_ExprContext: NodeTag = 2;
 pub const T_IndexInfo: NodeTag = 1;
 pub const T_Invalid: NodeTag = 0;
-pub type bitmapword = uint32;
+pub type bitmapword = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Bitmapset {
     pub nwords: libc::c_int,
     pub words: [bitmapword; 0],
 }
-pub type AttrNumber = int16;
+pub type AttrNumber = i16;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Node {
@@ -732,7 +732,7 @@ pub struct RangeVar {
     pub catalogname: *mut libc::c_char,
     pub schemaname: *mut libc::c_char,
     pub relname: *mut libc::c_char,
-    pub inh: bool_0,
+    pub inh: bool,
     pub relpersistence: libc::c_char,
     pub alias: *mut Alias,
     pub location: libc::c_int,
@@ -767,7 +767,7 @@ pub struct Var {
     pub varno: Index,
     pub varattno: AttrNumber,
     pub vartype: Oid,
-    pub vartypmod: int32,
+    pub vartypmod: i32,
     pub varcollid: Oid,
     pub varlevelsup: Index,
     pub varnosyn: Index,
@@ -779,12 +779,12 @@ pub struct Var {
 pub struct Const {
     pub xpr: Expr,
     pub consttype: Oid,
-    pub consttypmod: int32,
+    pub consttypmod: i32,
     pub constcollid: Oid,
     pub constlen: libc::c_int,
     pub constvalue: Datum,
-    pub constisnull: bool_0,
-    pub constbyval: bool_0,
+    pub constisnull: bool,
+    pub constbyval: bool,
     pub location: libc::c_int,
 }
 pub type ParamKind = libc::c_uint;
@@ -799,7 +799,7 @@ pub struct Param {
     pub paramkind: ParamKind,
     pub paramid: libc::c_int,
     pub paramtype: Oid,
-    pub paramtypmod: int32,
+    pub paramtypmod: i32,
     pub paramcollid: Oid,
     pub location: libc::c_int,
 }
@@ -820,7 +820,7 @@ pub struct SubscriptingRef {
     pub refcontainertype: Oid,
     pub refelemtype: Oid,
     pub refrestype: Oid,
-    pub reftypmod: int32,
+    pub reftypmod: i32,
     pub refcollid: Oid,
     pub refupperindexpr: *mut List,
     pub reflowerindexpr: *mut List,
@@ -853,7 +853,7 @@ pub struct OpExpr {
     pub opno: Oid,
     pub opfuncid: Oid,
     pub opresulttype: Oid,
-    pub opretset: bool_0,
+    pub opretset: bool,
     pub opcollid: Oid,
     pub inputcollid: Oid,
     pub args: *mut List,
@@ -923,7 +923,7 @@ pub struct CaseWhen {
 pub struct CaseTestExpr {
     pub xpr: Expr,
     pub typeId: Oid,
-    pub typeMod: int32,
+    pub typeMod: i32,
     pub collation: Oid,
 }
 #[derive(Copy, Clone)]
@@ -934,7 +934,7 @@ pub struct ArrayExpr {
     pub array_collid: Oid,
     pub element_typeid: Oid,
     pub elements: *mut List,
-    pub multidims: bool_0,
+    pub multidims: bool,
     pub location: libc::c_int,
 }
 #[derive(Copy, Clone)]
@@ -1010,7 +1010,7 @@ pub struct SQLValueFunction {
     pub xpr: Expr,
     pub op: SQLValueFunctionOp,
     pub type_0: Oid,
-    pub typmod: int32,
+    pub typmod: i32,
     pub location: libc::c_int,
 }
 pub type XmlExprOp = libc::c_uint;
@@ -1036,7 +1036,7 @@ pub struct XmlExpr {
     pub args: *mut List,
     pub xmloption: XmlOptionType,
     pub type_0: Oid,
-    pub typmod: int32,
+    pub typmod: i32,
     pub location: libc::c_int,
 }
 pub type NullTestType = libc::c_uint;
@@ -1048,7 +1048,7 @@ pub struct NullTest {
     pub xpr: Expr,
     pub arg: *mut Expr,
     pub nulltesttype: NullTestType,
-    pub argisrow: bool_0,
+    pub argisrow: bool,
     pub location: libc::c_int,
 }
 pub type BoolTestType = libc::c_uint;
@@ -1084,7 +1084,7 @@ pub struct TargetEntry {
     pub ressortgroupref: Index,
     pub resorigtbl: Oid,
     pub resorigcol: AttrNumber,
-    pub resjunk: bool_0,
+    pub resjunk: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1137,7 +1137,7 @@ pub type SortByNulls = libc::c_uint;
 pub const SORTBY_NULLS_LAST: SortByNulls = 2;
 pub const SORTBY_NULLS_FIRST: SortByNulls = 1;
 pub const SORTBY_NULLS_DEFAULT: SortByNulls = 0;
-pub type AclMode = uint32;
+pub type AclMode = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Query {
@@ -1145,18 +1145,18 @@ pub struct Query {
     pub commandType: CmdType,
     pub querySource: QuerySource,
     pub queryId: uint64,
-    pub canSetTag: bool_0,
+    pub canSetTag: bool,
     pub utilityStmt: *mut Node,
     pub resultRelation: libc::c_int,
-    pub hasAggs: bool_0,
-    pub hasWindowFuncs: bool_0,
-    pub hasTargetSRFs: bool_0,
-    pub hasSubLinks: bool_0,
-    pub hasDistinctOn: bool_0,
-    pub hasRecursive: bool_0,
-    pub hasModifyingCTE: bool_0,
-    pub hasForUpdate: bool_0,
-    pub hasRowSecurity: bool_0,
+    pub hasAggs: bool,
+    pub hasWindowFuncs: bool,
+    pub hasTargetSRFs: bool,
+    pub hasSubLinks: bool,
+    pub hasDistinctOn: bool,
+    pub hasRecursive: bool,
+    pub hasModifyingCTE: bool,
+    pub hasForUpdate: bool,
+    pub hasRowSecurity: bool,
     pub cteList: *mut List,
     pub rtable: *mut List,
     pub jointree: *mut FromExpr,
@@ -1186,10 +1186,10 @@ pub struct TypeName {
     pub type_0: NodeTag,
     pub names: *mut List,
     pub typeOid: Oid,
-    pub setof: bool_0,
-    pub pct_type: bool_0,
+    pub setof: bool,
+    pub pct_type: bool,
     pub typmods: *mut List,
-    pub typemod: int32,
+    pub typemod: i32,
     pub arrayBounds: *mut List,
     pub location: libc::c_int,
 }
@@ -1264,10 +1264,10 @@ pub struct FuncCall {
     pub agg_order: *mut List,
     pub agg_filter: *mut Node,
     pub over: *mut WindowDef,
-    pub agg_within_group: bool_0,
-    pub agg_star: bool_0,
-    pub agg_distinct: bool_0,
-    pub func_variadic: bool_0,
+    pub agg_within_group: bool,
+    pub agg_star: bool,
+    pub agg_distinct: bool,
+    pub func_variadic: bool,
     pub funcformat: CoercionForm,
     pub location: libc::c_int,
 }
@@ -1354,19 +1354,19 @@ pub struct RangeTblEntry {
     pub rellockmode: libc::c_int,
     pub tablesample: *mut TableSampleClause,
     pub subquery: *mut Query,
-    pub security_barrier: bool_0,
+    pub security_barrier: bool,
     pub jointype: JoinType,
     pub joinmergedcols: libc::c_int,
     pub joinaliasvars: *mut List,
     pub joinleftcols: *mut List,
     pub joinrightcols: *mut List,
     pub functions: *mut List,
-    pub funcordinality: bool_0,
+    pub funcordinality: bool,
     pub tablefunc: *mut TableFunc,
     pub values_lists: *mut List,
     pub ctename: *mut libc::c_char,
     pub ctelevelsup: Index,
-    pub self_reference: bool_0,
+    pub self_reference: bool,
     pub coltypes: *mut List,
     pub coltypmods: *mut List,
     pub colcollations: *mut List,
@@ -1374,9 +1374,9 @@ pub struct RangeTblEntry {
     pub enrtuples: libc::c_double,
     pub alias: *mut Alias,
     pub eref: *mut Alias,
-    pub lateral: bool_0,
-    pub inh: bool_0,
-    pub inFromCl: bool_0,
+    pub lateral: bool,
+    pub inh: bool,
+    pub inFromCl: bool,
     pub requiredPerms: AclMode,
     pub checkAsUser: Oid,
     pub selectedCols: *mut Bitmapset,
@@ -1402,7 +1402,7 @@ pub const CTEMaterializeDefault: CTEMaterialize = 0;
 pub struct CTESearchClause {
     pub type_0: NodeTag,
     pub search_col_list: *mut List,
-    pub search_breadth_first: bool_0,
+    pub search_breadth_first: bool,
     pub search_seq_column: *mut libc::c_char,
     pub location: libc::c_int,
 }
@@ -1432,7 +1432,7 @@ pub struct CommonTableExpr {
     pub search_clause: *mut CTESearchClause,
     pub cycle_clause: *mut CTECycleClause,
     pub location: libc::c_int,
-    pub cterecursive: bool_0,
+    pub cterecursive: bool,
     pub cterefcount: libc::c_int,
     pub ctecolnames: *mut List,
     pub ctecoltypes: *mut List,
@@ -1440,48 +1440,13 @@ pub struct CommonTableExpr {
     pub ctecolcollations: *mut List,
 }
 pub type Relation = *mut RelationData;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseState {
-    pub parentParseState: *mut ParseState,
-    pub p_sourcetext: *const libc::c_char,
-    pub p_rtable: *mut List,
-    pub p_joinexprs: *mut List,
-    pub p_joinlist: *mut List,
-    pub p_namespace: *mut List,
-    pub p_lateral_active: bool_0,
-    pub p_ctenamespace: *mut List,
-    pub p_future_ctes: *mut List,
-    pub p_parent_cte: *mut CommonTableExpr,
-    pub p_target_relation: Relation,
-    pub p_target_nsitem: *mut ParseNamespaceItem,
-    pub p_is_insert: bool_0,
-    pub p_windowdefs: *mut List,
-    pub p_expr_kind: ParseExprKind,
-    pub p_next_resno: libc::c_int,
-    pub p_multiassign_exprs: *mut List,
-    pub p_locking_clause: *mut List,
-    pub p_locked_from_parent: bool_0,
-    pub p_resolve_unknowns: bool_0,
-    pub p_queryEnv: *mut QueryEnvironment,
-    pub p_hasAggs: bool_0,
-    pub p_hasWindowFuncs: bool_0,
-    pub p_hasTargetSRFs: bool_0,
-    pub p_hasSubLinks: bool_0,
-    pub p_hasModifyingCTE: bool_0,
-    pub p_last_srf: *mut Node,
-    pub p_pre_columnref_hook: PreParseColumnRefHook,
-    pub p_post_columnref_hook: PostParseColumnRefHook,
-    pub p_paramref_hook: ParseParamRefHook,
-    pub p_coerce_param_hook: CoerceParamHook,
-    pub p_ref_hook_state: *mut libc::c_void,
-}
+
 pub type CoerceParamHook = Option::<
     unsafe extern "C" fn(
         *mut ParseState,
         *mut Param,
         Oid,
-        int32,
+        i32,
         libc::c_int,
     ) -> *mut Node,
 >;
@@ -1543,10 +1508,10 @@ pub struct ParseNamespaceItem {
     pub p_rte: *mut RangeTblEntry,
     pub p_rtindex: libc::c_int,
     pub p_nscolumns: *mut ParseNamespaceColumn,
-    pub p_rel_visible: bool_0,
-    pub p_cols_visible: bool_0,
-    pub p_lateral_only: bool_0,
-    pub p_lateral_ok: bool_0,
+    pub p_rel_visible: bool,
+    pub p_cols_visible: bool,
+    pub p_lateral_only: bool,
+    pub p_lateral_ok: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1554,11 +1519,11 @@ pub struct ParseNamespaceColumn {
     pub p_varno: Index,
     pub p_varattno: AttrNumber,
     pub p_vartype: Oid,
-    pub p_vartypmod: int32,
+    pub p_vartypmod: i32,
     pub p_varcollid: Oid,
     pub p_varnosyn: Index,
     pub p_varattnosyn: AttrNumber,
-    pub p_dontexpand: bool_0,
+    pub p_dontexpand: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1597,7 +1562,7 @@ unsafe extern "C" fn list_nth(
     return (*list_nth_cell(list, n)).ptr_value;
 }
 #[no_mangle]
-pub static mut Transform_null_equals: bool_0 = 0 as libc::c_int as bool_0;
+pub static mut Transform_null_equals: bool = false;
 #[no_mangle]
 pub unsafe extern "C" fn transformExpr(
     mut pstate: *mut ParseState,
@@ -1729,7 +1694,7 @@ unsafe extern "C" fn transformExprRecurse(
             result = transformRowExpr(
                 pstate,
                 expr as *mut RowExpr,
-                0 as libc::c_int as bool_0,
+                false,
             );
         }
         138 => {
@@ -1810,10 +1775,10 @@ unsafe extern "C" fn transformIndirection(
     };
     while if !(i__state.l).is_null() && i__state.i < (*i__state.l).length {
         i = &mut *((*i__state.l).elements).offset(i__state.i as isize) as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         i = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut n: *mut Node = (*i).ptr_value as *mut Node;
@@ -1838,7 +1803,7 @@ unsafe extern "C" fn transformIndirection(
                     exprType(result),
                     exprTypmod(result),
                     subscripts,
-                    0 as libc::c_int as bool_0,
+                    false,
                 ) as *mut Node;
             }
             subscripts = 0 as *mut libc::c_void as *mut List;
@@ -1858,7 +1823,7 @@ unsafe extern "C" fn transformIndirection(
                 ),
                 last_srf,
                 0 as *mut FuncCall,
-                0 as libc::c_int as bool_0,
+                false,
                 location,
             );
             if newresult.is_null() {
@@ -1881,7 +1846,7 @@ unsafe extern "C" fn transformIndirection(
             exprType(result),
             exprTypmod(result),
             subscripts,
-            0 as libc::c_int as bool_0,
+            false,
         ) as *mut Node;
     }
     return result;
@@ -1938,7 +1903,7 @@ unsafe extern "C" fn transformColumnRef(
             node = colNameToVar(
                 pstate,
                 colname,
-                0 as libc::c_int as bool_0,
+                false,
                 (*cref).location,
             );
             if node.is_null() {
@@ -2016,7 +1981,7 @@ unsafe extern "C" fn transformColumnRef(
                         ),
                         (*pstate).p_last_srf,
                         0 as *mut FuncCall,
-                        0 as libc::c_int as bool_0,
+                        false,
                         (*cref).location,
                     );
                 }
@@ -2085,7 +2050,7 @@ unsafe extern "C" fn transformColumnRef(
                         ),
                         (*pstate).p_last_srf,
                         0 as *mut FuncCall,
-                        0 as libc::c_int as bool_0,
+                        false,
                         (*cref).location,
                     );
                 }
@@ -2169,7 +2134,7 @@ unsafe extern "C" fn transformColumnRef(
                             ),
                             (*pstate).p_last_srf,
                             0 as *mut FuncCall,
-                            0 as libc::c_int as bool_0,
+                            false,
                             (*cref).location,
                         );
                     }
@@ -2244,17 +2209,17 @@ unsafe extern "C" fn transformParamRef(
     }
     return result;
 }
-unsafe extern "C" fn exprIsNullConstant(mut arg: *mut Node) -> bool_0 {
+unsafe extern "C" fn exprIsNullConstant(mut arg: *mut Node) -> bool {
     if !arg.is_null()
         && (*(arg as *const Node)).type_0 as libc::c_uint
             == T_A_Const as libc::c_int as libc::c_uint
     {
         let mut con: *mut A_Const = arg as *mut A_Const;
         if (*con).val.type_0 as libc::c_uint == T_Null as libc::c_int as libc::c_uint {
-            return 1 as libc::c_int as bool_0;
+            return true;
         }
     }
-    return 0 as libc::c_int as bool_0;
+    return false;
 }
 unsafe extern "C" fn transformAExprOp(
     mut pstate: *mut ParseState,
@@ -2338,7 +2303,7 @@ unsafe extern "C" fn transformAExprOpAny(
     return make_scalar_array_op(
         pstate,
         (*a).name,
-        1 as libc::c_int as bool_0,
+        true,
         lexpr,
         rexpr,
         (*a).location,
@@ -2353,7 +2318,7 @@ unsafe extern "C" fn transformAExprOpAll(
     return make_scalar_array_op(
         pstate,
         (*a).name,
-        0 as libc::c_int as bool_0,
+        false,
         lexpr,
         rexpr,
         (*a).location,
@@ -2653,10 +2618,10 @@ unsafe extern "C" fn transformBoolExpr(
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
         lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut arg: *mut Node = (*lc).ptr_value as *mut Node;
@@ -2686,10 +2651,10 @@ unsafe extern "C" fn transformFuncCall(
     while if !(args__state.l).is_null() && args__state.i < (*args__state.l).length {
         args = &mut *((*args__state.l).elements).offset(args__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         args = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         targs = lappend(
@@ -2713,10 +2678,10 @@ unsafe extern "C" fn transformFuncCall(
         {
             args = &mut *((*args__state_0.l).elements).offset(args__state_0.i as isize)
                 as *mut ListCell;
-            1 as libc::c_int as bool_0 as libc::c_int
+            true as libc::c_int
         } else {
             args = 0 as *mut ListCell;
-            0 as libc::c_int as bool_0 as libc::c_int
+            false as libc::c_int
         } != 0
         {
             let mut arg: *mut SortBy = (*args).ptr_value as *mut SortBy;
@@ -2735,7 +2700,7 @@ unsafe extern "C" fn transformFuncCall(
         targs,
         last_srf,
         fn_0,
-        0 as libc::c_int as bool_0,
+        false,
         (*fn_0).location,
     );
 }
@@ -2768,7 +2733,7 @@ unsafe extern "C" fn transformMultiAssignRef(
                 sublink as *mut Expr,
                 0 as libc::c_int as AttrNumber,
                 0 as *mut libc::c_char,
-                1 as libc::c_int as bool_0,
+                true,
             );
             (*pstate)
                 .p_multiassign_exprs = lappend(
@@ -2782,7 +2747,7 @@ unsafe extern "C" fn transformMultiAssignRef(
             rexpr = transformRowExpr(
                 pstate,
                 (*maref).source as *mut RowExpr,
-                1 as libc::c_int as bool_0,
+                true,
             ) as *mut RowExpr;
             if list_length((*rexpr).args) != (*maref).ncolumns {
                 let elevel__0: libc::c_int = 21 as libc::c_int;
@@ -2795,7 +2760,7 @@ unsafe extern "C" fn transformMultiAssignRef(
                 rexpr as *mut Expr,
                 0 as libc::c_int as AttrNumber,
                 0 as *mut libc::c_char,
-                1 as libc::c_int as bool_0,
+                true,
             );
             (*pstate)
                 .p_multiassign_exprs = lappend(
@@ -2908,10 +2873,10 @@ unsafe extern "C" fn transformCaseExpr(
     };
     while if !(l__state.l).is_null() && l__state.i < (*l__state.l).length {
         l = &mut *((*l__state.l).elements).offset(l__state.i as isize) as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         l = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut w: *mut CaseWhen = (*l).ptr_value as *mut CaseWhen;
@@ -2984,10 +2949,10 @@ unsafe extern "C" fn transformCaseExpr(
     while if !(l__state_0.l).is_null() && l__state_0.i < (*l__state_0.l).length {
         l = &mut *((*l__state_0.l).elements).offset(l__state_0.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         l = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut w_0: *mut CaseWhen = (*l).ptr_value as *mut CaseWhen;
@@ -3080,13 +3045,13 @@ unsafe extern "C" fn transformSubLink(
             abort();
         }
     }
-    (*pstate).p_hasSubLinks = 1 as libc::c_int as bool_0;
+    (*pstate).p_hasSubLinks = true;
     qtree = parse_sub_analyze(
         (*sublink).subselect,
         pstate,
         0 as *mut CommonTableExpr,
-        0 as libc::c_int as bool_0,
-        1 as libc::c_int as bool_0,
+        false,
+        true,
     );
     if !((*(qtree as *const Node)).type_0 as libc::c_uint
         == T_Query as libc::c_int as libc::c_uint)
@@ -3177,10 +3142,10 @@ unsafe extern "C" fn transformSubLink(
         while if !(l__state.l).is_null() && l__state.i < (*l__state.l).length {
             l = &mut *((*l__state.l).elements).offset(l__state.i as isize)
                 as *mut ListCell;
-            1 as libc::c_int as bool_0 as libc::c_int
+            true as libc::c_int
         } else {
             l = 0 as *mut ListCell;
-            0 as libc::c_int as bool_0 as libc::c_int
+            false as libc::c_int
         } != 0
         {
             let mut tent: *mut TargetEntry = (*l).ptr_value as *mut TargetEntry;
@@ -3232,7 +3197,7 @@ unsafe extern "C" fn transformArrayExpr(
     mut a: *mut A_ArrayExpr,
     mut array_type: Oid,
     mut element_type: Oid,
-    mut typmod: int32,
+    mut typmod: i32,
 ) -> *mut Node {
     let mut newa: *mut ArrayExpr = ({
         let mut _result: *mut Node = 0 as *mut Node;
@@ -3243,8 +3208,8 @@ unsafe extern "C" fn transformArrayExpr(
     let mut newcoercedelems: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut element: *mut ListCell = 0 as *mut ListCell;
     let mut coerce_type: Oid = 0;
-    let mut coerce_hard: bool_0 = 0;
-    (*newa).multidims = 0 as libc::c_int as bool_0;
+    let mut coerce_hard: bool = 0;
+    (*newa).multidims = false;
     let mut element__state: ForEachState = {
         let mut init = ForEachState {
             l: (*a).elements,
@@ -3257,10 +3222,10 @@ unsafe extern "C" fn transformArrayExpr(
     {
         element = &mut *((*element__state.l).elements).offset(element__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         element = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut e: *mut Node = (*element).ptr_value as *mut Node;
@@ -3275,26 +3240,26 @@ unsafe extern "C" fn transformArrayExpr(
                 element_type,
                 typmod,
             );
-            (*newa).multidims = 1 as libc::c_int as bool_0;
+            (*newa).multidims = true;
         } else {
             newe = transformExprRecurse(pstate, e);
             if (*newa).multidims == 0
                 && get_element_type(exprType(newe)) != 0 as libc::c_int as Oid
             {
-                (*newa).multidims = 1 as libc::c_int as bool_0;
+                (*newa).multidims = true;
             }
         }
         newelems = lappend(newelems, newe as *mut libc::c_void);
         element__state.i += 1;
         element__state.i;
     }
-    if (array_type != 0 as libc::c_int as Oid) as libc::c_int as bool_0 != 0 {
+    if (array_type != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
         coerce_type = if (*newa).multidims as libc::c_int != 0 {
             array_type
         } else {
             element_type
         };
-        coerce_hard = 1 as libc::c_int as bool_0;
+        coerce_hard = true;
     } else {
         if newelems.is_null() {
             let elevel_: libc::c_int = 21 as libc::c_int;
@@ -3312,7 +3277,7 @@ unsafe extern "C" fn transformArrayExpr(
         if (*newa).multidims != 0 {
             array_type = coerce_type;
             element_type = get_element_type(array_type);
-            if (element_type != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0 {
+            if (element_type != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
                 let elevel__0: libc::c_int = 21 as libc::c_int;
                 let mut __error_0: libc::c_int = 0;
                 if elevel__0 >= 21 as libc::c_int {
@@ -3322,7 +3287,7 @@ unsafe extern "C" fn transformArrayExpr(
         } else {
             element_type = coerce_type;
             array_type = get_array_type(element_type);
-            if (array_type != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0 {
+            if (array_type != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
                 let elevel__1: libc::c_int = 21 as libc::c_int;
                 let mut __error_1: libc::c_int = 0;
                 if elevel__1 >= 21 as libc::c_int {
@@ -3330,7 +3295,7 @@ unsafe extern "C" fn transformArrayExpr(
                 }
             }
         }
-        coerce_hard = 0 as libc::c_int as bool_0;
+        coerce_hard = false;
     }
     let mut element__state_0: ForEachState = {
         let mut init = ForEachState {
@@ -3344,10 +3309,10 @@ unsafe extern "C" fn transformArrayExpr(
     {
         element = &mut *((*element__state_0.l).elements)
             .offset(element__state_0.i as isize) as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         element = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut e_0: *mut Node = (*element).ptr_value as *mut Node;
@@ -3391,7 +3356,7 @@ unsafe extern "C" fn transformArrayExpr(
 unsafe extern "C" fn transformRowExpr(
     mut pstate: *mut ParseState,
     mut r: *mut RowExpr,
-    mut allowDefault: bool_0,
+    mut allowDefault: bool,
 ) -> *mut Node {
     let mut newr: *mut RowExpr = 0 as *mut RowExpr;
     let mut fname: [libc::c_char; 16] = [0; 16];
@@ -3452,10 +3417,10 @@ unsafe extern "C" fn transformCoalesceExpr(
     while if !(args__state.l).is_null() && args__state.i < (*args__state.l).length {
         args = &mut *((*args__state.l).elements).offset(args__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         args = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut e: *mut Node = (*args).ptr_value as *mut Node;
@@ -3483,10 +3448,10 @@ unsafe extern "C" fn transformCoalesceExpr(
     {
         args = &mut *((*args__state_0.l).elements).offset(args__state_0.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         args = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut e_0: *mut Node = (*args).ptr_value as *mut Node;
@@ -3542,10 +3507,10 @@ unsafe extern "C" fn transformMinMaxExpr(
     while if !(args__state.l).is_null() && args__state.i < (*args__state.l).length {
         args = &mut *((*args__state.l).elements).offset(args__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         args = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut e: *mut Node = (*args).ptr_value as *mut Node;
@@ -3568,10 +3533,10 @@ unsafe extern "C" fn transformMinMaxExpr(
     {
         args = &mut *((*args__state_0.l).elements).offset(args__state_0.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         args = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut e_0: *mut Node = (*args).ptr_value as *mut Node;
@@ -3593,28 +3558,28 @@ unsafe extern "C" fn transformSQLValueFunction(
         2 => {
             (*svf)
                 .typmod = anytime_typmod_check(
-                1 as libc::c_int as bool_0,
+                true,
                 (*svf).typmod,
             );
         }
         4 => {
             (*svf)
                 .typmod = anytimestamp_typmod_check(
-                1 as libc::c_int as bool_0,
+                true,
                 (*svf).typmod,
             );
         }
         6 => {
             (*svf)
                 .typmod = anytime_typmod_check(
-                0 as libc::c_int as bool_0,
+                false,
                 (*svf).typmod,
             );
         }
         8 => {
             (*svf)
                 .typmod = anytimestamp_typmod_check(
-                0 as libc::c_int as bool_0,
+                false,
                 (*svf).typmod,
             );
         }
@@ -3639,8 +3604,8 @@ unsafe extern "C" fn transformXmlExpr(
         (*newx)
             .name = map_sql_identifier_to_xml_name(
             (*x).name,
-            0 as libc::c_int as bool_0,
-            0 as libc::c_int as bool_0,
+            false,
+            false,
         );
     } else {
         (*newx).name = 0 as *mut libc::c_char;
@@ -3660,10 +3625,10 @@ unsafe extern "C" fn transformXmlExpr(
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
         lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut r: *mut ResTarget = (*lc).ptr_value as *mut ResTarget;
@@ -3673,16 +3638,16 @@ unsafe extern "C" fn transformXmlExpr(
         if !((*r).name).is_null() {
             argname = map_sql_identifier_to_xml_name(
                 (*r).name,
-                0 as libc::c_int as bool_0,
-                0 as libc::c_int as bool_0,
+                false,
+                false,
             );
         } else if (*((*r).val as *const Node)).type_0 as libc::c_uint
             == T_ColumnRef as libc::c_int as libc::c_uint
         {
             argname = map_sql_identifier_to_xml_name(
                 FigureColname((*r).val),
-                1 as libc::c_int as bool_0,
-                0 as libc::c_int as bool_0,
+                true,
+                false,
             );
         } else {
             let elevel_: libc::c_int = 21 as libc::c_int;
@@ -3704,10 +3669,10 @@ unsafe extern "C" fn transformXmlExpr(
             while if !(lc2__state.l).is_null() && lc2__state.i < (*lc2__state.l).length {
                 lc2 = &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize)
                     as *mut ListCell;
-                1 as libc::c_int as bool_0 as libc::c_int
+                true as libc::c_int
             } else {
                 lc2 = 0 as *mut ListCell;
-                0 as libc::c_int as bool_0 as libc::c_int
+                false as libc::c_int
             } != 0
             {
                 if strcmp(argname, (*((*lc2).ptr_value as *mut Value)).val.str_0)
@@ -3744,10 +3709,10 @@ unsafe extern "C" fn transformXmlExpr(
     while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
         lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut e: *mut Node = (*lc).ptr_value as *mut Node;
@@ -3781,7 +3746,7 @@ unsafe extern "C" fn transformXmlSerialize(
     let mut result: *mut Node = 0 as *mut Node;
     let mut xexpr: *mut XmlExpr = 0 as *mut XmlExpr;
     let mut targetType: Oid = 0;
-    let mut targetTypmod: int32 = 0;
+    let mut targetTypmod: i32 = 0;
     xexpr = ({
         let mut _result: *mut Node = 0 as *mut Node;
         (*_result).type_0 = T_XmlExpr;
@@ -3863,7 +3828,7 @@ unsafe extern "C" fn transformWholeRowRef(
         (*nsitem).p_rte,
         (*nsitem).p_rtindex as Index,
         sublevels_up as Index,
-        1 as libc::c_int as bool_0,
+        true,
     );
     (*result).location = location;
     markVarForSelectPriv(pstate, result);
@@ -3878,19 +3843,19 @@ unsafe extern "C" fn transformTypeCast(
     let mut expr: *mut Node = 0 as *mut Node;
     let mut inputType: Oid = 0;
     let mut targetType: Oid = 0;
-    let mut targetTypmod: int32 = 0;
+    let mut targetTypmod: i32 = 0;
     let mut location: libc::c_int = 0;
     typenameTypeIdAndMod(pstate, (*tc).typeName, &mut targetType, &mut targetTypmod);
     if (*(arg as *const Node)).type_0 as libc::c_uint
         == T_A_ArrayExpr as libc::c_int as libc::c_uint
     {
         let mut targetBaseType: Oid = 0;
-        let mut targetBaseTypmod: int32 = 0;
+        let mut targetBaseTypmod: i32 = 0;
         let mut elementType: Oid = 0;
         targetBaseTypmod = targetTypmod;
         targetBaseType = getBaseTypeAndTypmod(targetType, &mut targetBaseTypmod);
         elementType = get_element_type(targetBaseType);
-        if (elementType != 0 as libc::c_int as Oid) as libc::c_int as bool_0 != 0 {
+        if (elementType != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
             expr = transformArrayExpr(
                 pstate,
                 arg as *mut A_ArrayExpr,
@@ -3997,7 +3962,7 @@ unsafe extern "C" fn make_row_distinct_op(
         l__state.i;
     }
     if result.is_null() {
-        result = makeBoolConst(0 as libc::c_int as bool_0, 0 as libc::c_int as bool_0);
+        result = makeBoolConst(false, false);
     }
     return result;
 }
@@ -4019,7 +3984,7 @@ unsafe extern "C" fn make_nulltest_from_distinct(
     } else {
         (*nt).nulltesttype = IS_NOT_NULL;
     }
-    (*nt).argisrow = 0 as libc::c_int as bool_0;
+    (*nt).argisrow = false;
     (*nt).location = (*distincta).location;
     return nt as *mut Node;
 }

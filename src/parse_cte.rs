@@ -7,7 +7,7 @@
 //     pub type QueryEnvironment;
 //     pub type TypeCacheEnumData;
 //     pub type DomainConstraintCache;
-//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
 //     fn errfinish(
 //         filename: *const libc::c_char,
 //         lineno: libc::c_int,
@@ -18,7 +18,7 @@
 //     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
 //     fn palloc0(size: Size) -> *mut libc::c_void;
 //     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
-//     fn bms_is_empty(a: *const Bitmapset) -> bool_0;
+//     fn bms_is_empty(a: *const Bitmapset) -> bool;
 //     fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
 //     fn bms_del_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
 //     fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
@@ -26,25 +26,25 @@
 //     fn lappend_int(list: *mut List, datum: libc::c_int) -> *mut List;
 //     fn lappend_oid(list: *mut List, datum: Oid) -> *mut List;
 //     fn lcons(datum: *mut libc::c_void, list: *mut List) -> *mut List;
-//     fn list_member(list: *const List, datum: *const libc::c_void) -> bool_0;
+//     fn list_member(list: *const List, datum: *const libc::c_void) -> bool;
 //     fn list_delete_first(list: *mut List) -> *mut List;
 //     fn list_copy(list: *const List) -> *mut List;
 //     fn makeString(str: *mut libc::c_char) -> *mut Value;
 //     fn list_make2_impl(t: NodeTag, datum1: ListCell, datum2: ListCell) -> *mut List;
 //     fn exprType(expr: *const Node) -> Oid;
-//     fn exprTypmod(expr: *const Node) -> int32;
+//     fn exprTypmod(expr: *const Node) -> i32;
 //     fn exprCollation(expr: *const Node) -> Oid;
 //     fn raw_expression_tree_walker(
 //         node: *mut Node,
-//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         walker: Option::<unsafe extern "C" fn() -> bool>,
 //         context: *mut libc::c_void,
-//     ) -> bool_0;
+//     ) -> bool;
 //     fn parse_sub_analyze(
 //         parseTree: *mut Node,
 //         parentParseState: *mut ParseState,
 //         parentCTE: *mut CommonTableExpr,
-//         locked_from_parent: bool_0,
-//         resolve_unknowns: bool_0,
+//         locked_from_parent: bool,
+//         resolve_unknowns: bool,
 //     ) -> *mut Query;
 //     fn select_common_type(
 //         pstate: *mut ParseState,
@@ -62,11 +62,11 @@
 //         pstate: *mut ParseState,
 //         exprs: *mut List,
 //         common_type: Oid,
-//     ) -> int32;
+//     ) -> i32;
 //     fn select_common_collation(
 //         pstate: *mut ParseState,
 //         exprs: *mut List,
-//         none_ok: bool_0,
+//         none_ok: bool,
 //     ) -> Oid;
 //     fn transformExpr(
 //         pstate: *mut ParseState,
@@ -79,15 +79,15 @@
 use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
-pub type uintptr_t = libc::c_ulong;
-pub type size_t = __darwin_size_t;
-pub type bool_0 = libc::c_uchar;
-pub type int16 = libc::c_short;
-pub type int32 = libc::c_int;
-pub type uint16 = libc::c_ushort;
-pub type uint32 = libc::c_uint;
-pub type uint64 = libc::c_ulong;
-pub type Size = size_t;
+// pub type usize = libc::c_ulong;
+// pub type isize = __darwin_size_t;
+// pub type bool = libc::c_uchar;
+// pub type i16 = libc::c_short;
+// pub type i32 = libc::c_int;
+// pub type u16 = libc::c_ushort;
+// pub type u32 = libc::c_uint;
+// pub type uint64 = libc::c_ulong;
+pub type Size = isize;
 pub type Index = libc::c_uint;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -96,12 +96,12 @@ pub struct nameData {
 }
 pub type NameData = nameData;
 pub type MemoryContext = *mut MemoryContextData;
-pub type Datum = uintptr_t;
+pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct NullableDatum {
     pub value: Datum,
-    pub isnull: bool_0,
+    pub isnull: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -546,14 +546,14 @@ pub const T_ProjectionInfo: NodeTag = 3;
 pub const T_ExprContext: NodeTag = 2;
 pub const T_IndexInfo: NodeTag = 1;
 pub const T_Invalid: NodeTag = 0;
-pub type bitmapword = uint32;
+pub type bitmapword = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Bitmapset {
     pub nwords: libc::c_int,
     pub words: [bitmapword; 0],
 }
-pub type AttrNumber = int16;
+pub type AttrNumber = i16;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Node {
@@ -609,7 +609,7 @@ pub struct RangeVar {
     pub catalogname: *mut libc::c_char,
     pub schemaname: *mut libc::c_char,
     pub relname: *mut libc::c_char,
-    pub inh: bool_0,
+    pub inh: bool,
     pub relpersistence: libc::c_char,
     pub alias: *mut Alias,
     pub location: libc::c_int,
@@ -643,7 +643,7 @@ pub struct IntoClause {
     pub onCommit: OnCommitAction,
     pub tableSpaceName: *mut libc::c_char,
     pub viewQuery: *mut Node,
-    pub skipData: bool_0,
+    pub skipData: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -662,7 +662,7 @@ pub struct Param {
     pub paramkind: ParamKind,
     pub paramid: libc::c_int,
     pub paramtype: Oid,
-    pub paramtypmod: int32,
+    pub paramtypmod: i32,
     pub paramcollid: Oid,
     pub location: libc::c_int,
 }
@@ -696,14 +696,14 @@ pub struct TargetEntry {
     pub ressortgroupref: Index,
     pub resorigtbl: Oid,
     pub resorigcol: AttrNumber,
-    pub resjunk: bool_0,
+    pub resjunk: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct JoinExpr {
     pub type_0: NodeTag,
     pub jointype: JoinType,
-    pub isNatural: bool_0,
+    pub isNatural: bool,
     pub larg: *mut Node,
     pub rarg: *mut Node,
     pub usingClause: *mut List,
@@ -753,7 +753,7 @@ pub const QSRC_QUAL_INSTEAD_RULE: QuerySource = 3;
 pub const QSRC_INSTEAD_RULE: QuerySource = 2;
 pub const QSRC_PARSER: QuerySource = 1;
 pub const QSRC_ORIGINAL: QuerySource = 0;
-pub type AclMode = uint32;
+pub type AclMode = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Query {
@@ -761,18 +761,18 @@ pub struct Query {
     pub commandType: CmdType,
     pub querySource: QuerySource,
     pub queryId: uint64,
-    pub canSetTag: bool_0,
+    pub canSetTag: bool,
     pub utilityStmt: *mut Node,
     pub resultRelation: libc::c_int,
-    pub hasAggs: bool_0,
-    pub hasWindowFuncs: bool_0,
-    pub hasTargetSRFs: bool_0,
-    pub hasSubLinks: bool_0,
-    pub hasDistinctOn: bool_0,
-    pub hasRecursive: bool_0,
-    pub hasModifyingCTE: bool_0,
-    pub hasForUpdate: bool_0,
-    pub hasRowSecurity: bool_0,
+    pub hasAggs: bool,
+    pub hasWindowFuncs: bool,
+    pub hasTargetSRFs: bool,
+    pub hasSubLinks: bool,
+    pub hasDistinctOn: bool,
+    pub hasRecursive: bool,
+    pub hasModifyingCTE: bool,
+    pub hasForUpdate: bool,
+    pub hasRowSecurity: bool,
     pub cteList: *mut List,
     pub rtable: *mut List,
     pub jointree: *mut FromExpr,
@@ -830,19 +830,19 @@ pub struct RangeTblEntry {
     pub rellockmode: libc::c_int,
     pub tablesample: *mut TableSampleClause,
     pub subquery: *mut Query,
-    pub security_barrier: bool_0,
+    pub security_barrier: bool,
     pub jointype: JoinType,
     pub joinmergedcols: libc::c_int,
     pub joinaliasvars: *mut List,
     pub joinleftcols: *mut List,
     pub joinrightcols: *mut List,
     pub functions: *mut List,
-    pub funcordinality: bool_0,
+    pub funcordinality: bool,
     pub tablefunc: *mut TableFunc,
     pub values_lists: *mut List,
     pub ctename: *mut libc::c_char,
     pub ctelevelsup: Index,
-    pub self_reference: bool_0,
+    pub self_reference: bool,
     pub coltypes: *mut List,
     pub coltypmods: *mut List,
     pub colcollations: *mut List,
@@ -850,9 +850,9 @@ pub struct RangeTblEntry {
     pub enrtuples: libc::c_double,
     pub alias: *mut Alias,
     pub eref: *mut Alias,
-    pub lateral: bool_0,
-    pub inh: bool_0,
-    pub inFromCl: bool_0,
+    pub lateral: bool,
+    pub inh: bool,
+    pub inFromCl: bool,
     pub requiredPerms: AclMode,
     pub checkAsUser: Oid,
     pub selectedCols: *mut Bitmapset,
@@ -874,7 +874,7 @@ pub struct TableSampleClause {
 pub struct WithClause {
     pub type_0: NodeTag,
     pub ctes: *mut List,
-    pub recursive: bool_0,
+    pub recursive: bool,
     pub location: libc::c_int,
 }
 pub type CTEMaterialize = libc::c_uint;
@@ -886,7 +886,7 @@ pub const CTEMaterializeDefault: CTEMaterialize = 0;
 pub struct CTESearchClause {
     pub type_0: NodeTag,
     pub search_col_list: *mut List,
-    pub search_breadth_first: bool_0,
+    pub search_breadth_first: bool,
     pub search_seq_column: *mut libc::c_char,
     pub location: libc::c_int,
 }
@@ -916,7 +916,7 @@ pub struct CommonTableExpr {
     pub search_clause: *mut CTESearchClause,
     pub cycle_clause: *mut CTECycleClause,
     pub location: libc::c_int,
-    pub cterecursive: bool_0,
+    pub cterecursive: bool,
     pub cterefcount: libc::c_int,
     pub ctecolnames: *mut List,
     pub ctecoltypes: *mut List,
@@ -948,7 +948,7 @@ pub struct SelectStmt {
     pub lockingClause: *mut List,
     pub withClause: *mut WithClause,
     pub op: SetOperation,
-    pub all: bool_0,
+    pub all: bool,
     pub larg: *mut SelectStmt,
     pub rarg: *mut SelectStmt,
 }
@@ -957,7 +957,7 @@ pub struct SelectStmt {
 pub struct SetOperationStmt {
     pub type_0: NodeTag,
     pub op: SetOperation,
-    pub all: bool_0,
+    pub all: bool,
     pub larg: *mut Node,
     pub rarg: *mut Node,
     pub colTypes: *mut List,
@@ -971,23 +971,23 @@ pub struct FormData_pg_attribute {
     pub attrelid: Oid,
     pub attname: NameData,
     pub atttypid: Oid,
-    pub attstattarget: int32,
-    pub attlen: int16,
-    pub attnum: int16,
-    pub attndims: int32,
-    pub attcacheoff: int32,
-    pub atttypmod: int32,
-    pub attbyval: bool_0,
+    pub attstattarget: i32,
+    pub attlen: i16,
+    pub attnum: i16,
+    pub attndims: i32,
+    pub attcacheoff: i32,
+    pub atttypmod: i32,
+    pub attbyval: bool,
     pub attstorage: libc::c_char,
     pub attalign: libc::c_char,
-    pub attnotnull: bool_0,
-    pub atthasdef: bool_0,
-    pub atthasmissing: bool_0,
+    pub attnotnull: bool,
+    pub atthasdef: bool,
+    pub atthasmissing: bool,
     pub attidentity: libc::c_char,
     pub attgenerated: libc::c_char,
-    pub attisdropped: bool_0,
-    pub attislocal: bool_0,
-    pub attinhcount: int32,
+    pub attisdropped: bool,
+    pub attislocal: bool,
+    pub attinhcount: i32,
     pub attcollation: Oid,
 }
 #[derive(Copy, Clone)]
@@ -1001,8 +1001,8 @@ pub struct AttrDefault {
 pub struct ConstrCheck {
     pub ccname: *mut libc::c_char,
     pub ccbin: *mut libc::c_char,
-    pub ccvalid: bool_0,
-    pub ccnoinherit: bool_0,
+    pub ccvalid: bool,
+    pub ccnoinherit: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1010,65 +1010,30 @@ pub struct TupleConstr {
     pub defval: *mut AttrDefault,
     pub check: *mut ConstrCheck,
     pub missing: *mut AttrMissing,
-    pub num_defval: uint16,
-    pub num_check: uint16,
-    pub has_not_null: bool_0,
-    pub has_generated_stored: bool_0,
+    pub num_defval: u16,
+    pub num_check: u16,
+    pub has_not_null: bool,
+    pub has_generated_stored: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct TupleDescData {
     pub natts: libc::c_int,
     pub tdtypeid: Oid,
-    pub tdtypmod: int32,
+    pub tdtypmod: i32,
     pub tdrefcount: libc::c_int,
     pub constr: *mut TupleConstr,
     pub attrs: [FormData_pg_attribute; 0],
 }
 pub type TupleDesc = *mut TupleDescData;
 pub type Relation = *mut RelationData;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseState {
-    pub parentParseState: *mut ParseState,
-    pub p_sourcetext: *const libc::c_char,
-    pub p_rtable: *mut List,
-    pub p_joinexprs: *mut List,
-    pub p_joinlist: *mut List,
-    pub p_namespace: *mut List,
-    pub p_lateral_active: bool_0,
-    pub p_ctenamespace: *mut List,
-    pub p_future_ctes: *mut List,
-    pub p_parent_cte: *mut CommonTableExpr,
-    pub p_target_relation: Relation,
-    pub p_target_nsitem: *mut ParseNamespaceItem,
-    pub p_is_insert: bool_0,
-    pub p_windowdefs: *mut List,
-    pub p_expr_kind: ParseExprKind,
-    pub p_next_resno: libc::c_int,
-    pub p_multiassign_exprs: *mut List,
-    pub p_locking_clause: *mut List,
-    pub p_locked_from_parent: bool_0,
-    pub p_resolve_unknowns: bool_0,
-    pub p_queryEnv: *mut QueryEnvironment,
-    pub p_hasAggs: bool_0,
-    pub p_hasWindowFuncs: bool_0,
-    pub p_hasTargetSRFs: bool_0,
-    pub p_hasSubLinks: bool_0,
-    pub p_hasModifyingCTE: bool_0,
-    pub p_last_srf: *mut Node,
-    pub p_pre_columnref_hook: PreParseColumnRefHook,
-    pub p_post_columnref_hook: PostParseColumnRefHook,
-    pub p_paramref_hook: ParseParamRefHook,
-    pub p_coerce_param_hook: CoerceParamHook,
-    pub p_ref_hook_state: *mut libc::c_void,
-}
+
 pub type CoerceParamHook = Option::<
     unsafe extern "C" fn(
         *mut ParseState,
         *mut Param,
         Oid,
-        int32,
+        i32,
         libc::c_int,
     ) -> *mut Node,
 >;
@@ -1130,10 +1095,10 @@ pub struct ParseNamespaceItem {
     pub p_rte: *mut RangeTblEntry,
     pub p_rtindex: libc::c_int,
     pub p_nscolumns: *mut ParseNamespaceColumn,
-    pub p_rel_visible: bool_0,
-    pub p_cols_visible: bool_0,
-    pub p_lateral_only: bool_0,
-    pub p_lateral_ok: bool_0,
+    pub p_rel_visible: bool,
+    pub p_cols_visible: bool,
+    pub p_lateral_only: bool,
+    pub p_lateral_ok: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1141,19 +1106,19 @@ pub struct ParseNamespaceColumn {
     pub p_varno: Index,
     pub p_varattno: AttrNumber,
     pub p_vartype: Oid,
-    pub p_vartypmod: int32,
+    pub p_vartypmod: i32,
     pub p_varcollid: Oid,
     pub p_varnosyn: Index,
     pub p_varattnosyn: AttrNumber,
-    pub p_dontexpand: bool_0,
+    pub p_dontexpand: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct TypeCacheEntry {
     pub type_id: Oid,
-    pub type_id_hash: uint32,
-    pub typlen: int16,
-    pub typbyval: bool_0,
+    pub type_id_hash: u32,
+    pub typlen: i16,
+    pub typbyval: bool,
     pub typalign: libc::c_char,
     pub typstorage: libc::c_char,
     pub typtype: libc::c_char,
@@ -1184,7 +1149,7 @@ pub struct TypeCacheEntry {
     pub rng_subdiff_finfo: FmgrInfo,
     pub rngtype: *mut TypeCacheEntry,
     pub domainBaseType: Oid,
-    pub domainBaseTypmod: int32,
+    pub domainBaseTypmod: i32,
     pub domainData: *mut DomainConstraintCache,
     pub flags: libc::c_int,
     pub enumData: *mut TypeCacheEnumData,
@@ -1196,8 +1161,8 @@ pub struct FmgrInfo {
     pub fn_addr: PGFunction,
     pub fn_oid: Oid,
     pub fn_nargs: libc::c_short,
-    pub fn_strict: bool_0,
-    pub fn_retset: bool_0,
+    pub fn_strict: bool,
+    pub fn_retset: bool,
     pub fn_stats: libc::c_uchar,
     pub fn_extra: *mut libc::c_void,
     pub fn_mcxt: MemoryContext,
@@ -1213,7 +1178,7 @@ pub struct FunctionCallInfoBaseData {
     pub context: fmNodePtr,
     pub resultinfo: fmNodePtr,
     pub fncollation: Oid,
-    pub isnull: bool_0,
+    pub isnull: bool,
     pub nargs: libc::c_short,
     pub args: [NullableDatum; 0],
 }
@@ -1308,10 +1273,10 @@ pub unsafe extern "C" fn transformWithClause(
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
         lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut cte: *mut CommonTableExpr = (*lc).ptr_value as *mut CommonTableExpr;
@@ -1323,10 +1288,10 @@ pub unsafe extern "C" fn transformWithClause(
         while if !(rest__state.l).is_null() && rest__state.i < (*rest__state.l).length {
             rest = &mut *((*rest__state.l).elements).offset(rest__state.i as isize)
                 as *mut ListCell;
-            1 as libc::c_int as bool_0 as libc::c_int
+            true as libc::c_int
         } else {
             rest = 0 as *mut ListCell;
-            0 as libc::c_int as bool_0 as libc::c_int
+            false as libc::c_int
         } != 0
         {
             let mut cte2: *mut CommonTableExpr = (*rest).ptr_value
@@ -1341,12 +1306,12 @@ pub unsafe extern "C" fn transformWithClause(
             rest__state.i += 1;
             rest__state.i;
         }
-        (*cte).cterecursive = 0 as libc::c_int as bool_0;
+        (*cte).cterecursive = false;
         (*cte).cterefcount = 0 as libc::c_int;
         if !((*((*cte).ctequery as *const Node)).type_0 as libc::c_uint
             == T_SelectStmt as libc::c_int as libc::c_uint)
         {
-            (*pstate).p_hasModifyingCTE = 1 as libc::c_int as bool_0;
+            (*pstate).p_hasModifyingCTE = true;
         }
         lc__state.i += 1;
         lc__state.i;
@@ -1380,10 +1345,10 @@ pub unsafe extern "C" fn transformWithClause(
         while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
             lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
                 as *mut ListCell;
-            1 as libc::c_int as bool_0 as libc::c_int
+            true as libc::c_int
         } else {
             lc = 0 as *mut ListCell;
-            0 as libc::c_int as bool_0 as libc::c_int
+            false as libc::c_int
         } != 0
         {
             let ref mut fresh0 = (*(cstate.items).offset(i as isize)).cte;
@@ -1428,10 +1393,10 @@ pub unsafe extern "C" fn transformWithClause(
         while if !(lc__state_1.l).is_null() && lc__state_1.i < (*lc__state_1.l).length {
             lc = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize)
                 as *mut ListCell;
-            1 as libc::c_int as bool_0 as libc::c_int
+            true as libc::c_int
         } else {
             lc = 0 as *mut ListCell;
-            0 as libc::c_int as bool_0 as libc::c_int
+            false as libc::c_int
         } != 0
         {
             let mut cte_2: *mut CommonTableExpr = (*lc).ptr_value
@@ -1458,8 +1423,8 @@ unsafe extern "C" fn analyzeCTE(
         (*cte).ctequery,
         pstate,
         cte,
-        0 as libc::c_int as bool_0,
-        1 as libc::c_int as bool_0,
+        false,
+        true,
     );
     (*cte).ctequery = query as *mut Node;
     if !((*(query as *const Node)).type_0 as libc::c_uint
@@ -1511,7 +1476,7 @@ unsafe extern "C" fn analyzeCTE(
             abort();
         }
     }
-    (*query).canSetTag = 0 as libc::c_int as bool_0;
+    (*query).canSetTag = false;
     if (*cte).cterecursive == 0 {
         analyzeCTETargetList(
             pstate,
@@ -1552,10 +1517,10 @@ unsafe extern "C" fn analyzeCTE(
         {
             lctlist = &mut *((*lctlist__state.l).elements)
                 .offset(lctlist__state.i as isize) as *mut ListCell;
-            1 as libc::c_int as bool_0 as libc::c_int
+            true as libc::c_int
         } else {
             lctlist = 0 as *mut ListCell;
-            0 as libc::c_int as bool_0 as libc::c_int
+            false as libc::c_int
         } != 0
         {
             let mut te: *mut TargetEntry = (*lctlist).ptr_value as *mut TargetEntry;
@@ -1670,10 +1635,10 @@ unsafe extern "C" fn analyzeCTE(
         while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
             lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
                 as *mut ListCell;
-            1 as libc::c_int as bool_0 as libc::c_int
+            true as libc::c_int
         } else {
             lc = 0 as *mut ListCell;
-            0 as libc::c_int as bool_0 as libc::c_int
+            false as libc::c_int
         } != 0
         {
             let mut colname: *mut Value = (*lc).ptr_value as *mut Value;
@@ -1722,10 +1687,10 @@ unsafe extern "C" fn analyzeCTE(
         while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
             lc_0 = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
                 as *mut ListCell;
-            1 as libc::c_int as bool_0 as libc::c_int
+            true as libc::c_int
         } else {
             lc_0 = 0 as *mut ListCell;
-            0 as libc::c_int as bool_0 as libc::c_int
+            false as libc::c_int
         } != 0
         {
             let mut colname_0: *mut Value = (*lc_0).ptr_value as *mut Value;
@@ -1853,7 +1818,7 @@ unsafe extern "C" fn analyzeCTE(
                         as *mut libc::c_void,
                 },
             ),
-            1 as libc::c_int as bool_0,
+            true,
         );
         typentry = lookup_type_cache(
             (*(*cte).cycle_clause).cycle_mark_type,
@@ -1917,9 +1882,9 @@ unsafe extern "C" fn makeDependencyGraph(mut cstate: *mut CteState) {
 unsafe extern "C" fn makeDependencyGraphWalker(
     mut node: *mut Node,
     mut cstate: *mut CteState,
-) -> bool_0 {
+) -> bool {
     if node.is_null() {
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_RangeVar as libc::c_int as libc::c_uint
@@ -1938,10 +1903,10 @@ unsafe extern "C" fn makeDependencyGraphWalker(
             while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
                 lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
                     as *mut ListCell;
-                1 as libc::c_int as bool_0 as libc::c_int
+                true as libc::c_int
             } else {
                 lc = 0 as *mut ListCell;
-                0 as libc::c_int as bool_0 as libc::c_int
+                false as libc::c_int
             } != 0
             {
                 let mut withlist: *mut List = (*lc).ptr_value as *mut List;
@@ -1958,16 +1923,16 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                 {
                     lc2 = &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize)
                         as *mut ListCell;
-                    1 as libc::c_int as bool_0 as libc::c_int
+                    true as libc::c_int
                 } else {
                     lc2 = 0 as *mut ListCell;
-                    0 as libc::c_int as bool_0 as libc::c_int
+                    false as libc::c_int
                 } != 0
                 {
                     let mut cte: *mut CommonTableExpr = (*lc2).ptr_value
                         as *mut CommonTableExpr;
                     if strcmp((*rv).relname, (*cte).ctename) == 0 as libc::c_int {
-                        return 0 as libc::c_int as bool_0;
+                        return false;
                     }
                     lc2__state.i += 1;
                     lc2__state.i;
@@ -1991,7 +1956,7 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                             (*((*cstate).items).offset(i as isize)).id,
                         );
                     } else {
-                        (*cte_0).cterecursive = 1 as libc::c_int as bool_0;
+                        (*cte_0).cterecursive = true;
                     }
                     break;
                 } else {
@@ -2000,7 +1965,7 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                 }
             }
         }
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_SelectStmt as libc::c_int as libc::c_uint
@@ -2026,10 +1991,10 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                 {
                     lc_0 = &mut *((*lc__state_0.l).elements)
                         .offset(lc__state_0.i as isize) as *mut ListCell;
-                    1 as libc::c_int as bool_0 as libc::c_int
+                    true as libc::c_int
                 } else {
                     lc_0 = 0 as *mut ListCell;
-                    0 as libc::c_int as bool_0 as libc::c_int
+                    false as libc::c_int
                 } != 0
                 {
                     let mut cte_1: *mut CommonTableExpr = (*lc_0).ptr_value
@@ -2042,13 +2007,13 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                     node,
                     ::core::mem::transmute::<
                         Option::<
-                            unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0,
+                            unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
                         >,
-                        Option::<unsafe extern "C" fn() -> bool_0>,
+                        Option::<unsafe extern "C" fn() -> bool>,
                     >(
                         Some(
                             makeDependencyGraphWalker
-                                as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0,
+                                as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
                         ),
                     ),
                     cstate as *mut libc::c_void,
@@ -2072,10 +2037,10 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                 {
                     lc_0 = &mut *((*lc__state_1.l).elements)
                         .offset(lc__state_1.i as isize) as *mut ListCell;
-                    1 as libc::c_int as bool_0 as libc::c_int
+                    true as libc::c_int
                 } else {
                     lc_0 = 0 as *mut ListCell;
-                    0 as libc::c_int as bool_0 as libc::c_int
+                    false as libc::c_int
                 } != 0
                 {
                     let mut cte_2: *mut CommonTableExpr = (*lc_0).ptr_value
@@ -2095,36 +2060,36 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                     node,
                     ::core::mem::transmute::<
                         Option::<
-                            unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0,
+                            unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
                         >,
-                        Option::<unsafe extern "C" fn() -> bool_0>,
+                        Option::<unsafe extern "C" fn() -> bool>,
                     >(
                         Some(
                             makeDependencyGraphWalker
-                                as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0,
+                                as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
                         ),
                     ),
                     cstate as *mut libc::c_void,
                 );
                 (*cstate).innerwiths = list_delete_first((*cstate).innerwiths);
             }
-            return 0 as libc::c_int as bool_0;
+            return false;
         }
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_WithClause as libc::c_int as libc::c_uint
     {
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     return raw_expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0>,
-            Option::<unsafe extern "C" fn() -> bool_0>,
+            Option::<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
+            Option::<unsafe extern "C" fn() -> bool>,
         >(
             Some(
                 makeDependencyGraphWalker
-                    as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0,
+                    as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
             ),
         ),
         cstate as *mut libc::c_void,
@@ -2276,10 +2241,10 @@ unsafe extern "C" fn checkWellFormedRecursion(mut cstate: *mut CteState) {
 unsafe extern "C" fn checkWellFormedRecursionWalker(
     mut node: *mut Node,
     mut cstate: *mut CteState,
-) -> bool_0 {
+) -> bool {
     let mut save_context: RecursionContext = (*cstate).context;
     if node.is_null() {
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_RangeVar as libc::c_int as libc::c_uint
@@ -2298,10 +2263,10 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
             while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
                 lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
                     as *mut ListCell;
-                1 as libc::c_int as bool_0 as libc::c_int
+                true as libc::c_int
             } else {
                 lc = 0 as *mut ListCell;
-                0 as libc::c_int as bool_0 as libc::c_int
+                false as libc::c_int
             } != 0
             {
                 let mut withlist: *mut List = (*lc).ptr_value as *mut List;
@@ -2318,16 +2283,16 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                 {
                     lc2 = &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize)
                         as *mut ListCell;
-                    1 as libc::c_int as bool_0 as libc::c_int
+                    true as libc::c_int
                 } else {
                     lc2 = 0 as *mut ListCell;
-                    0 as libc::c_int as bool_0 as libc::c_int
+                    false as libc::c_int
                 } != 0
                 {
                     let mut cte: *mut CommonTableExpr = (*lc2).ptr_value
                         as *mut CommonTableExpr;
                     if strcmp((*rv).relname, (*cte).ctename) == 0 as libc::c_int {
-                        return 0 as libc::c_int as bool_0;
+                        return false;
                     }
                     lc2__state.i += 1;
                     lc2__state.i;
@@ -2356,7 +2321,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                 }
             }
         }
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_SelectStmt as libc::c_int as libc::c_uint
@@ -2382,10 +2347,10 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                 {
                     lc_0 = &mut *((*lc__state_0.l).elements)
                         .offset(lc__state_0.i as isize) as *mut ListCell;
-                    1 as libc::c_int as bool_0 as libc::c_int
+                    true as libc::c_int
                 } else {
                     lc_0 = 0 as *mut ListCell;
-                    0 as libc::c_int as bool_0 as libc::c_int
+                    false as libc::c_int
                 } != 0
                 {
                     let mut cte_0: *mut CommonTableExpr = (*lc_0).ptr_value
@@ -2414,10 +2379,10 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                 {
                     lc_0 = &mut *((*lc__state_1.l).elements)
                         .offset(lc__state_1.i as isize) as *mut ListCell;
-                    1 as libc::c_int as bool_0 as libc::c_int
+                    true as libc::c_int
                 } else {
                     lc_0 = 0 as *mut ListCell;
-                    0 as libc::c_int as bool_0 as libc::c_int
+                    false as libc::c_int
                 } != 0
                 {
                     let mut cte_1: *mut CommonTableExpr = (*lc_0).ptr_value
@@ -2439,12 +2404,12 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
         } else {
             checkWellFormedSelectStmt(stmt, cstate);
         }
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_WithClause as libc::c_int as libc::c_uint
     {
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_JoinExpr as libc::c_int as libc::c_uint
@@ -2510,7 +2475,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                 }
             }
         }
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_SubLink as libc::c_int as libc::c_uint
@@ -2520,17 +2485,17 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
         checkWellFormedRecursionWalker((*sl).subselect, cstate);
         (*cstate).context = save_context;
         checkWellFormedRecursionWalker((*sl).testexpr, cstate);
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     return raw_expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0>,
-            Option::<unsafe extern "C" fn() -> bool_0>,
+            Option::<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
+            Option::<unsafe extern "C" fn() -> bool>,
         >(
             Some(
                 checkWellFormedRecursionWalker
-                    as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0,
+                    as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
             ),
         ),
         cstate as *mut libc::c_void,
@@ -2545,12 +2510,12 @@ unsafe extern "C" fn checkWellFormedSelectStmt(
         raw_expression_tree_walker(
             stmt as *mut Node,
             ::core::mem::transmute::<
-                Option::<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0>,
-                Option::<unsafe extern "C" fn() -> bool_0>,
+                Option::<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
+                Option::<unsafe extern "C" fn() -> bool>,
             >(
                 Some(
                     checkWellFormedRecursionWalker
-                        as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0,
+                        as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
                 ),
             ),
             cstate as *mut libc::c_void,
@@ -2562,13 +2527,13 @@ unsafe extern "C" fn checkWellFormedSelectStmt(
                     stmt as *mut Node,
                     ::core::mem::transmute::<
                         Option::<
-                            unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0,
+                            unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
                         >,
-                        Option::<unsafe extern "C" fn() -> bool_0>,
+                        Option::<unsafe extern "C" fn() -> bool>,
                     >(
                         Some(
                             checkWellFormedRecursionWalker
-                                as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool_0,
+                                as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
                         ),
                     ),
                     cstate as *mut libc::c_void,

@@ -19,7 +19,7 @@
 //     ) -> *mut libc::c_void;
 //     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
 //     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
-//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
 //     fn errfinish(
 //         filename: *const libc::c_char,
 //         lineno: libc::c_int,
@@ -28,7 +28,7 @@
 //     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
 //     fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
 //     fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
-//     fn bms_is_member(x: libc::c_int, a: *const Bitmapset) -> bool_0;
+//     fn bms_is_member(x: libc::c_int, a: *const Bitmapset) -> bool;
 //     fn lappend_int(list: *mut List, datum: libc::c_int) -> *mut List;
 //     fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
 //     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
@@ -38,7 +38,7 @@
 //         attributeNumber: AttrNumber,
 //         attributeName: *const libc::c_char,
 //         oidtypeid: Oid,
-//         typmod: int32,
+//         typmod: i32,
 //         attdim: libc::c_int,
 //     );
 //     fn TupleDescInitEntryCollation(
@@ -52,19 +52,19 @@
 //         pstate: *mut ParseState,
 //         containerBase: *mut Node,
 //         containerType: Oid,
-//         containerTypMod: int32,
+//         containerTypMod: i32,
 //         indirection: *mut List,
-//         isAssignment: bool_0,
+//         isAssignment: bool,
 //     ) -> *mut SubscriptingRef;
-//     fn transformContainerType(containerType: *mut Oid, containerTypmod: *mut int32);
+//     fn transformContainerType(containerType: *mut Oid, containerTypmod: *mut i32);
 //     fn get_database_name(dbid: Oid) -> *mut libc::c_char;
-//     fn get_expr_result_tupdesc(expr: *mut Node, noError: bool_0) -> TupleDesc;
+//     fn get_expr_result_tupdesc(expr: *mut Node, noError: bool) -> TupleDesc;
 //     static mut MyDatabaseId: Oid;
 //     fn makeVar(
 //         varno: Index,
 //         varattno: AttrNumber,
 //         vartype: Oid,
-//         vartypmod: int32,
+//         vartypmod: i32,
 //         varcollid: Oid,
 //         varlevelsup: Index,
 //     ) -> *mut Var;
@@ -72,23 +72,23 @@
 //         expr: *mut Expr,
 //         resno: AttrNumber,
 //         resname: *mut libc::c_char,
-//         resjunk: bool_0,
+//         resjunk: bool,
 //     ) -> *mut TargetEntry;
-//     fn makeNullConst(consttype: Oid, consttypmod: int32, constcollid: Oid) -> *mut Const;
+//     fn makeNullConst(consttype: Oid, consttypmod: i32, constcollid: Oid) -> *mut Const;
 //     fn makeRangeVar(
 //         schemaname: *mut libc::c_char,
 //         relname: *mut libc::c_char,
 //         location: libc::c_int,
 //     ) -> *mut RangeVar;
 //     fn exprType(expr: *const Node) -> Oid;
-//     fn exprTypmod(expr: *const Node) -> int32;
+//     fn exprTypmod(expr: *const Node) -> i32;
 //     fn exprCollation(expr: *const Node) -> Oid;
 //     fn coerce_to_target_type(
 //         pstate: *mut ParseState,
 //         expr: *mut Node,
 //         exprtype: Oid,
 //         targettype: Oid,
-//         targettypmod: int32,
+//         targettypmod: i32,
 //         ccontext: CoercionContext,
 //         cformat: CoercionForm,
 //         location: libc::c_int,
@@ -96,12 +96,12 @@
 //     fn coerce_to_domain(
 //         arg: *mut Node,
 //         baseTypeId: Oid,
-//         baseTypeMod: int32,
+//         baseTypeMod: i32,
 //         typeId: Oid,
 //         ccontext: CoercionContext,
 //         cformat: CoercionForm,
 //         location: libc::c_int,
-//         hideInputCoercion: bool_0,
+//         hideInputCoercion: bool,
 //     ) -> *mut Node;
 //     fn transformExpr(
 //         pstate: *mut ParseState,
@@ -137,7 +137,7 @@
 //         rtindex: libc::c_int,
 //         sublevels_up: libc::c_int,
 //         location: libc::c_int,
-//         include_dropped: bool_0,
+//         include_dropped: bool,
 //         colnames: *mut *mut List,
 //         colvars: *mut *mut List,
 //     );
@@ -156,7 +156,7 @@
 //     fn attnameAttNum(
 //         rd: Relation,
 //         attname: *const libc::c_char,
-//         sysColOK: bool_0,
+//         sysColOK: bool,
 //     ) -> libc::c_int;
 //     fn attnumTypeId(rd: Relation, attid: libc::c_int) -> Oid;
 //     fn typeidTypeRelid(type_id: Oid) -> Oid;
@@ -166,33 +166,33 @@
 //         relid: Oid,
 //         attnum: AttrNumber,
 //         typid: *mut Oid,
-//         typmod: *mut int32,
+//         typmod: *mut i32,
 //         collid: *mut Oid,
 //     );
 //     fn get_typcollation(typid: Oid) -> Oid;
-//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut int32) -> Oid;
+//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut i32) -> Oid;
 // }
 use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
-pub type uintptr_t = libc::c_ulong;
-pub type size_t = __darwin_size_t;
-pub type bool_0 = libc::c_uchar;
-pub type int16 = libc::c_short;
-pub type int32 = libc::c_int;
-pub type uint8 = libc::c_uchar;
-pub type uint16 = libc::c_ushort;
-pub type uint32 = libc::c_uint;
-pub type bits8 = uint8;
-pub type uint64 = libc::c_ulong;
-pub type Size = size_t;
+// pub type usize = libc::c_ulong;
+// pub type isize = __darwin_size_t;
+// pub type bool = libc::c_uchar;
+// pub type i16 = libc::c_short;
+// pub type i32 = libc::c_int;
+// pub type u8 = libc::c_uchar;
+// pub type u16 = libc::c_ushort;
+// pub type u32 = libc::c_uint;
+pub type bits8 = u8;
+// pub type uint64 = libc::c_ulong;
+pub type Size = isize;
 pub type Index = libc::c_uint;
 pub type float4 = libc::c_float;
 pub type regproc = Oid;
 pub type RegProcedure = regproc;
-pub type TransactionId = uint32;
-pub type SubTransactionId = uint32;
-pub type CommandId = uint32;
+pub type TransactionId = u32;
+pub type SubTransactionId = u32;
+pub type CommandId = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct varlena {
@@ -203,13 +203,13 @@ pub type bytea = varlena;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct int2vector {
-    pub vl_len_: int32,
+    pub vl_len_: i32,
     pub ndim: libc::c_int,
-    pub dataoffset: int32,
+    pub dataoffset: i32,
     pub elemtype: Oid,
     pub dim1: libc::c_int,
     pub lbound1: libc::c_int,
-    pub values: [int16; 0],
+    pub values: [i16; 0],
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -221,8 +221,8 @@ pub type NameData = nameData;
 #[repr(C)]
 pub struct MemoryContextData {
     pub type_0: NodeTag,
-    pub isReset: bool_0,
-    pub allowInCritSection: bool_0,
+    pub isReset: bool,
+    pub allowInCritSection: bool,
     pub mem_allocated: Size,
     pub methods: *const MemoryContextMethods,
     pub parent: MemoryContext,
@@ -257,7 +257,7 @@ pub struct MemoryContextMethods {
     pub get_chunk_space: Option::<
         unsafe extern "C" fn(MemoryContext, *mut libc::c_void) -> Size,
     >,
-    pub is_empty: Option::<unsafe extern "C" fn(MemoryContext) -> bool_0>,
+    pub is_empty: Option::<unsafe extern "C" fn(MemoryContext) -> bool>,
     pub stats: Option::<
         unsafe extern "C" fn(
             MemoryContext,
@@ -705,20 +705,20 @@ pub const T_ProjectionInfo: NodeTag = 3;
 pub const T_ExprContext: NodeTag = 2;
 pub const T_IndexInfo: NodeTag = 1;
 pub const T_Invalid: NodeTag = 0;
-pub type Datum = uintptr_t;
+pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct NullableDatum {
     pub value: Datum,
-    pub isnull: bool_0,
+    pub isnull: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct BlockIdData {
-    pub bi_hi: uint16,
-    pub bi_lo: uint16,
+    pub bi_hi: u16,
+    pub bi_lo: u16,
 }
-pub type OffsetNumber = uint16;
+pub type OffsetNumber = u16;
 #[derive(Copy, Clone)]
 #[repr(C, align(2))]
 pub struct ItemPointerData(pub ItemPointerData_Inner);
@@ -736,9 +736,9 @@ const ItemPointerData_PADDING: usize = ::core::mem::size_of::<ItemPointerData>()
 pub struct HeapTupleHeaderData {
     pub t_choice: C2RustUnnamed,
     pub t_ctid: ItemPointerData,
-    pub t_infomask2: uint16,
-    pub t_infomask: uint16,
-    pub t_hoff: uint8,
+    pub t_infomask2: u16,
+    pub t_infomask: u16,
+    pub t_hoff: u8,
     pub t_bits: [bits8; 0],
 }
 #[derive(Copy, Clone)]
@@ -750,8 +750,8 @@ pub union C2RustUnnamed {
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct DatumTupleFields {
-    pub datum_len_: int32,
-    pub datum_typmod: int32,
+    pub datum_len_: i32,
+    pub datum_typmod: i32,
     pub datum_typeid: Oid,
 }
 #[derive(Copy, Clone)]
@@ -771,7 +771,7 @@ pub type HeapTupleHeader = *mut HeapTupleHeaderData;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HeapTupleData {
-    pub t_len: uint32,
+    pub t_len: u32,
     pub t_self: ItemPointerData,
     pub t_tableOid: Oid,
     pub t_data: HeapTupleHeader,
@@ -792,14 +792,14 @@ pub union ListCell {
     pub int_value: libc::c_int,
     pub oid_value: Oid,
 }
-pub type bitmapword = uint32;
+pub type bitmapword = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Bitmapset {
     pub nwords: libc::c_int,
     pub words: [bitmapword; 0],
 }
-pub type AttrNumber = int16;
+pub type AttrNumber = i16;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Node {
@@ -857,7 +857,7 @@ pub struct RangeVar {
     pub catalogname: *mut libc::c_char,
     pub schemaname: *mut libc::c_char,
     pub relname: *mut libc::c_char,
-    pub inh: bool_0,
+    pub inh: bool,
     pub relpersistence: libc::c_char,
     pub alias: *mut Alias,
     pub location: libc::c_int,
@@ -892,7 +892,7 @@ pub struct Var {
     pub varno: Index,
     pub varattno: AttrNumber,
     pub vartype: Oid,
-    pub vartypmod: int32,
+    pub vartypmod: i32,
     pub varcollid: Oid,
     pub varlevelsup: Index,
     pub varnosyn: Index,
@@ -904,12 +904,12 @@ pub struct Var {
 pub struct Const {
     pub xpr: Expr,
     pub consttype: Oid,
-    pub consttypmod: int32,
+    pub consttypmod: i32,
     pub constcollid: Oid,
     pub constlen: libc::c_int,
     pub constvalue: Datum,
-    pub constisnull: bool_0,
-    pub constbyval: bool_0,
+    pub constisnull: bool,
+    pub constbyval: bool,
     pub location: libc::c_int,
 }
 pub type ParamKind = libc::c_uint;
@@ -924,7 +924,7 @@ pub struct Param {
     pub paramkind: ParamKind,
     pub paramid: libc::c_int,
     pub paramtype: Oid,
-    pub paramtypmod: int32,
+    pub paramtypmod: i32,
     pub paramcollid: Oid,
     pub location: libc::c_int,
 }
@@ -935,7 +935,7 @@ pub struct SubscriptingRef {
     pub refcontainertype: Oid,
     pub refelemtype: Oid,
     pub refrestype: Oid,
-    pub reftypmod: int32,
+    pub reftypmod: i32,
     pub refcollid: Oid,
     pub refupperindexpr: *mut List,
     pub reflowerindexpr: *mut List,
@@ -979,7 +979,7 @@ pub struct FieldSelect {
     pub arg: *mut Expr,
     pub fieldnum: AttrNumber,
     pub resulttype: Oid,
-    pub resulttypmod: int32,
+    pub resulttypmod: i32,
     pub resultcollid: Oid,
 }
 #[derive(Copy, Clone)]
@@ -1007,7 +1007,7 @@ pub struct CaseExpr {
 pub struct CaseTestExpr {
     pub xpr: Expr,
     pub typeId: Oid,
-    pub typeMod: int32,
+    pub typeMod: i32,
     pub collation: Oid,
 }
 pub type MinMaxOp = libc::c_uint;
@@ -1046,7 +1046,7 @@ pub struct SQLValueFunction {
     pub xpr: Expr,
     pub op: SQLValueFunctionOp,
     pub type_0: Oid,
-    pub typmod: int32,
+    pub typmod: i32,
     pub location: libc::c_int,
 }
 pub type XmlExprOp = libc::c_uint;
@@ -1072,7 +1072,7 @@ pub struct XmlExpr {
     pub args: *mut List,
     pub xmloption: XmlOptionType,
     pub type_0: Oid,
-    pub typmod: int32,
+    pub typmod: i32,
     pub location: libc::c_int,
 }
 #[derive(Copy, Clone)]
@@ -1080,7 +1080,7 @@ pub struct XmlExpr {
 pub struct SetToDefault {
     pub xpr: Expr,
     pub typeId: Oid,
-    pub typeMod: int32,
+    pub typeMod: i32,
     pub collation: Oid,
     pub location: libc::c_int,
 }
@@ -1094,7 +1094,7 @@ pub struct TargetEntry {
     pub ressortgroupref: Index,
     pub resorigtbl: Oid,
     pub resorigcol: AttrNumber,
-    pub resjunk: bool_0,
+    pub resjunk: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1140,7 +1140,7 @@ pub const QSRC_QUAL_INSTEAD_RULE: QuerySource = 3;
 pub const QSRC_INSTEAD_RULE: QuerySource = 2;
 pub const QSRC_PARSER: QuerySource = 1;
 pub const QSRC_ORIGINAL: QuerySource = 0;
-pub type AclMode = uint32;
+pub type AclMode = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Query {
@@ -1148,18 +1148,18 @@ pub struct Query {
     pub commandType: CmdType,
     pub querySource: QuerySource,
     pub queryId: uint64,
-    pub canSetTag: bool_0,
+    pub canSetTag: bool,
     pub utilityStmt: *mut Node,
     pub resultRelation: libc::c_int,
-    pub hasAggs: bool_0,
-    pub hasWindowFuncs: bool_0,
-    pub hasTargetSRFs: bool_0,
-    pub hasSubLinks: bool_0,
-    pub hasDistinctOn: bool_0,
-    pub hasRecursive: bool_0,
-    pub hasModifyingCTE: bool_0,
-    pub hasForUpdate: bool_0,
-    pub hasRowSecurity: bool_0,
+    pub hasAggs: bool,
+    pub hasWindowFuncs: bool,
+    pub hasTargetSRFs: bool,
+    pub hasSubLinks: bool,
+    pub hasDistinctOn: bool,
+    pub hasRecursive: bool,
+    pub hasModifyingCTE: bool,
+    pub hasForUpdate: bool,
+    pub hasRowSecurity: bool,
     pub cteList: *mut List,
     pub rtable: *mut List,
     pub jointree: *mut FromExpr,
@@ -1189,10 +1189,10 @@ pub struct TypeName {
     pub type_0: NodeTag,
     pub names: *mut List,
     pub typeOid: Oid,
-    pub setof: bool_0,
-    pub pct_type: bool_0,
+    pub setof: bool,
+    pub pct_type: bool,
     pub typmods: *mut List,
-    pub typemod: int32,
+    pub typemod: i32,
     pub arrayBounds: *mut List,
     pub location: libc::c_int,
 }
@@ -1260,10 +1260,10 @@ pub struct FuncCall {
     pub agg_order: *mut List,
     pub agg_filter: *mut Node,
     pub over: *mut WindowDef,
-    pub agg_within_group: bool_0,
-    pub agg_star: bool_0,
-    pub agg_distinct: bool_0,
-    pub func_variadic: bool_0,
+    pub agg_within_group: bool,
+    pub agg_star: bool,
+    pub agg_distinct: bool,
+    pub func_variadic: bool,
     pub funcformat: CoercionForm,
     pub location: libc::c_int,
 }
@@ -1284,7 +1284,7 @@ pub struct WindowDef {
 #[repr(C)]
 pub struct A_Indices {
     pub type_0: NodeTag,
-    pub is_slice: bool_0,
+    pub is_slice: bool,
     pub lidx: *mut Node,
     pub uidx: *mut Node,
 }
@@ -1324,19 +1324,19 @@ pub struct RangeTblEntry {
     pub rellockmode: libc::c_int,
     pub tablesample: *mut TableSampleClause,
     pub subquery: *mut Query,
-    pub security_barrier: bool_0,
+    pub security_barrier: bool,
     pub jointype: JoinType,
     pub joinmergedcols: libc::c_int,
     pub joinaliasvars: *mut List,
     pub joinleftcols: *mut List,
     pub joinrightcols: *mut List,
     pub functions: *mut List,
-    pub funcordinality: bool_0,
+    pub funcordinality: bool,
     pub tablefunc: *mut TableFunc,
     pub values_lists: *mut List,
     pub ctename: *mut libc::c_char,
     pub ctelevelsup: Index,
-    pub self_reference: bool_0,
+    pub self_reference: bool,
     pub coltypes: *mut List,
     pub coltypmods: *mut List,
     pub colcollations: *mut List,
@@ -1344,9 +1344,9 @@ pub struct RangeTblEntry {
     pub enrtuples: libc::c_double,
     pub alias: *mut Alias,
     pub eref: *mut Alias,
-    pub lateral: bool_0,
-    pub inh: bool_0,
-    pub inFromCl: bool_0,
+    pub lateral: bool,
+    pub inh: bool,
+    pub inFromCl: bool,
     pub requiredPerms: AclMode,
     pub checkAsUser: Oid,
     pub selectedCols: *mut Bitmapset,
@@ -1372,7 +1372,7 @@ pub const CTEMaterializeDefault: CTEMaterialize = 0;
 pub struct CTESearchClause {
     pub type_0: NodeTag,
     pub search_col_list: *mut List,
-    pub search_breadth_first: bool_0,
+    pub search_breadth_first: bool,
     pub search_seq_column: *mut libc::c_char,
     pub location: libc::c_int,
 }
@@ -1402,7 +1402,7 @@ pub struct CommonTableExpr {
     pub search_clause: *mut CTESearchClause,
     pub cycle_clause: *mut CTECycleClause,
     pub location: libc::c_int,
-    pub cterecursive: bool_0,
+    pub cterecursive: bool,
     pub cterefcount: libc::c_int,
     pub ctecolnames: *mut List,
     pub ctecoltypes: *mut List,
@@ -1415,23 +1415,23 @@ pub struct FormData_pg_attribute {
     pub attrelid: Oid,
     pub attname: NameData,
     pub atttypid: Oid,
-    pub attstattarget: int32,
-    pub attlen: int16,
-    pub attnum: int16,
-    pub attndims: int32,
-    pub attcacheoff: int32,
-    pub atttypmod: int32,
-    pub attbyval: bool_0,
+    pub attstattarget: i32,
+    pub attlen: i16,
+    pub attnum: i16,
+    pub attndims: i32,
+    pub attcacheoff: i32,
+    pub atttypmod: i32,
+    pub attbyval: bool,
     pub attstorage: libc::c_char,
     pub attalign: libc::c_char,
-    pub attnotnull: bool_0,
-    pub atthasdef: bool_0,
-    pub atthasmissing: bool_0,
+    pub attnotnull: bool,
+    pub atthasdef: bool,
+    pub atthasmissing: bool,
     pub attidentity: libc::c_char,
     pub attgenerated: libc::c_char,
-    pub attisdropped: bool_0,
-    pub attislocal: bool_0,
-    pub attinhcount: int32,
+    pub attisdropped: bool,
+    pub attislocal: bool,
+    pub attinhcount: i32,
     pub attcollation: Oid,
 }
 pub type Form_pg_attribute = *mut FormData_pg_attribute;
@@ -1446,8 +1446,8 @@ pub struct AttrDefault {
 pub struct ConstrCheck {
     pub ccname: *mut libc::c_char,
     pub ccbin: *mut libc::c_char,
-    pub ccvalid: bool_0,
-    pub ccnoinherit: bool_0,
+    pub ccvalid: bool,
+    pub ccnoinherit: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1455,97 +1455,31 @@ pub struct TupleConstr {
     pub defval: *mut AttrDefault,
     pub check: *mut ConstrCheck,
     pub missing: *mut AttrMissing,
-    pub num_defval: uint16,
-    pub num_check: uint16,
-    pub has_not_null: bool_0,
-    pub has_generated_stored: bool_0,
+    pub num_defval: u16,
+    pub num_check: u16,
+    pub has_not_null: bool,
+    pub has_generated_stored: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct TupleDescData {
     pub natts: libc::c_int,
     pub tdtypeid: Oid,
-    pub tdtypmod: int32,
+    pub tdtypmod: i32,
     pub tdrefcount: libc::c_int,
     pub constr: *mut TupleConstr,
     pub attrs: [FormData_pg_attribute; 0],
 }
 pub type TupleDesc = *mut TupleDescData;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct RelationData {
-    pub rd_node: RelFileNode,
-    pub rd_smgr: *mut SMgrRelationData,
-    pub rd_refcnt: libc::c_int,
-    pub rd_backend: BackendId,
-    pub rd_islocaltemp: bool_0,
-    pub rd_isnailed: bool_0,
-    pub rd_isvalid: bool_0,
-    pub rd_indexvalid: bool_0,
-    pub rd_statvalid: bool_0,
-    pub rd_version_checked: bool_0,
-    pub rd_createSubid: SubTransactionId,
-    pub rd_newRelfilenodeSubid: SubTransactionId,
-    pub rd_firstRelfilenodeSubid: SubTransactionId,
-    pub rd_droppedSubid: SubTransactionId,
-    pub rd_rel: Form_pg_class,
-    pub rd_att: TupleDesc,
-    pub rd_id: Oid,
-    pub rd_lockInfo: LockInfoData,
-    pub rd_rules: *mut RuleLock,
-    pub rd_rulescxt: MemoryContext,
-    pub trigdesc: *mut TriggerDesc,
-    pub rd_rsdesc: *mut RowSecurityDesc,
-    pub rd_fkeylist: *mut List,
-    pub rd_fkeyvalid: bool_0,
-    pub rd_partkey: PartitionKey,
-    pub rd_partkeycxt: MemoryContext,
-    pub rd_partdesc: PartitionDesc,
-    pub rd_pdcxt: MemoryContext,
-    pub rd_partcheck: *mut List,
-    pub rd_partcheckvalid: bool_0,
-    pub rd_partcheckcxt: MemoryContext,
-    pub rd_indexlist: *mut List,
-    pub rd_pkindex: Oid,
-    pub rd_replidindex: Oid,
-    pub rd_statlist: *mut List,
-    pub rd_indexattr: *mut Bitmapset,
-    pub rd_keyattr: *mut Bitmapset,
-    pub rd_pkattr: *mut Bitmapset,
-    pub rd_idattr: *mut Bitmapset,
-    pub rd_pubactions: *mut PublicationActions,
-    pub rd_options: *mut bytea,
-    pub rd_amhandler: Oid,
-    pub rd_tableam: *const TableAmRoutine,
-    pub rd_index: Form_pg_index,
-    pub rd_indextuple: *mut HeapTupleData,
-    pub rd_indexcxt: MemoryContext,
-    pub rd_indam: *mut IndexAmRoutine,
-    pub rd_opfamily: *mut Oid,
-    pub rd_opcintype: *mut Oid,
-    pub rd_support: *mut RegProcedure,
-    pub rd_supportinfo: *mut FmgrInfo,
-    pub rd_indoption: *mut int16,
-    pub rd_indexprs: *mut List,
-    pub rd_indpred: *mut List,
-    pub rd_exclops: *mut Oid,
-    pub rd_exclprocs: *mut Oid,
-    pub rd_exclstrats: *mut uint16,
-    pub rd_indcollation: *mut Oid,
-    pub rd_opcoptions: *mut *mut bytea,
-    pub rd_amcache: *mut libc::c_void,
-    pub rd_fdwroutine: *mut FdwRoutine,
-    pub rd_toastoid: Oid,
-    pub pgstat_info: *mut PgStat_TableStatus,
-}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct FmgrInfo {
     pub fn_addr: PGFunction,
     pub fn_oid: Oid,
     pub fn_nargs: libc::c_short,
-    pub fn_strict: bool_0,
-    pub fn_retset: bool_0,
+    pub fn_strict: bool,
+    pub fn_retset: bool,
     pub fn_stats: libc::c_uchar,
     pub fn_extra: *mut libc::c_void,
     pub fn_mcxt: MemoryContext,
@@ -1561,7 +1495,7 @@ pub struct FunctionCallInfoBaseData {
     pub context: fmNodePtr,
     pub resultinfo: fmNodePtr,
     pub fncollation: Oid,
-    pub isnull: bool_0,
+    pub isnull: bool,
     pub nargs: libc::c_short,
     pub args: [NullableDatum; 0],
 }
@@ -1571,54 +1505,54 @@ pub type Form_pg_index = *mut FormData_pg_index;
 pub struct FormData_pg_index {
     pub indexrelid: Oid,
     pub indrelid: Oid,
-    pub indnatts: int16,
-    pub indnkeyatts: int16,
-    pub indisunique: bool_0,
-    pub indisprimary: bool_0,
-    pub indisexclusion: bool_0,
-    pub indimmediate: bool_0,
-    pub indisclustered: bool_0,
-    pub indisvalid: bool_0,
-    pub indcheckxmin: bool_0,
-    pub indisready: bool_0,
-    pub indislive: bool_0,
-    pub indisreplident: bool_0,
+    pub indnatts: i16,
+    pub indnkeyatts: i16,
+    pub indisunique: bool,
+    pub indisprimary: bool,
+    pub indisexclusion: bool,
+    pub indimmediate: bool,
+    pub indisclustered: bool,
+    pub indisvalid: bool,
+    pub indcheckxmin: bool,
+    pub indisready: bool,
+    pub indislive: bool,
+    pub indisreplident: bool,
     pub indkey: int2vector,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct PublicationActions {
-    pub pubinsert: bool_0,
-    pub pubupdate: bool_0,
-    pub pubdelete: bool_0,
-    pub pubtruncate: bool_0,
+    pub pubinsert: bool,
+    pub pubupdate: bool,
+    pub pubdelete: bool,
+    pub pubtruncate: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct TriggerDesc {
     pub triggers: *mut Trigger,
     pub numtriggers: libc::c_int,
-    pub trig_insert_before_row: bool_0,
-    pub trig_insert_after_row: bool_0,
-    pub trig_insert_instead_row: bool_0,
-    pub trig_insert_before_statement: bool_0,
-    pub trig_insert_after_statement: bool_0,
-    pub trig_update_before_row: bool_0,
-    pub trig_update_after_row: bool_0,
-    pub trig_update_instead_row: bool_0,
-    pub trig_update_before_statement: bool_0,
-    pub trig_update_after_statement: bool_0,
-    pub trig_delete_before_row: bool_0,
-    pub trig_delete_after_row: bool_0,
-    pub trig_delete_instead_row: bool_0,
-    pub trig_delete_before_statement: bool_0,
-    pub trig_delete_after_statement: bool_0,
-    pub trig_truncate_before_statement: bool_0,
-    pub trig_truncate_after_statement: bool_0,
-    pub trig_insert_new_table: bool_0,
-    pub trig_update_old_table: bool_0,
-    pub trig_update_new_table: bool_0,
-    pub trig_delete_old_table: bool_0,
+    pub trig_insert_before_row: bool,
+    pub trig_insert_after_row: bool,
+    pub trig_insert_instead_row: bool,
+    pub trig_insert_before_statement: bool,
+    pub trig_insert_after_statement: bool,
+    pub trig_update_before_row: bool,
+    pub trig_update_after_row: bool,
+    pub trig_update_instead_row: bool,
+    pub trig_update_before_statement: bool,
+    pub trig_update_after_statement: bool,
+    pub trig_delete_before_row: bool,
+    pub trig_delete_after_row: bool,
+    pub trig_delete_instead_row: bool,
+    pub trig_delete_before_statement: bool,
+    pub trig_delete_after_statement: bool,
+    pub trig_truncate_before_statement: bool,
+    pub trig_truncate_after_statement: bool,
+    pub trig_insert_new_table: bool,
+    pub trig_update_old_table: bool,
+    pub trig_update_new_table: bool,
+    pub trig_delete_old_table: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1626,18 +1560,18 @@ pub struct Trigger {
     pub tgoid: Oid,
     pub tgname: *mut libc::c_char,
     pub tgfoid: Oid,
-    pub tgtype: int16,
+    pub tgtype: i16,
     pub tgenabled: libc::c_char,
-    pub tgisinternal: bool_0,
-    pub tgisclone: bool_0,
+    pub tgisinternal: bool,
+    pub tgisclone: bool,
     pub tgconstrrelid: Oid,
     pub tgconstrindid: Oid,
     pub tgconstraint: Oid,
-    pub tgdeferrable: bool_0,
-    pub tginitdeferred: bool_0,
-    pub tgnargs: int16,
-    pub tgnattr: int16,
-    pub tgattr: *mut int16,
+    pub tgdeferrable: bool,
+    pub tginitdeferred: bool,
+    pub tgnargs: i16,
+    pub tgnattr: i16,
+    pub tgattr: *mut i16,
     pub tgargs: *mut *mut libc::c_char,
     pub tgqual: *mut libc::c_char,
     pub tgoldtable: *mut libc::c_char,
@@ -1657,7 +1591,7 @@ pub struct RewriteRule {
     pub qual: *mut Node,
     pub actions: *mut List,
     pub enabled: libc::c_char,
-    pub isInstead: bool_0,
+    pub isInstead: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1683,24 +1617,24 @@ pub struct FormData_pg_class {
     pub relam: Oid,
     pub relfilenode: Oid,
     pub reltablespace: Oid,
-    pub relpages: int32,
+    pub relpages: i32,
     pub reltuples: float4,
-    pub relallvisible: int32,
+    pub relallvisible: i32,
     pub reltoastrelid: Oid,
-    pub relhasindex: bool_0,
-    pub relisshared: bool_0,
+    pub relhasindex: bool,
+    pub relisshared: bool,
     pub relpersistence: libc::c_char,
     pub relkind: libc::c_char,
-    pub relnatts: int16,
-    pub relchecks: int16,
-    pub relhasrules: bool_0,
-    pub relhastriggers: bool_0,
-    pub relhassubclass: bool_0,
-    pub relrowsecurity: bool_0,
-    pub relforcerowsecurity: bool_0,
-    pub relispopulated: bool_0,
+    pub relnatts: i16,
+    pub relchecks: i16,
+    pub relhasrules: bool,
+    pub relhastriggers: bool,
+    pub relhassubclass: bool,
+    pub relrowsecurity: bool,
+    pub relforcerowsecurity: bool,
+    pub relispopulated: bool,
     pub relreplident: libc::c_char,
-    pub relispartition: bool_0,
+    pub relispartition: bool,
     pub relrewrite: Oid,
     pub relfrozenxid: TransactionId,
     pub relminmxid: TransactionId,
@@ -1714,48 +1648,13 @@ pub struct RelFileNode {
     pub relNode: Oid,
 }
 pub type Relation = *mut RelationData;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseState {
-    pub parentParseState: *mut ParseState,
-    pub p_sourcetext: *const libc::c_char,
-    pub p_rtable: *mut List,
-    pub p_joinexprs: *mut List,
-    pub p_joinlist: *mut List,
-    pub p_namespace: *mut List,
-    pub p_lateral_active: bool_0,
-    pub p_ctenamespace: *mut List,
-    pub p_future_ctes: *mut List,
-    pub p_parent_cte: *mut CommonTableExpr,
-    pub p_target_relation: Relation,
-    pub p_target_nsitem: *mut ParseNamespaceItem,
-    pub p_is_insert: bool_0,
-    pub p_windowdefs: *mut List,
-    pub p_expr_kind: ParseExprKind,
-    pub p_next_resno: libc::c_int,
-    pub p_multiassign_exprs: *mut List,
-    pub p_locking_clause: *mut List,
-    pub p_locked_from_parent: bool_0,
-    pub p_resolve_unknowns: bool_0,
-    pub p_queryEnv: *mut QueryEnvironment,
-    pub p_hasAggs: bool_0,
-    pub p_hasWindowFuncs: bool_0,
-    pub p_hasTargetSRFs: bool_0,
-    pub p_hasSubLinks: bool_0,
-    pub p_hasModifyingCTE: bool_0,
-    pub p_last_srf: *mut Node,
-    pub p_pre_columnref_hook: PreParseColumnRefHook,
-    pub p_post_columnref_hook: PostParseColumnRefHook,
-    pub p_paramref_hook: ParseParamRefHook,
-    pub p_coerce_param_hook: CoerceParamHook,
-    pub p_ref_hook_state: *mut libc::c_void,
-}
+
 pub type CoerceParamHook = Option::<
     unsafe extern "C" fn(
         *mut ParseState,
         *mut Param,
         Oid,
-        int32,
+        i32,
         libc::c_int,
     ) -> *mut Node,
 >;
@@ -1817,10 +1716,10 @@ pub struct ParseNamespaceItem {
     pub p_rte: *mut RangeTblEntry,
     pub p_rtindex: libc::c_int,
     pub p_nscolumns: *mut ParseNamespaceColumn,
-    pub p_rel_visible: bool_0,
-    pub p_cols_visible: bool_0,
-    pub p_lateral_only: bool_0,
-    pub p_lateral_ok: bool_0,
+    pub p_rel_visible: bool,
+    pub p_cols_visible: bool,
+    pub p_lateral_only: bool,
+    pub p_lateral_ok: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1828,11 +1727,11 @@ pub struct ParseNamespaceColumn {
     pub p_varno: Index,
     pub p_varattno: AttrNumber,
     pub p_vartype: Oid,
-    pub p_vartypmod: int32,
+    pub p_vartypmod: i32,
     pub p_varcollid: Oid,
     pub p_varnosyn: Index,
     pub p_varattnosyn: AttrNumber,
-    pub p_dontexpand: bool_0,
+    pub p_dontexpand: bool,
 }
 pub const CRSERR_TOO_MANY: C2RustUnnamed_1 = 2;
 pub const CRSERR_WRONG_DB: C2RustUnnamed_1 = 1;
@@ -1914,7 +1813,7 @@ pub unsafe extern "C" fn transformTargetEntry(
     mut expr: *mut Node,
     mut exprKind: ParseExprKind,
     mut colname: *mut libc::c_char,
-    mut resjunk: bool_0,
+    mut resjunk: bool,
 ) -> *mut TargetEntry {
     if expr.is_null() {
         if exprKind as libc::c_uint
@@ -1941,11 +1840,11 @@ pub unsafe extern "C" fn transformTargetList(
     mut exprKind: ParseExprKind,
 ) -> *mut List {
     let mut p_target: *mut List = 0 as *mut libc::c_void as *mut List;
-    let mut expand_star: bool_0 = 0;
+    let mut expand_star: bool = 0;
     let mut o_target: *mut ListCell = 0 as *mut ListCell;
     expand_star = (exprKind as libc::c_uint
         != EXPR_KIND_UPDATE_SOURCE as libc::c_int as libc::c_uint) as libc::c_int
-        as bool_0;
+        as bool;
     let mut current_block_4: u64;
     let mut o_target__state: ForEachState = {
         let mut init = ForEachState {
@@ -1959,10 +1858,10 @@ pub unsafe extern "C" fn transformTargetList(
     {
         o_target = &mut *((*o_target__state.l).elements)
             .offset(o_target__state.i as isize) as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         o_target = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut res: *mut ResTarget = (*o_target).ptr_value as *mut ResTarget;
@@ -1976,7 +1875,7 @@ pub unsafe extern "C" fn transformTargetList(
                 {
                     p_target = list_concat(
                         p_target,
-                        ExpandColumnRefStar(pstate, cref, 1 as libc::c_int as bool_0),
+                        ExpandColumnRefStar(pstate, cref, true),
                     );
                     current_block_4 = 12517898123489920830;
                 } else {
@@ -1994,7 +1893,7 @@ pub unsafe extern "C" fn transformTargetList(
                         ExpandIndirectionStar(
                             pstate,
                             ind,
-                            1 as libc::c_int as bool_0,
+                            true,
                             exprKind,
                         ),
                     );
@@ -2018,7 +1917,7 @@ pub unsafe extern "C" fn transformTargetList(
                         0 as *mut Node,
                         exprKind,
                         (*res).name,
-                        0 as libc::c_int as bool_0,
+                        false,
                     ) as *mut libc::c_void,
                 );
             }
@@ -2038,7 +1937,7 @@ pub unsafe extern "C" fn transformExpressionList(
     mut pstate: *mut ParseState,
     mut exprlist: *mut List,
     mut exprKind: ParseExprKind,
-    mut allowDefault: bool_0,
+    mut allowDefault: bool,
 ) -> *mut List {
     let mut result: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut lc: *mut ListCell = 0 as *mut ListCell;
@@ -2053,10 +1952,10 @@ pub unsafe extern "C" fn transformExpressionList(
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
         lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut e: *mut Node = (*lc).ptr_value as *mut Node;
@@ -2069,7 +1968,7 @@ pub unsafe extern "C" fn transformExpressionList(
             {
                 result = list_concat(
                     result,
-                    ExpandColumnRefStar(pstate, cref, 0 as libc::c_int as bool_0),
+                    ExpandColumnRefStar(pstate, cref, false),
                 );
                 current_block_5 = 16668937799742929182;
             } else {
@@ -2087,7 +1986,7 @@ pub unsafe extern "C" fn transformExpressionList(
                     ExpandIndirectionStar(
                         pstate,
                         ind,
-                        0 as libc::c_int as bool_0,
+                        false,
                         exprKind,
                     ),
                 );
@@ -2130,10 +2029,10 @@ pub unsafe extern "C" fn markTargetListOrigins(
     };
     while if !(l__state.l).is_null() && l__state.i < (*l__state.l).length {
         l = &mut *((*l__state.l).elements).offset(l__state.i as isize) as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         l = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut tle: *mut TargetEntry = (*l).ptr_value as *mut TargetEntry;
@@ -2265,7 +2164,7 @@ pub unsafe extern "C" fn transformAssignedExpr(
     let mut rd: Relation = (*pstate).p_target_relation;
     let mut type_id: Oid = 0;
     let mut attrtype: Oid = 0;
-    let mut attrtypmod: int32 = 0;
+    let mut attrtypmod: i32 = 0;
     let mut attrcollation: Oid = 0;
     let mut sv_expr_kind: ParseExprKind = EXPR_KIND_NONE;
     sv_expr_kind = (*pstate).p_expr_kind;
@@ -2335,7 +2234,7 @@ pub unsafe extern "C" fn transformAssignedExpr(
             pstate,
             colVar,
             colname,
-            0 as libc::c_int as bool_0,
+            false,
             attrtype,
             attrtypmod,
             attrcollation,
@@ -2395,9 +2294,9 @@ pub unsafe extern "C" fn transformAssignmentIndirection(
     mut pstate: *mut ParseState,
     mut basenode: *mut Node,
     mut targetName: *const libc::c_char,
-    mut targetIsSubscripting: bool_0,
+    mut targetIsSubscripting: bool,
     mut targetTypeId: Oid,
-    mut targetTypMod: int32,
+    mut targetTypMod: i32,
     mut targetCollation: Oid,
     mut indirection: *mut List,
     mut indirection_cell: *mut ListCell,
@@ -2407,7 +2306,7 @@ pub unsafe extern "C" fn transformAssignmentIndirection(
 ) -> *mut Node {
     let mut result: *mut Node = 0 as *mut Node;
     let mut subscripts: *mut List = 0 as *mut libc::c_void as *mut List;
-    let mut isSlice: bool_0 = 0 as libc::c_int as bool_0;
+    let mut isSlice: bool = false;
     let mut i: *mut ListCell = 0 as *mut ListCell;
     if !indirection_cell.is_null() && basenode.is_null() {
         let mut ctest: *mut CaseTestExpr = ({
@@ -2423,10 +2322,10 @@ pub unsafe extern "C" fn transformAssignmentIndirection(
     let mut i__state: ForEachState = for_each_cell_setup(indirection, indirection_cell);
     while if !(i__state.l).is_null() && i__state.i < (*i__state.l).length {
         i = &mut *((*i__state.l).elements).offset(i__state.i as isize) as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         i = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut n: *mut Node = (*i).ptr_value as *mut Node;
@@ -2435,7 +2334,7 @@ pub unsafe extern "C" fn transformAssignmentIndirection(
         {
             subscripts = lappend(subscripts, n as *mut libc::c_void);
             if (*(n as *mut A_Indices)).is_slice != 0 {
-                isSlice = 1 as libc::c_int as bool_0;
+                isSlice = true;
             }
         } else if (*(n as *const Node)).type_0 as libc::c_uint
             == T_A_Star as libc::c_int as libc::c_uint
@@ -2448,11 +2347,11 @@ pub unsafe extern "C" fn transformAssignmentIndirection(
         } else {
             let mut fstore: *mut FieldStore = 0 as *mut FieldStore;
             let mut baseTypeId: Oid = 0;
-            let mut baseTypeMod: int32 = 0;
+            let mut baseTypeMod: i32 = 0;
             let mut typrelid: Oid = 0;
             let mut attnum: AttrNumber = 0;
             let mut fieldTypeId: Oid = 0;
-            let mut fieldTypMod: int32 = 0;
+            let mut fieldTypMod: i32 = 0;
             let mut fieldCollation: Oid = 0;
             if !subscripts.is_null() {
                 return transformAssignmentSubscripts(
@@ -2507,7 +2406,7 @@ pub unsafe extern "C" fn transformAssignmentIndirection(
                 pstate,
                 0 as *mut Node,
                 (*(n as *mut Value)).val.str_0,
-                0 as libc::c_int as bool_0,
+                false,
                 fieldTypeId,
                 fieldTypMod,
                 fieldCollation,
@@ -2547,7 +2446,7 @@ pub unsafe extern "C" fn transformAssignmentIndirection(
                     COERCION_IMPLICIT,
                     COERCE_IMPLICIT_CAST,
                     location,
-                    0 as libc::c_int as bool_0,
+                    false,
                 );
             }
             return fstore as *mut Node;
@@ -2604,10 +2503,10 @@ unsafe extern "C" fn transformAssignmentSubscripts(
     mut basenode: *mut Node,
     mut targetName: *const libc::c_char,
     mut targetTypeId: Oid,
-    mut targetTypMod: int32,
+    mut targetTypMod: i32,
     mut targetCollation: Oid,
     mut subscripts: *mut List,
-    mut isSlice: bool_0,
+    mut isSlice: bool,
     mut indirection: *mut List,
     mut next_indirection: *mut ListCell,
     mut rhs: *mut Node,
@@ -2617,9 +2516,9 @@ unsafe extern "C" fn transformAssignmentSubscripts(
     let mut result: *mut Node = 0 as *mut Node;
     let mut sbsref: *mut SubscriptingRef = 0 as *mut SubscriptingRef;
     let mut containerType: Oid = 0;
-    let mut containerTypMod: int32 = 0;
+    let mut containerTypMod: i32 = 0;
     let mut typeNeeded: Oid = 0;
-    let mut typmodNeeded: int32 = 0;
+    let mut typmodNeeded: i32 = 0;
     let mut collationNeeded: Oid = 0;
     containerType = targetTypeId;
     containerTypMod = targetTypMod;
@@ -2630,7 +2529,7 @@ unsafe extern "C" fn transformAssignmentSubscripts(
         containerType,
         containerTypMod,
         subscripts,
-        1 as libc::c_int as bool_0,
+        true,
     );
     typeNeeded = (*sbsref).refrestype;
     typmodNeeded = (*sbsref).reftypmod;
@@ -2643,7 +2542,7 @@ unsafe extern "C" fn transformAssignmentSubscripts(
         pstate,
         0 as *mut Node,
         targetName,
-        1 as libc::c_int as bool_0,
+        true,
         typeNeeded,
         typmodNeeded,
         collationNeeded,
@@ -2727,10 +2626,10 @@ pub unsafe extern "C" fn checkInsertTargets(
         while if !(tl__state.l).is_null() && tl__state.i < (*tl__state.l).length {
             tl = &mut *((*tl__state.l).elements).offset(tl__state.i as isize)
                 as *mut ListCell;
-            1 as libc::c_int as bool_0 as libc::c_int
+            true as libc::c_int
         } else {
             tl = 0 as *mut ListCell;
-            0 as libc::c_int as bool_0 as libc::c_int
+            false as libc::c_int
         } != 0
         {
             let mut col_0: *mut ResTarget = (*tl).ptr_value as *mut ResTarget;
@@ -2739,7 +2638,7 @@ pub unsafe extern "C" fn checkInsertTargets(
             attrno = attnameAttNum(
                 (*pstate).p_target_relation,
                 name,
-                0 as libc::c_int as bool_0,
+                false,
             );
             if attrno == 0 as libc::c_int {
                 let elevel_: libc::c_int = 21 as libc::c_int;
@@ -2779,7 +2678,7 @@ pub unsafe extern "C" fn checkInsertTargets(
 unsafe extern "C" fn ExpandColumnRefStar(
     mut pstate: *mut ParseState,
     mut cref: *mut ColumnRef,
-    mut make_target_entry: bool_0,
+    mut make_target_entry: bool,
 ) -> *mut List {
     let mut fields: *mut List = (*cref).fields;
     let mut numnames: libc::c_int = list_length(fields);
@@ -2926,7 +2825,7 @@ unsafe extern "C" fn ExpandAllTables(
     mut location: libc::c_int,
 ) -> *mut List {
     let mut target: *mut List = 0 as *mut libc::c_void as *mut List;
-    let mut found_table: bool_0 = 0 as libc::c_int as bool_0;
+    let mut found_table: bool = false;
     let mut l: *mut ListCell = 0 as *mut ListCell;
     let mut l__state: ForEachState = {
         let mut init = ForEachState {
@@ -2937,16 +2836,16 @@ unsafe extern "C" fn ExpandAllTables(
     };
     while if !(l__state.l).is_null() && l__state.i < (*l__state.l).length {
         l = &mut *((*l__state.l).elements).offset(l__state.i as isize) as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         l = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut nsitem: *mut ParseNamespaceItem = (*l).ptr_value
             as *mut ParseNamespaceItem;
         if !((*nsitem).p_cols_visible == 0) {
-            found_table = 1 as libc::c_int as bool_0;
+            found_table = true;
             target = list_concat(
                 target,
                 expandNSItemAttrs(pstate, nsitem, 0 as libc::c_int, location),
@@ -2967,7 +2866,7 @@ unsafe extern "C" fn ExpandAllTables(
 unsafe extern "C" fn ExpandIndirectionStar(
     mut pstate: *mut ParseState,
     mut ind: *mut A_Indirection,
-    mut make_target_entry: bool_0,
+    mut make_target_entry: bool,
     mut exprKind: ParseExprKind,
 ) -> *mut List {
     let mut expr: *mut Node = 0 as *mut Node;
@@ -2985,7 +2884,7 @@ unsafe extern "C" fn ExpandSingleTable(
     mut nsitem: *mut ParseNamespaceItem,
     mut sublevels_up: libc::c_int,
     mut location: libc::c_int,
-    mut make_target_entry: bool_0,
+    mut make_target_entry: bool,
 ) -> *mut List {
     if make_target_entry != 0 {
         return expandNSItemAttrs(pstate, nsitem, sublevels_up, location)
@@ -3008,10 +2907,10 @@ unsafe extern "C" fn ExpandSingleTable(
         while if !(l__state.l).is_null() && l__state.i < (*l__state.l).length {
             l = &mut *((*l__state.l).elements).offset(l__state.i as isize)
                 as *mut ListCell;
-            1 as libc::c_int as bool_0 as libc::c_int
+            true as libc::c_int
         } else {
             l = 0 as *mut ListCell;
-            0 as libc::c_int as bool_0 as libc::c_int
+            false as libc::c_int
         } != 0
         {
             let mut var: *mut Var = (*l).ptr_value as *mut Var;
@@ -3059,10 +2958,10 @@ unsafe extern "C" fn FigureColnameInternal(
             while if !(l__state.l).is_null() && l__state.i < (*l__state.l).length {
                 l = &mut *((*l__state.l).elements).offset(l__state.i as isize)
                     as *mut ListCell;
-                1 as libc::c_int as bool_0 as libc::c_int
+                true as libc::c_int
             } else {
                 l = 0 as *mut ListCell;
-                0 as libc::c_int as bool_0 as libc::c_int
+                false as libc::c_int
             } != 0
             {
                 let mut i: *mut Node = (*l).ptr_value as *mut Node;
@@ -3093,10 +2992,10 @@ unsafe extern "C" fn FigureColnameInternal(
             while if !(l__state_0.l).is_null() && l__state_0.i < (*l__state_0.l).length {
                 l_0 = &mut *((*l__state_0.l).elements).offset(l__state_0.i as isize)
                     as *mut ListCell;
-                1 as libc::c_int as bool_0 as libc::c_int
+                true as libc::c_int
             } else {
                 l_0 = 0 as *mut ListCell;
-                0 as libc::c_int as bool_0 as libc::c_int
+                false as libc::c_int
             } != 0
             {
                 let mut i_0: *mut Node = (*l_0).ptr_value as *mut Node;

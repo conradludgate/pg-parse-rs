@@ -4,7 +4,7 @@
 //     pub type RelationData;
 //     pub type QueryEnvironment;
 //     fn abort() -> !;
-//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
 //     fn errfinish(
 //         filename: *const libc::c_char,
 //         lineno: libc::c_int,
@@ -16,37 +16,37 @@
 //     fn makeRelabelType(
 //         arg: *mut Expr,
 //         rtype: Oid,
-//         rtypmod: int32,
+//         rtypmod: i32,
 //         rcollid: Oid,
 //         rformat: CoercionForm,
 //     ) -> *mut RelabelType;
 //     fn exprType(expr: *const Node) -> Oid;
-//     fn exprTypmod(expr: *const Node) -> int32;
+//     fn exprTypmod(expr: *const Node) -> i32;
 //     fn exprCollation(expr: *const Node) -> Oid;
 //     fn exprSetCollation(expr: *mut Node, collation: Oid);
 //     fn exprSetInputCollation(expr: *mut Node, inputcollation: Oid);
 //     fn exprLocation(expr: *const Node) -> libc::c_int;
 //     fn expression_tree_walker(
 //         node: *mut Node,
-//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         walker: Option::<unsafe extern "C" fn() -> bool>,
 //         context: *mut libc::c_void,
-//     ) -> bool_0;
+//     ) -> bool;
 //     fn query_tree_walker(
 //         query: *mut Query,
-//         walker: Option::<unsafe extern "C" fn() -> bool_0>,
+//         walker: Option::<unsafe extern "C" fn() -> bool>,
 //         context: *mut libc::c_void,
 //         flags: libc::c_int,
-//     ) -> bool_0;
+//     ) -> bool;
 //     fn get_func_variadictype(funcid: Oid) -> Oid;
 //     fn get_typcollation(typid: Oid) -> Oid;
 // }
 use super::*;
 pub type Oid = libc::c_uint;
-pub type bool_0 = libc::c_uchar;
-pub type int16 = libc::c_short;
-pub type int32 = libc::c_int;
-pub type uint32 = libc::c_uint;
-pub type uint64 = libc::c_ulong;
+// pub type bool = libc::c_uchar;
+// pub type i16 = libc::c_short;
+// pub type i32 = libc::c_int;
+// pub type u32 = libc::c_uint;
+// pub type uint64 = libc::c_ulong;
 pub type Index = libc::c_uint;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -491,14 +491,14 @@ pub const T_ProjectionInfo: NodeTag = 3;
 pub const T_ExprContext: NodeTag = 2;
 pub const T_IndexInfo: NodeTag = 1;
 pub const T_Invalid: NodeTag = 0;
-pub type bitmapword = uint32;
+pub type bitmapword = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Bitmapset {
     pub nwords: libc::c_int,
     pub words: [bitmapword; 0],
 }
-pub type AttrNumber = int16;
+pub type AttrNumber = i16;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Node {
@@ -588,7 +588,7 @@ pub struct Param {
     pub paramkind: ParamKind,
     pub paramid: libc::c_int,
     pub paramtype: Oid,
-    pub paramtypmod: int32,
+    pub paramtypmod: i32,
     pub paramcollid: Oid,
     pub location: libc::c_int,
 }
@@ -607,8 +607,8 @@ pub struct Aggref {
     pub aggorder: *mut List,
     pub aggdistinct: *mut List,
     pub aggfilter: *mut Expr,
-    pub aggstar: bool_0,
-    pub aggvariadic: bool_0,
+    pub aggstar: bool,
+    pub aggvariadic: bool,
     pub aggkind: libc::c_char,
     pub agglevelsup: Index,
     pub aggsplit: AggSplit,
@@ -627,8 +627,8 @@ pub struct WindowFunc {
     pub args: *mut List,
     pub aggfilter: *mut Expr,
     pub winref: Index,
-    pub winstar: bool_0,
-    pub winagg: bool_0,
+    pub winstar: bool,
+    pub winagg: bool,
     pub location: libc::c_int,
 }
 #[derive(Copy, Clone)]
@@ -638,7 +638,7 @@ pub struct SubscriptingRef {
     pub refcontainertype: Oid,
     pub refelemtype: Oid,
     pub refrestype: Oid,
-    pub reftypmod: int32,
+    pub reftypmod: i32,
     pub refcollid: Oid,
     pub refupperindexpr: *mut List,
     pub reflowerindexpr: *mut List,
@@ -657,7 +657,7 @@ pub struct FieldSelect {
     pub arg: *mut Expr,
     pub fieldnum: AttrNumber,
     pub resulttype: Oid,
-    pub resulttypmod: int32,
+    pub resulttypmod: i32,
     pub resultcollid: Oid,
 }
 #[derive(Copy, Clone)]
@@ -666,7 +666,7 @@ pub struct RelabelType {
     pub xpr: Expr,
     pub arg: *mut Expr,
     pub resulttype: Oid,
-    pub resulttypmod: int32,
+    pub resulttypmod: i32,
     pub resultcollid: Oid,
     pub relabelformat: CoercionForm,
     pub location: libc::c_int,
@@ -732,7 +732,7 @@ pub struct CoerceToDomain {
     pub xpr: Expr,
     pub arg: *mut Expr,
     pub resulttype: Oid,
-    pub resulttypmod: int32,
+    pub resulttypmod: i32,
     pub resultcollid: Oid,
     pub coercionformat: CoercionForm,
     pub location: libc::c_int,
@@ -747,7 +747,7 @@ pub struct TargetEntry {
     pub ressortgroupref: Index,
     pub resorigtbl: Oid,
     pub resorigcol: AttrNumber,
-    pub resjunk: bool_0,
+    pub resjunk: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -779,7 +779,7 @@ pub const QSRC_QUAL_INSTEAD_RULE: QuerySource = 3;
 pub const QSRC_INSTEAD_RULE: QuerySource = 2;
 pub const QSRC_PARSER: QuerySource = 1;
 pub const QSRC_ORIGINAL: QuerySource = 0;
-pub type AclMode = uint32;
+pub type AclMode = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Query {
@@ -787,18 +787,18 @@ pub struct Query {
     pub commandType: CmdType,
     pub querySource: QuerySource,
     pub queryId: uint64,
-    pub canSetTag: bool_0,
+    pub canSetTag: bool,
     pub utilityStmt: *mut Node,
     pub resultRelation: libc::c_int,
-    pub hasAggs: bool_0,
-    pub hasWindowFuncs: bool_0,
-    pub hasTargetSRFs: bool_0,
-    pub hasSubLinks: bool_0,
-    pub hasDistinctOn: bool_0,
-    pub hasRecursive: bool_0,
-    pub hasModifyingCTE: bool_0,
-    pub hasForUpdate: bool_0,
-    pub hasRowSecurity: bool_0,
+    pub hasAggs: bool,
+    pub hasWindowFuncs: bool,
+    pub hasTargetSRFs: bool,
+    pub hasSubLinks: bool,
+    pub hasDistinctOn: bool,
+    pub hasRecursive: bool,
+    pub hasModifyingCTE: bool,
+    pub hasForUpdate: bool,
+    pub hasRowSecurity: bool,
     pub cteList: *mut List,
     pub rtable: *mut List,
     pub jointree: *mut FromExpr,
@@ -856,19 +856,19 @@ pub struct RangeTblEntry {
     pub rellockmode: libc::c_int,
     pub tablesample: *mut TableSampleClause,
     pub subquery: *mut Query,
-    pub security_barrier: bool_0,
+    pub security_barrier: bool,
     pub jointype: JoinType,
     pub joinmergedcols: libc::c_int,
     pub joinaliasvars: *mut List,
     pub joinleftcols: *mut List,
     pub joinrightcols: *mut List,
     pub functions: *mut List,
-    pub funcordinality: bool_0,
+    pub funcordinality: bool,
     pub tablefunc: *mut TableFunc,
     pub values_lists: *mut List,
     pub ctename: *mut libc::c_char,
     pub ctelevelsup: Index,
-    pub self_reference: bool_0,
+    pub self_reference: bool,
     pub coltypes: *mut List,
     pub coltypmods: *mut List,
     pub colcollations: *mut List,
@@ -876,9 +876,9 @@ pub struct RangeTblEntry {
     pub enrtuples: libc::c_double,
     pub alias: *mut Alias,
     pub eref: *mut Alias,
-    pub lateral: bool_0,
-    pub inh: bool_0,
-    pub inFromCl: bool_0,
+    pub lateral: bool,
+    pub inh: bool,
+    pub inFromCl: bool,
     pub requiredPerms: AclMode,
     pub checkAsUser: Oid,
     pub selectedCols: *mut Bitmapset,
@@ -904,7 +904,7 @@ pub const CTEMaterializeDefault: CTEMaterialize = 0;
 pub struct CTESearchClause {
     pub type_0: NodeTag,
     pub search_col_list: *mut List,
-    pub search_breadth_first: bool_0,
+    pub search_breadth_first: bool,
     pub search_seq_column: *mut libc::c_char,
     pub location: libc::c_int,
 }
@@ -934,7 +934,7 @@ pub struct CommonTableExpr {
     pub search_clause: *mut CTESearchClause,
     pub cycle_clause: *mut CTECycleClause,
     pub location: libc::c_int,
-    pub cterecursive: bool_0,
+    pub cterecursive: bool,
     pub cterefcount: libc::c_int,
     pub ctecolnames: *mut List,
     pub ctecoltypes: *mut List,
@@ -942,48 +942,13 @@ pub struct CommonTableExpr {
     pub ctecolcollations: *mut List,
 }
 pub type Relation = *mut RelationData;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseState {
-    pub parentParseState: *mut ParseState,
-    pub p_sourcetext: *const libc::c_char,
-    pub p_rtable: *mut List,
-    pub p_joinexprs: *mut List,
-    pub p_joinlist: *mut List,
-    pub p_namespace: *mut List,
-    pub p_lateral_active: bool_0,
-    pub p_ctenamespace: *mut List,
-    pub p_future_ctes: *mut List,
-    pub p_parent_cte: *mut CommonTableExpr,
-    pub p_target_relation: Relation,
-    pub p_target_nsitem: *mut ParseNamespaceItem,
-    pub p_is_insert: bool_0,
-    pub p_windowdefs: *mut List,
-    pub p_expr_kind: ParseExprKind,
-    pub p_next_resno: libc::c_int,
-    pub p_multiassign_exprs: *mut List,
-    pub p_locking_clause: *mut List,
-    pub p_locked_from_parent: bool_0,
-    pub p_resolve_unknowns: bool_0,
-    pub p_queryEnv: *mut QueryEnvironment,
-    pub p_hasAggs: bool_0,
-    pub p_hasWindowFuncs: bool_0,
-    pub p_hasTargetSRFs: bool_0,
-    pub p_hasSubLinks: bool_0,
-    pub p_hasModifyingCTE: bool_0,
-    pub p_last_srf: *mut Node,
-    pub p_pre_columnref_hook: PreParseColumnRefHook,
-    pub p_post_columnref_hook: PostParseColumnRefHook,
-    pub p_paramref_hook: ParseParamRefHook,
-    pub p_coerce_param_hook: CoerceParamHook,
-    pub p_ref_hook_state: *mut libc::c_void,
-}
+
 pub type CoerceParamHook = Option::<
     unsafe extern "C" fn(
         *mut ParseState,
         *mut Param,
         Oid,
-        int32,
+        i32,
         libc::c_int,
     ) -> *mut Node,
 >;
@@ -1045,10 +1010,10 @@ pub struct ParseNamespaceItem {
     pub p_rte: *mut RangeTblEntry,
     pub p_rtindex: libc::c_int,
     pub p_nscolumns: *mut ParseNamespaceColumn,
-    pub p_rel_visible: bool_0,
-    pub p_cols_visible: bool_0,
-    pub p_lateral_only: bool_0,
-    pub p_lateral_ok: bool_0,
+    pub p_rel_visible: bool,
+    pub p_cols_visible: bool,
+    pub p_lateral_only: bool,
+    pub p_lateral_ok: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1056,11 +1021,11 @@ pub struct ParseNamespaceColumn {
     pub p_varno: Index,
     pub p_varattno: AttrNumber,
     pub p_vartype: Oid,
-    pub p_vartypmod: int32,
+    pub p_vartypmod: i32,
     pub p_varcollid: Oid,
     pub p_varnosyn: Index,
     pub p_varattnosyn: AttrNumber,
-    pub p_dontexpand: bool_0,
+    pub p_dontexpand: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1117,12 +1082,12 @@ pub unsafe extern "C" fn assign_query_collations(
     query_tree_walker(
         query,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool_0>,
-            Option::<unsafe extern "C" fn() -> bool_0>,
+            Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
+            Option::<unsafe extern "C" fn() -> bool>,
         >(
             Some(
                 assign_query_collations_walker
-                    as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool_0,
+                    as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
             ),
         ),
         pstate as *mut libc::c_void,
@@ -1132,14 +1097,14 @@ pub unsafe extern "C" fn assign_query_collations(
 unsafe extern "C" fn assign_query_collations_walker(
     mut node: *mut Node,
     mut pstate: *mut ParseState,
-) -> bool_0 {
+) -> bool {
     if node.is_null() {
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_SetOperationStmt as libc::c_int as libc::c_uint
     {
-        return 0 as libc::c_int as bool_0;
+        return false;
     }
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_List as libc::c_int as libc::c_uint
@@ -1148,7 +1113,7 @@ unsafe extern "C" fn assign_query_collations_walker(
     } else {
         assign_expr_collations(pstate, node);
     }
-    return 0 as libc::c_int as bool_0;
+    return false;
 }
 #[no_mangle]
 pub unsafe extern "C" fn assign_list_collations(
@@ -1166,10 +1131,10 @@ pub unsafe extern "C" fn assign_list_collations(
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
         lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut node: *mut Node = (*lc).ptr_value as *mut Node;
@@ -1201,7 +1166,7 @@ pub unsafe extern "C" fn assign_expr_collations(
 pub unsafe extern "C" fn select_common_collation(
     mut pstate: *mut ParseState,
     mut exprs: *mut List,
-    mut none_ok: bool_0,
+    mut none_ok: bool,
 ) -> Oid {
     let mut context: assign_collations_context = assign_collations_context {
         pstate: 0 as *mut ParseState,
@@ -1245,10 +1210,10 @@ unsafe extern "C" fn assign_aggregate_collations(
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
         lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut tle: *mut TargetEntry = (*lc).ptr_value as *mut TargetEntry;
@@ -1265,11 +1230,11 @@ unsafe extern "C" fn assign_ordered_set_collations(
     mut aggref: *mut Aggref,
     mut loccontext: *mut assign_collations_context,
 ) {
-    let mut merge_sort_collations: bool_0 = 0;
+    let mut merge_sort_collations: bool = 0;
     let mut lc: *mut ListCell = 0 as *mut ListCell;
     merge_sort_collations = (list_length((*aggref).args) == 1 as libc::c_int
         && get_func_variadictype((*aggref).aggfnoid) == 0 as libc::c_int as Oid)
-        as libc::c_int as bool_0;
+        as libc::c_int as bool;
     assign_collations_walker((*aggref).aggdirectargs as *mut Node, loccontext);
     let mut lc__state: ForEachState = {
         let mut init = ForEachState {
@@ -1281,10 +1246,10 @@ unsafe extern "C" fn assign_ordered_set_collations(
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
         lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut tle: *mut TargetEntry = (*lc).ptr_value as *mut TargetEntry;
@@ -1303,11 +1268,11 @@ unsafe extern "C" fn assign_hypothetical_collations(
 ) {
     let mut h_cell: *mut ListCell = list_head((*aggref).aggdirectargs);
     let mut s_cell: *mut ListCell = list_head((*aggref).args);
-    let mut merge_sort_collations: bool_0 = 0;
+    let mut merge_sort_collations: bool = 0;
     let mut extra_args: libc::c_int = 0;
     merge_sort_collations = (list_length((*aggref).args) == 1 as libc::c_int
         && get_func_variadictype((*aggref).aggfnoid) == 0 as libc::c_int as Oid)
-        as libc::c_int as bool_0;
+        as libc::c_int as bool;
     extra_args = list_length((*aggref).aggdirectargs) - list_length((*aggref).args);
     loop {
         let fresh0 = extra_args;
@@ -1346,7 +1311,7 @@ unsafe extern "C" fn assign_hypothetical_collations(
                 abort();
             }
         }
-        if (paircontext.collation != 0 as libc::c_int as Oid) as libc::c_int as bool_0
+        if (paircontext.collation != 0 as libc::c_int as Oid) as libc::c_int as bool
             as libc::c_int != 0
             && paircontext.collation != exprCollation((*s_tle).expr as *mut Node)
         {

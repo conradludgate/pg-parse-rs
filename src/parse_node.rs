@@ -6,7 +6,7 @@
 //     pub type SubscriptingRefState;
 //     pub type SubscriptExecSteps;
 //     fn abort() -> !;
-//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
 //     fn errfinish(
 //         filename: *const libc::c_char,
 //         lineno: libc::c_int,
@@ -17,37 +17,37 @@
 //     static mut error_context_stack: *mut ErrorContextCallback;
 //     fn palloc0(size: Size) -> *mut libc::c_void;
 //     fn pfree(pointer: *mut libc::c_void);
-//     fn Int64GetDatum(X: int64) -> Datum;
+//     fn i64GetDatum(X: i64) -> Datum;
 //     fn table_close(relation: Relation, lockmode: LOCKMODE);
 //     fn pg_mbstrlen_with_len(mbstr: *const libc::c_char, len: libc::c_int) -> libc::c_int;
 //     fn makeConst(
 //         consttype: Oid,
-//         consttypmod: int32,
+//         consttypmod: i32,
 //         constcollid: Oid,
 //         constlen: libc::c_int,
 //         constvalue: Datum,
-//         constisnull: bool_0,
-//         constbyval: bool_0,
+//         constisnull: bool,
+//         constbyval: bool,
 //     ) -> *mut Const;
-//     fn scanint8(str: *const libc::c_char, errorOK: bool_0, result: *mut int64) -> bool_0;
+//     fn scanint8(str: *const libc::c_char, errorOK: bool, result: *mut i64) -> bool;
 //     fn getSubscriptingRoutines(
 //         typid: Oid,
 //         typelemp: *mut Oid,
 //     ) -> *const SubscriptRoutines;
-//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut int32) -> Oid;
+//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut i32) -> Oid;
 // }
 use super::*;
 pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
-pub type uintptr_t = libc::c_ulong;
-pub type size_t = __darwin_size_t;
-pub type bool_0 = libc::c_uchar;
-pub type int16 = libc::c_short;
-pub type int32 = libc::c_int;
-pub type uint32 = libc::c_uint;
-pub type int64 = libc::c_long;
-pub type uint64 = libc::c_ulong;
-pub type Size = size_t;
+// pub type usize = libc::c_ulong;
+// pub type isize = __darwin_size_t;
+// pub type bool = libc::c_uchar;
+// pub type i16 = libc::c_short;
+// pub type i32 = libc::c_int;
+// pub type u32 = libc::c_uint;
+// pub type i64 = libc::c_long;
+// pub type uint64 = libc::c_ulong;
+pub type Size = isize;
 pub type Index = libc::c_uint;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -56,8 +56,8 @@ pub struct ErrorContextCallback {
     pub callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
-pub type Datum = uintptr_t;
-pub type AttrNumber = int16;
+pub type Datum = usize;
+pub type AttrNumber = i16;
 pub type NodeTag = libc::c_uint;
 pub const T_SupportRequestIndexCondition: NodeTag = 425;
 pub const T_SupportRequestRows: NodeTag = 424;
@@ -496,7 +496,7 @@ pub struct Bitmapset {
     pub nwords: libc::c_int,
     pub words: [bitmapword; 0],
 }
-pub type bitmapword = uint32;
+pub type bitmapword = u32;
 pub type CmdType = libc::c_uint;
 pub const CMD_NOTHING: CmdType = 6;
 pub const CMD_UTILITY: CmdType = 5;
@@ -579,12 +579,12 @@ pub struct Expr {
 pub struct Const {
     pub xpr: Expr,
     pub consttype: Oid,
-    pub consttypmod: int32,
+    pub consttypmod: i32,
     pub constcollid: Oid,
     pub constlen: libc::c_int,
     pub constvalue: Datum,
-    pub constisnull: bool_0,
-    pub constbyval: bool_0,
+    pub constisnull: bool,
+    pub constbyval: bool,
     pub location: libc::c_int,
 }
 pub type ParamKind = libc::c_uint;
@@ -599,7 +599,7 @@ pub struct Param {
     pub paramkind: ParamKind,
     pub paramid: libc::c_int,
     pub paramtype: Oid,
-    pub paramtypmod: int32,
+    pub paramtypmod: i32,
     pub paramcollid: Oid,
     pub location: libc::c_int,
 }
@@ -610,7 +610,7 @@ pub struct SubscriptingRef {
     pub refcontainertype: Oid,
     pub refelemtype: Oid,
     pub refrestype: Oid,
-    pub reftypmod: int32,
+    pub reftypmod: i32,
     pub refcollid: Oid,
     pub refupperindexpr: *mut List,
     pub reflowerindexpr: *mut List,
@@ -661,7 +661,7 @@ pub const QSRC_QUAL_INSTEAD_RULE: QuerySource = 3;
 pub const QSRC_INSTEAD_RULE: QuerySource = 2;
 pub const QSRC_PARSER: QuerySource = 1;
 pub const QSRC_ORIGINAL: QuerySource = 0;
-pub type AclMode = uint32;
+pub type AclMode = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Query {
@@ -669,18 +669,18 @@ pub struct Query {
     pub commandType: CmdType,
     pub querySource: QuerySource,
     pub queryId: uint64,
-    pub canSetTag: bool_0,
+    pub canSetTag: bool,
     pub utilityStmt: *mut Node,
     pub resultRelation: libc::c_int,
-    pub hasAggs: bool_0,
-    pub hasWindowFuncs: bool_0,
-    pub hasTargetSRFs: bool_0,
-    pub hasSubLinks: bool_0,
-    pub hasDistinctOn: bool_0,
-    pub hasRecursive: bool_0,
-    pub hasModifyingCTE: bool_0,
-    pub hasForUpdate: bool_0,
-    pub hasRowSecurity: bool_0,
+    pub hasAggs: bool,
+    pub hasWindowFuncs: bool,
+    pub hasTargetSRFs: bool,
+    pub hasSubLinks: bool,
+    pub hasDistinctOn: bool,
+    pub hasRecursive: bool,
+    pub hasModifyingCTE: bool,
+    pub hasForUpdate: bool,
+    pub hasRowSecurity: bool,
     pub cteList: *mut List,
     pub rtable: *mut List,
     pub jointree: *mut FromExpr,
@@ -722,7 +722,7 @@ pub struct ParamRef {
 #[repr(C)]
 pub struct A_Indices {
     pub type_0: NodeTag,
-    pub is_slice: bool_0,
+    pub is_slice: bool,
     pub lidx: *mut Node,
     pub uidx: *mut Node,
 }
@@ -746,19 +746,19 @@ pub struct RangeTblEntry {
     pub rellockmode: libc::c_int,
     pub tablesample: *mut TableSampleClause,
     pub subquery: *mut Query,
-    pub security_barrier: bool_0,
+    pub security_barrier: bool,
     pub jointype: JoinType,
     pub joinmergedcols: libc::c_int,
     pub joinaliasvars: *mut List,
     pub joinleftcols: *mut List,
     pub joinrightcols: *mut List,
     pub functions: *mut List,
-    pub funcordinality: bool_0,
+    pub funcordinality: bool,
     pub tablefunc: *mut TableFunc,
     pub values_lists: *mut List,
     pub ctename: *mut libc::c_char,
     pub ctelevelsup: Index,
-    pub self_reference: bool_0,
+    pub self_reference: bool,
     pub coltypes: *mut List,
     pub coltypmods: *mut List,
     pub colcollations: *mut List,
@@ -766,9 +766,9 @@ pub struct RangeTblEntry {
     pub enrtuples: libc::c_double,
     pub alias: *mut Alias,
     pub eref: *mut Alias,
-    pub lateral: bool_0,
-    pub inh: bool_0,
-    pub inFromCl: bool_0,
+    pub lateral: bool,
+    pub inh: bool,
+    pub inFromCl: bool,
     pub requiredPerms: AclMode,
     pub checkAsUser: Oid,
     pub selectedCols: *mut Bitmapset,
@@ -794,7 +794,7 @@ pub const CTEMaterializeDefault: CTEMaterialize = 0;
 pub struct CTESearchClause {
     pub type_0: NodeTag,
     pub search_col_list: *mut List,
-    pub search_breadth_first: bool_0,
+    pub search_breadth_first: bool,
     pub search_seq_column: *mut libc::c_char,
     pub location: libc::c_int,
 }
@@ -824,55 +824,20 @@ pub struct CommonTableExpr {
     pub search_clause: *mut CTESearchClause,
     pub cycle_clause: *mut CTECycleClause,
     pub location: libc::c_int,
-    pub cterecursive: bool_0,
+    pub cterecursive: bool,
     pub cterefcount: libc::c_int,
     pub ctecolnames: *mut List,
     pub ctecoltypes: *mut List,
     pub ctecoltypmods: *mut List,
     pub ctecolcollations: *mut List,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseState {
-    pub parentParseState: *mut ParseState,
-    pub p_sourcetext: *const libc::c_char,
-    pub p_rtable: *mut List,
-    pub p_joinexprs: *mut List,
-    pub p_joinlist: *mut List,
-    pub p_namespace: *mut List,
-    pub p_lateral_active: bool_0,
-    pub p_ctenamespace: *mut List,
-    pub p_future_ctes: *mut List,
-    pub p_parent_cte: *mut CommonTableExpr,
-    pub p_target_relation: Relation,
-    pub p_target_nsitem: *mut ParseNamespaceItem,
-    pub p_is_insert: bool_0,
-    pub p_windowdefs: *mut List,
-    pub p_expr_kind: ParseExprKind,
-    pub p_next_resno: libc::c_int,
-    pub p_multiassign_exprs: *mut List,
-    pub p_locking_clause: *mut List,
-    pub p_locked_from_parent: bool_0,
-    pub p_resolve_unknowns: bool_0,
-    pub p_queryEnv: *mut QueryEnvironment,
-    pub p_hasAggs: bool_0,
-    pub p_hasWindowFuncs: bool_0,
-    pub p_hasTargetSRFs: bool_0,
-    pub p_hasSubLinks: bool_0,
-    pub p_hasModifyingCTE: bool_0,
-    pub p_last_srf: *mut Node,
-    pub p_pre_columnref_hook: PreParseColumnRefHook,
-    pub p_post_columnref_hook: PostParseColumnRefHook,
-    pub p_paramref_hook: ParseParamRefHook,
-    pub p_coerce_param_hook: CoerceParamHook,
-    pub p_ref_hook_state: *mut libc::c_void,
-}
+
 pub type CoerceParamHook = Option::<
     unsafe extern "C" fn(
         *mut ParseState,
         *mut Param,
         Oid,
-        int32,
+        i32,
         libc::c_int,
     ) -> *mut Node,
 >;
@@ -934,10 +899,10 @@ pub struct ParseNamespaceItem {
     pub p_rte: *mut RangeTblEntry,
     pub p_rtindex: libc::c_int,
     pub p_nscolumns: *mut ParseNamespaceColumn,
-    pub p_rel_visible: bool_0,
-    pub p_cols_visible: bool_0,
-    pub p_lateral_only: bool_0,
-    pub p_lateral_ok: bool_0,
+    pub p_rel_visible: bool,
+    pub p_cols_visible: bool,
+    pub p_lateral_only: bool,
+    pub p_lateral_ok: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -945,19 +910,19 @@ pub struct ParseNamespaceColumn {
     pub p_varno: Index,
     pub p_varattno: AttrNumber,
     pub p_vartype: Oid,
-    pub p_vartypmod: int32,
+    pub p_vartypmod: i32,
     pub p_varcollid: Oid,
     pub p_varnosyn: Index,
     pub p_varattnosyn: AttrNumber,
-    pub p_dontexpand: bool_0,
+    pub p_dontexpand: bool,
 }
 pub type SubscriptTransform = Option::<
     unsafe extern "C" fn(
         *mut SubscriptingRef,
         *mut List,
         *mut ParseState,
-        bool_0,
-        bool_0,
+        bool,
+        bool,
     ) -> (),
 >;
 pub type SubscriptExecSetup = Option::<
@@ -972,9 +937,9 @@ pub type SubscriptExecSetup = Option::<
 pub struct SubscriptRoutines {
     pub transform: SubscriptTransform,
     pub exec_setup: SubscriptExecSetup,
-    pub fetch_strict: bool_0,
-    pub fetch_leakproof: bool_0,
-    pub store_leakproof: bool_0,
+    pub fetch_strict: bool,
+    pub fetch_leakproof: bool,
+    pub store_leakproof: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -992,7 +957,7 @@ pub unsafe extern "C" fn make_parsestate(
         as *mut ParseState;
     (*pstate).parentParseState = parentParseState;
     (*pstate).p_next_resno = 1 as libc::c_int;
-    (*pstate).p_resolve_unknowns = 1 as libc::c_int as bool_0;
+    (*pstate).p_resolve_unknowns = true;
     if !parentParseState.is_null() {
         (*pstate).p_sourcetext = (*parentParseState).p_sourcetext;
         (*pstate).p_pre_columnref_hook = (*parentParseState).p_pre_columnref_hook;
@@ -1059,7 +1024,7 @@ pub unsafe extern "C" fn cancel_parser_errposition_callback(
 #[no_mangle]
 pub unsafe extern "C" fn transformContainerType(
     mut containerType: *mut Oid,
-    mut containerTypmod: *mut int32,
+    mut containerTypmod: *mut i32,
 ) {
     *containerType = getBaseTypeAndTypmod(*containerType, containerTypmod);
 }
@@ -1068,14 +1033,14 @@ pub unsafe extern "C" fn transformContainerSubscripts(
     mut pstate: *mut ParseState,
     mut containerBase: *mut Node,
     mut containerType: Oid,
-    mut containerTypMod: int32,
+    mut containerTypMod: i32,
     mut indirection: *mut List,
-    mut isAssignment: bool_0,
+    mut isAssignment: bool,
 ) -> *mut SubscriptingRef {
     let mut sbsref: *mut SubscriptingRef = 0 as *mut SubscriptingRef;
     let mut sbsroutines: *const SubscriptRoutines = 0 as *const SubscriptRoutines;
     let mut elementType: Oid = 0;
-    let mut isSlice: bool_0 = 0 as libc::c_int as bool_0;
+    let mut isSlice: bool = false;
     let mut idx: *mut ListCell = 0 as *mut ListCell;
     if isAssignment == 0 {
         transformContainerType(&mut containerType, &mut containerTypMod);
@@ -1098,15 +1063,15 @@ pub unsafe extern "C" fn transformContainerSubscripts(
     while if !(idx__state.l).is_null() && idx__state.i < (*idx__state.l).length {
         idx = &mut *((*idx__state.l).elements).offset(idx__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         idx = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut ai: *mut A_Indices = (*idx).ptr_value as *mut A_Indices;
         if (*ai).is_slice != 0 {
-            isSlice = 1 as libc::c_int as bool_0;
+            isSlice = true;
             break;
         } else {
             idx__state.i += 1;
@@ -1127,7 +1092,7 @@ pub unsafe extern "C" fn transformContainerSubscripts(
         .expect(
             "non-null function pointer",
         )(sbsref, indirection, pstate, isSlice, isAssignment);
-    if ((*sbsref).refrestype != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0 {
+    if ((*sbsref).refrestype != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
         let elevel__0: libc::c_int = 21 as libc::c_int;
         let mut __error_0: libc::c_int = 0;
         if elevel__0 >= 21 as libc::c_int {
@@ -1144,10 +1109,10 @@ pub unsafe extern "C" fn make_const(
 ) -> *mut Const {
     let mut con: *mut Const = 0 as *mut Const;
     let mut val: Datum = 0;
-    let mut val64: int64 = 0;
+    let mut val64: i64 = 0;
     let mut typeid: Oid = 0;
     let mut typelen: libc::c_int = 0;
-    let mut typebyval: bool_0 = 0;
+    let mut typebyval: bool = 0;
     let mut pcbstate: ParseCallbackState = ParseCallbackState {
         pstate: 0 as *mut ParseState,
         location: 0,
@@ -1160,41 +1125,41 @@ pub unsafe extern "C" fn make_const(
     match (*(value as *const Node)).type_0 as libc::c_uint {
         222 => {
             val = (*value).val.ival as Datum;
-            typelen = ::core::mem::size_of::<int32>() as libc::c_ulong as libc::c_int;
-            typebyval = 1 as libc::c_int as bool_0;
+            typelen = ::core::mem::size_of::<i32>() as libc::c_ulong as libc::c_int;
+            typebyval = true;
         }
         223 => {
-            if scanint8((*value).val.str_0, 1 as libc::c_int as bool_0, &mut val64) != 0
+            if scanint8((*value).val.str_0, true, &mut val64) != 0
             {
-                let mut val32: int32 = val64 as int32;
-                if val64 == val32 as int64 {
+                let mut val32: i32 = val64 as i32;
+                if val64 == val32 as i64 {
                     val = val32 as Datum;
-                    typelen = ::core::mem::size_of::<int32>() as libc::c_ulong
+                    typelen = ::core::mem::size_of::<i32>() as libc::c_ulong
                         as libc::c_int;
-                    typebyval = 1 as libc::c_int as bool_0;
+                    typebyval = true;
                 } else {
-                    val = Int64GetDatum(val64);
+                    val = i64GetDatum(val64);
                     typelen = ::core::mem::size_of::<int64>() as libc::c_ulong
                         as libc::c_int;
-                    typebyval = 0 as libc::c_int as bool_0;
+                    typebyval = false;
                 }
             } else {
                 setup_parser_errposition_callback(&mut pcbstate, pstate, location);
                 cancel_parser_errposition_callback(&mut pcbstate);
                 typelen = -(1 as libc::c_int);
-                typebyval = 0 as libc::c_int as bool_0;
+                typebyval = false;
             }
         }
         224 => {
             val = (*value).val.str_0 as Datum;
             typelen = -(2 as libc::c_int);
-            typebyval = 0 as libc::c_int as bool_0;
+            typebyval = false;
         }
         225 => {
             setup_parser_errposition_callback(&mut pcbstate, pstate, location);
             cancel_parser_errposition_callback(&mut pcbstate);
             typelen = -(1 as libc::c_int);
-            typebyval = 0 as libc::c_int as bool_0;
+            typebyval = false;
         }
         226 => {
             (*con).location = location;
@@ -1227,7 +1192,7 @@ pub unsafe extern "C" fn make_const(
         0 as libc::c_int as Oid,
         typelen,
         val,
-        0 as libc::c_int as bool_0,
+        false,
         typebyval,
     );
     (*con).location = location;

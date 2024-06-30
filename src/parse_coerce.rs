@@ -5,7 +5,7 @@
 //     pub type RelationData;
 //     pub type QueryEnvironment;
 //     fn abort() -> !;
-//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool_0;
+//     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
 //     fn errfinish(
 //         filename: *const libc::c_char,
 //         lineno: libc::c_int,
@@ -18,7 +18,7 @@
 //     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
 //     fn DecrTupleDescRefCount(tupdesc: TupleDesc);
 //     fn pg_detoast_datum(datum: *mut varlena) -> *mut varlena;
-//     fn typeInheritsFrom(subclassTypeId: Oid, superclassTypeId: Oid) -> bool_0;
+//     fn typeInheritsFrom(subclassTypeId: Oid, superclassTypeId: Oid) -> bool;
 //     fn makeFuncExpr(
 //         funcid: Oid,
 //         rettype: Oid,
@@ -30,13 +30,13 @@
 //     fn makeRelabelType(
 //         arg: *mut Expr,
 //         rtype: Oid,
-//         rtypmod: int32,
+//         rtypmod: i32,
 //         rcollid: Oid,
 //         rformat: CoercionForm,
 //     ) -> *mut RelabelType;
 //     fn exprType(expr: *const Node) -> Oid;
-//     fn exprTypmod(expr: *const Node) -> int32;
-//     fn expression_returns_set(clause: *mut Node) -> bool_0;
+//     fn exprTypmod(expr: *const Node) -> i32;
+//     fn expression_returns_set(clause: *mut Node) -> bool;
 //     fn exprLocation(expr: *const Node) -> libc::c_int;
 //     fn parser_errposition(pstate: *mut ParseState, location: libc::c_int) -> libc::c_int;
 //     fn setup_parser_errposition_callback(
@@ -57,50 +57,50 @@
 //         colnames: *mut *mut List,
 //     ) -> *mut List;
 //     fn typeidType(id: Oid) -> Type;
-//     fn typeLen(t: Type) -> int16;
-//     fn typeByVal(t: Type) -> bool_0;
+//     fn typeLen(t: Type) -> i16;
+//     fn typeByVal(t: Type) -> bool;
 //     fn typeTypeCollation(typ: Type) -> Oid;
-//     fn stringTypeDatum(tp: Type, string: *mut libc::c_char, atttypmod: int32) -> Datum;
+//     fn stringTypeDatum(tp: Type, string: *mut libc::c_char, atttypmod: i32) -> Datum;
 //     fn typeOrDomainTypeRelid(type_id: Oid) -> Oid;
 //     fn format_type_be(type_oid: Oid) -> *mut libc::c_char;
-//     fn type_is_enum(typid: Oid) -> bool_0;
-//     fn type_is_range(typid: Oid) -> bool_0;
-//     fn type_is_multirange(typid: Oid) -> bool_0;
+//     fn type_is_enum(typid: Oid) -> bool;
+//     fn type_is_range(typid: Oid) -> bool;
+//     fn type_is_multirange(typid: Oid) -> bool;
 //     fn get_type_category_preferred(
 //         typid: Oid,
 //         typcategory: *mut libc::c_char,
-//         typispreferred: *mut bool_0,
+//         typispreferred: *mut bool,
 //     );
 //     fn get_element_type(typid: Oid) -> Oid;
 //     fn get_array_type(typid: Oid) -> Oid;
 //     fn get_base_element_type(typid: Oid) -> Oid;
 //     fn getBaseType(typid: Oid) -> Oid;
-//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut int32) -> Oid;
+//     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut i32) -> Oid;
 //     fn get_range_subtype(rangeOid: Oid) -> Oid;
 //     fn get_range_multirange(rangeOid: Oid) -> Oid;
 //     fn get_multirange_range(multirangeOid: Oid) -> Oid;
 //     fn SearchSysCache1(cacheId: libc::c_int, key1: Datum) -> HeapTuple;
 //     fn SearchSysCache2(cacheId: libc::c_int, key1: Datum, key2: Datum) -> HeapTuple;
 //     fn ReleaseSysCache(tuple: HeapTuple);
-//     fn lookup_rowtype_tupdesc(type_id: Oid, typmod: int32) -> TupleDesc;
+//     fn lookup_rowtype_tupdesc(type_id: Oid, typmod: i32) -> TupleDesc;
 // }
 use super::*;
 pub type Oid = libc::c_uint;
-pub type uintptr_t = libc::c_ulong;
-pub type bool_0 = libc::c_uchar;
+// pub type usize = libc::c_ulong;
+// pub type bool = libc::c_uchar;
 pub type Pointer = *mut libc::c_char;
-pub type int16 = libc::c_short;
-pub type int32 = libc::c_int;
-pub type uint8 = libc::c_uchar;
-pub type uint16 = libc::c_ushort;
-pub type uint32 = libc::c_uint;
-pub type bits8 = uint8;
+// pub type i16 = libc::c_short;
+// pub type i32 = libc::c_int;
+// pub type u8 = libc::c_uchar;
+// pub type u16 = libc::c_ushort;
+// pub type u32 = libc::c_uint;
+pub type bits8 = u8;
 pub type uint64 = libc::c_ulong;
 pub type Index = libc::c_uint;
 pub type float4 = libc::c_float;
 pub type regproc = Oid;
-pub type TransactionId = uint32;
-pub type CommandId = uint32;
+pub type TransactionId = u32;
+pub type CommandId = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct varlena {
@@ -110,9 +110,9 @@ pub struct varlena {
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct oidvector {
-    pub vl_len_: int32,
+    pub vl_len_: i32,
     pub ndim: libc::c_int,
-    pub dataoffset: int32,
+    pub dataoffset: i32,
     pub elemtype: Oid,
     pub dim1: libc::c_int,
     pub lbound1: libc::c_int,
@@ -131,14 +131,14 @@ pub struct ErrorContextCallback {
     pub callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
-pub type Datum = uintptr_t;
+pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct BlockIdData {
-    pub bi_hi: uint16,
-    pub bi_lo: uint16,
+    pub bi_hi: u16,
+    pub bi_lo: u16,
 }
-pub type OffsetNumber = uint16;
+pub type OffsetNumber = u16;
 #[derive(Copy, Clone)]
 #[repr(C, align(2))]
 pub struct ItemPointerData(pub ItemPointerData_Inner);
@@ -156,9 +156,9 @@ const ItemPointerData_PADDING: usize = ::core::mem::size_of::<ItemPointerData>()
 pub struct HeapTupleHeaderData {
     pub t_choice: C2RustUnnamed,
     pub t_ctid: ItemPointerData,
-    pub t_infomask2: uint16,
-    pub t_infomask: uint16,
-    pub t_hoff: uint8,
+    pub t_infomask2: u16,
+    pub t_infomask: u16,
+    pub t_hoff: u8,
     pub t_bits: [bits8; 0],
 }
 #[derive(Copy, Clone)]
@@ -170,8 +170,8 @@ pub union C2RustUnnamed {
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct DatumTupleFields {
-    pub datum_len_: int32,
-    pub datum_typmod: int32,
+    pub datum_len_: i32,
+    pub datum_typmod: i32,
     pub datum_typeid: Oid,
 }
 #[derive(Copy, Clone)]
@@ -191,7 +191,7 @@ pub type HeapTupleHeader = *mut HeapTupleHeaderData;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HeapTupleData {
-    pub t_len: uint32,
+    pub t_len: u32,
     pub t_self: ItemPointerData,
     pub t_tableOid: Oid,
     pub t_data: HeapTupleHeader,
@@ -640,14 +640,14 @@ pub const T_ProjectionInfo: NodeTag = 3;
 pub const T_ExprContext: NodeTag = 2;
 pub const T_IndexInfo: NodeTag = 1;
 pub const T_Invalid: NodeTag = 0;
-pub type bitmapword = uint32;
+pub type bitmapword = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Bitmapset {
     pub nwords: libc::c_int,
     pub words: [bitmapword; 0],
 }
-pub type AttrNumber = int16;
+pub type AttrNumber = i16;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Node {
@@ -721,7 +721,7 @@ pub struct Var {
     pub varno: Index,
     pub varattno: AttrNumber,
     pub vartype: Oid,
-    pub vartypmod: int32,
+    pub vartypmod: i32,
     pub varcollid: Oid,
     pub varlevelsup: Index,
     pub varnosyn: Index,
@@ -733,12 +733,12 @@ pub struct Var {
 pub struct Const {
     pub xpr: Expr,
     pub consttype: Oid,
-    pub consttypmod: int32,
+    pub consttypmod: i32,
     pub constcollid: Oid,
     pub constlen: libc::c_int,
     pub constvalue: Datum,
-    pub constisnull: bool_0,
-    pub constbyval: bool_0,
+    pub constisnull: bool,
+    pub constbyval: bool,
     pub location: libc::c_int,
 }
 pub type ParamKind = libc::c_uint;
@@ -753,7 +753,7 @@ pub struct Param {
     pub paramkind: ParamKind,
     pub paramid: libc::c_int,
     pub paramtype: Oid,
-    pub paramtypmod: int32,
+    pub paramtypmod: i32,
     pub paramcollid: Oid,
     pub location: libc::c_int,
 }
@@ -773,8 +773,8 @@ pub struct FuncExpr {
     pub xpr: Expr,
     pub funcid: Oid,
     pub funcresulttype: Oid,
-    pub funcretset: bool_0,
-    pub funcvariadic: bool_0,
+    pub funcretset: bool,
+    pub funcvariadic: bool,
     pub funcformat: CoercionForm,
     pub funccollid: Oid,
     pub inputcollid: Oid,
@@ -787,7 +787,7 @@ pub struct RelabelType {
     pub xpr: Expr,
     pub arg: *mut Expr,
     pub resulttype: Oid,
-    pub resulttypmod: int32,
+    pub resulttypmod: i32,
     pub resultcollid: Oid,
     pub relabelformat: CoercionForm,
     pub location: libc::c_int,
@@ -809,7 +809,7 @@ pub struct ArrayCoerceExpr {
     pub arg: *mut Expr,
     pub elemexpr: *mut Expr,
     pub resulttype: Oid,
-    pub resulttypmod: int32,
+    pub resulttypmod: i32,
     pub resultcollid: Oid,
     pub coerceformat: CoercionForm,
     pub location: libc::c_int,
@@ -836,7 +836,7 @@ pub struct CollateExpr {
 pub struct CaseTestExpr {
     pub xpr: Expr,
     pub typeId: Oid,
-    pub typeMod: int32,
+    pub typeMod: i32,
     pub collation: Oid,
 }
 #[derive(Copy, Clone)]
@@ -855,7 +855,7 @@ pub struct CoerceToDomain {
     pub xpr: Expr,
     pub arg: *mut Expr,
     pub resulttype: Oid,
-    pub resulttypmod: int32,
+    pub resulttypmod: i32,
     pub resultcollid: Oid,
     pub coercionformat: CoercionForm,
     pub location: libc::c_int,
@@ -890,7 +890,7 @@ pub const QSRC_QUAL_INSTEAD_RULE: QuerySource = 3;
 pub const QSRC_INSTEAD_RULE: QuerySource = 2;
 pub const QSRC_PARSER: QuerySource = 1;
 pub const QSRC_ORIGINAL: QuerySource = 0;
-pub type AclMode = uint32;
+pub type AclMode = u32;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Query {
@@ -898,18 +898,18 @@ pub struct Query {
     pub commandType: CmdType,
     pub querySource: QuerySource,
     pub queryId: uint64,
-    pub canSetTag: bool_0,
+    pub canSetTag: bool,
     pub utilityStmt: *mut Node,
     pub resultRelation: libc::c_int,
-    pub hasAggs: bool_0,
-    pub hasWindowFuncs: bool_0,
-    pub hasTargetSRFs: bool_0,
-    pub hasSubLinks: bool_0,
-    pub hasDistinctOn: bool_0,
-    pub hasRecursive: bool_0,
-    pub hasModifyingCTE: bool_0,
-    pub hasForUpdate: bool_0,
-    pub hasRowSecurity: bool_0,
+    pub hasAggs: bool,
+    pub hasWindowFuncs: bool,
+    pub hasTargetSRFs: bool,
+    pub hasSubLinks: bool,
+    pub hasDistinctOn: bool,
+    pub hasRecursive: bool,
+    pub hasModifyingCTE: bool,
+    pub hasForUpdate: bool,
+    pub hasRowSecurity: bool,
     pub cteList: *mut List,
     pub rtable: *mut List,
     pub jointree: *mut FromExpr,
@@ -967,19 +967,19 @@ pub struct RangeTblEntry {
     pub rellockmode: libc::c_int,
     pub tablesample: *mut TableSampleClause,
     pub subquery: *mut Query,
-    pub security_barrier: bool_0,
+    pub security_barrier: bool,
     pub jointype: JoinType,
     pub joinmergedcols: libc::c_int,
     pub joinaliasvars: *mut List,
     pub joinleftcols: *mut List,
     pub joinrightcols: *mut List,
     pub functions: *mut List,
-    pub funcordinality: bool_0,
+    pub funcordinality: bool,
     pub tablefunc: *mut TableFunc,
     pub values_lists: *mut List,
     pub ctename: *mut libc::c_char,
     pub ctelevelsup: Index,
-    pub self_reference: bool_0,
+    pub self_reference: bool,
     pub coltypes: *mut List,
     pub coltypmods: *mut List,
     pub colcollations: *mut List,
@@ -987,9 +987,9 @@ pub struct RangeTblEntry {
     pub enrtuples: libc::c_double,
     pub alias: *mut Alias,
     pub eref: *mut Alias,
-    pub lateral: bool_0,
-    pub inh: bool_0,
-    pub inFromCl: bool_0,
+    pub lateral: bool,
+    pub inh: bool,
+    pub inFromCl: bool,
     pub requiredPerms: AclMode,
     pub checkAsUser: Oid,
     pub selectedCols: *mut Bitmapset,
@@ -1015,7 +1015,7 @@ pub const CTEMaterializeDefault: CTEMaterialize = 0;
 pub struct CTESearchClause {
     pub type_0: NodeTag,
     pub search_col_list: *mut List,
-    pub search_breadth_first: bool_0,
+    pub search_breadth_first: bool,
     pub search_seq_column: *mut libc::c_char,
     pub location: libc::c_int,
 }
@@ -1045,7 +1045,7 @@ pub struct CommonTableExpr {
     pub search_clause: *mut CTESearchClause,
     pub cycle_clause: *mut CTECycleClause,
     pub location: libc::c_int,
-    pub cterecursive: bool_0,
+    pub cterecursive: bool,
     pub cterefcount: libc::c_int,
     pub ctecolnames: *mut List,
     pub ctecoltypes: *mut List,
@@ -1058,23 +1058,23 @@ pub struct FormData_pg_attribute {
     pub attrelid: Oid,
     pub attname: NameData,
     pub atttypid: Oid,
-    pub attstattarget: int32,
-    pub attlen: int16,
-    pub attnum: int16,
-    pub attndims: int32,
-    pub attcacheoff: int32,
-    pub atttypmod: int32,
-    pub attbyval: bool_0,
+    pub attstattarget: i32,
+    pub attlen: i16,
+    pub attnum: i16,
+    pub attndims: i32,
+    pub attcacheoff: i32,
+    pub atttypmod: i32,
+    pub attbyval: bool,
     pub attstorage: libc::c_char,
     pub attalign: libc::c_char,
-    pub attnotnull: bool_0,
-    pub atthasdef: bool_0,
-    pub atthasmissing: bool_0,
+    pub attnotnull: bool,
+    pub atthasdef: bool,
+    pub atthasmissing: bool,
     pub attidentity: libc::c_char,
     pub attgenerated: libc::c_char,
-    pub attisdropped: bool_0,
-    pub attislocal: bool_0,
-    pub attinhcount: int32,
+    pub attisdropped: bool,
+    pub attislocal: bool,
+    pub attinhcount: i32,
     pub attcollation: Oid,
 }
 pub type Form_pg_attribute = *mut FormData_pg_attribute;
@@ -1089,8 +1089,8 @@ pub struct AttrDefault {
 pub struct ConstrCheck {
     pub ccname: *mut libc::c_char,
     pub ccbin: *mut libc::c_char,
-    pub ccvalid: bool_0,
-    pub ccnoinherit: bool_0,
+    pub ccvalid: bool,
+    pub ccnoinherit: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1098,17 +1098,17 @@ pub struct TupleConstr {
     pub defval: *mut AttrDefault,
     pub check: *mut ConstrCheck,
     pub missing: *mut AttrMissing,
-    pub num_defval: uint16,
-    pub num_check: uint16,
-    pub has_not_null: bool_0,
-    pub has_generated_stored: bool_0,
+    pub num_defval: u16,
+    pub num_check: u16,
+    pub has_not_null: bool,
+    pub has_generated_stored: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct TupleDescData {
     pub natts: libc::c_int,
     pub tdtypeid: Oid,
-    pub tdtypmod: int32,
+    pub tdtypmod: i32,
     pub tdrefcount: libc::c_int,
     pub constr: *mut TupleConstr,
     pub attrs: [FormData_pg_attribute; 0],
@@ -1138,24 +1138,24 @@ pub struct FormData_pg_class {
     pub relam: Oid,
     pub relfilenode: Oid,
     pub reltablespace: Oid,
-    pub relpages: int32,
+    pub relpages: i32,
     pub reltuples: float4,
-    pub relallvisible: int32,
+    pub relallvisible: i32,
     pub reltoastrelid: Oid,
-    pub relhasindex: bool_0,
-    pub relisshared: bool_0,
+    pub relhasindex: bool,
+    pub relisshared: bool,
     pub relpersistence: libc::c_char,
     pub relkind: libc::c_char,
-    pub relnatts: int16,
-    pub relchecks: int16,
-    pub relhasrules: bool_0,
-    pub relhastriggers: bool_0,
-    pub relhassubclass: bool_0,
-    pub relrowsecurity: bool_0,
-    pub relforcerowsecurity: bool_0,
-    pub relispopulated: bool_0,
+    pub relnatts: i16,
+    pub relchecks: i16,
+    pub relhasrules: bool,
+    pub relhastriggers: bool,
+    pub relhassubclass: bool,
+    pub relrowsecurity: bool,
+    pub relforcerowsecurity: bool,
+    pub relispopulated: bool,
     pub relreplident: libc::c_char,
-    pub relispartition: bool_0,
+    pub relispartition: bool,
     pub relrewrite: Oid,
     pub relfrozenxid: TransactionId,
     pub relminmxid: TransactionId,
@@ -1174,14 +1174,14 @@ pub struct FormData_pg_proc {
     pub provariadic: Oid,
     pub prosupport: regproc,
     pub prokind: libc::c_char,
-    pub prosecdef: bool_0,
-    pub proleakproof: bool_0,
-    pub proisstrict: bool_0,
-    pub proretset: bool_0,
+    pub prosecdef: bool,
+    pub proleakproof: bool,
+    pub proisstrict: bool,
+    pub proretset: bool,
     pub provolatile: libc::c_char,
     pub proparallel: libc::c_char,
-    pub pronargs: int16,
-    pub pronargdefaults: int16,
+    pub pronargs: i16,
+    pub pronargdefaults: i16,
     pub prorettype: Oid,
     pub proargtypes: oidvector,
 }
@@ -1193,12 +1193,12 @@ pub struct FormData_pg_type {
     pub typname: NameData,
     pub typnamespace: Oid,
     pub typowner: Oid,
-    pub typlen: int16,
-    pub typbyval: bool_0,
+    pub typlen: i16,
+    pub typbyval: bool,
     pub typtype: libc::c_char,
     pub typcategory: libc::c_char,
-    pub typispreferred: bool_0,
-    pub typisdefined: bool_0,
+    pub typispreferred: bool,
+    pub typisdefined: bool,
     pub typdelim: libc::c_char,
     pub typrelid: Oid,
     pub typsubscript: regproc,
@@ -1213,55 +1213,20 @@ pub struct FormData_pg_type {
     pub typanalyze: regproc,
     pub typalign: libc::c_char,
     pub typstorage: libc::c_char,
-    pub typnotnull: bool_0,
+    pub typnotnull: bool,
     pub typbasetype: Oid,
-    pub typtypmod: int32,
-    pub typndims: int32,
+    pub typtypmod: i32,
+    pub typndims: i32,
     pub typcollation: Oid,
 }
 pub type Form_pg_type = *mut FormData_pg_type;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseState {
-    pub parentParseState: *mut ParseState,
-    pub p_sourcetext: *const libc::c_char,
-    pub p_rtable: *mut List,
-    pub p_joinexprs: *mut List,
-    pub p_joinlist: *mut List,
-    pub p_namespace: *mut List,
-    pub p_lateral_active: bool_0,
-    pub p_ctenamespace: *mut List,
-    pub p_future_ctes: *mut List,
-    pub p_parent_cte: *mut CommonTableExpr,
-    pub p_target_relation: Relation,
-    pub p_target_nsitem: *mut ParseNamespaceItem,
-    pub p_is_insert: bool_0,
-    pub p_windowdefs: *mut List,
-    pub p_expr_kind: ParseExprKind,
-    pub p_next_resno: libc::c_int,
-    pub p_multiassign_exprs: *mut List,
-    pub p_locking_clause: *mut List,
-    pub p_locked_from_parent: bool_0,
-    pub p_resolve_unknowns: bool_0,
-    pub p_queryEnv: *mut QueryEnvironment,
-    pub p_hasAggs: bool_0,
-    pub p_hasWindowFuncs: bool_0,
-    pub p_hasTargetSRFs: bool_0,
-    pub p_hasSubLinks: bool_0,
-    pub p_hasModifyingCTE: bool_0,
-    pub p_last_srf: *mut Node,
-    pub p_pre_columnref_hook: PreParseColumnRefHook,
-    pub p_post_columnref_hook: PostParseColumnRefHook,
-    pub p_paramref_hook: ParseParamRefHook,
-    pub p_coerce_param_hook: CoerceParamHook,
-    pub p_ref_hook_state: *mut libc::c_void,
-}
+
 pub type CoerceParamHook = Option::<
     unsafe extern "C" fn(
         *mut ParseState,
         *mut Param,
         Oid,
-        int32,
+        i32,
         libc::c_int,
     ) -> *mut Node,
 >;
@@ -1323,10 +1288,10 @@ pub struct ParseNamespaceItem {
     pub p_rte: *mut RangeTblEntry,
     pub p_rtindex: libc::c_int,
     pub p_nscolumns: *mut ParseNamespaceColumn,
-    pub p_rel_visible: bool_0,
-    pub p_cols_visible: bool_0,
-    pub p_lateral_only: bool_0,
-    pub p_lateral_ok: bool_0,
+    pub p_rel_visible: bool,
+    pub p_cols_visible: bool,
+    pub p_lateral_only: bool,
+    pub p_lateral_ok: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1334,11 +1299,11 @@ pub struct ParseNamespaceColumn {
     pub p_varno: Index,
     pub p_varattno: AttrNumber,
     pub p_vartype: Oid,
-    pub p_vartypmod: int32,
+    pub p_vartypmod: i32,
     pub p_varcollid: Oid,
     pub p_varnosyn: Index,
     pub p_varattnosyn: AttrNumber,
-    pub p_dontexpand: bool_0,
+    pub p_dontexpand: bool,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1506,7 +1471,7 @@ pub unsafe extern "C" fn coerce_to_target_type(
     mut expr: *mut Node,
     mut exprtype: Oid,
     mut targettype: Oid,
-    mut targettypmod: int32,
+    mut targettypmod: i32,
     mut ccontext: CoercionContext,
     mut cformat: CoercionForm,
     mut location: libc::c_int,
@@ -1542,7 +1507,7 @@ pub unsafe extern "C" fn coerce_to_target_type(
         location,
         (result != expr
             && !((*(result as *const Node)).type_0 as libc::c_uint
-                == T_Const as libc::c_int as libc::c_uint)) as libc::c_int as bool_0,
+                == T_Const as libc::c_int as libc::c_uint)) as libc::c_int as bool,
     );
     if expr != origexpr {
         let mut coll: *mut CollateExpr = origexpr as *mut CollateExpr;
@@ -1562,12 +1527,12 @@ pub unsafe extern "C" fn coerce_to_target_type(
 pub unsafe extern "C" fn coerce_to_domain(
     mut arg: *mut Node,
     mut baseTypeId: Oid,
-    mut baseTypeMod: int32,
+    mut baseTypeMod: i32,
     mut typeId: Oid,
     mut ccontext: CoercionContext,
     mut cformat: CoercionForm,
     mut location: libc::c_int,
-    mut hideInputCoercion: bool_0,
+    mut hideInputCoercion: bool,
 ) -> *mut Node {
     let mut result: *mut CoerceToDomain = 0 as *mut CoerceToDomain;
     if baseTypeId == 0 as libc::c_int as Oid {
@@ -1586,7 +1551,7 @@ pub unsafe extern "C" fn coerce_to_domain(
         ccontext,
         COERCE_IMPLICIT_CAST,
         location,
-        0 as libc::c_int as bool_0,
+        false,
     );
     result = ({
         let mut _result: *mut Node = 0 as *mut Node;
@@ -1603,11 +1568,11 @@ pub unsafe extern "C" fn coerce_to_domain(
 unsafe extern "C" fn coerce_type_typmod(
     mut node: *mut Node,
     mut targetTypeId: Oid,
-    mut targetTypMod: int32,
+    mut targetTypMod: i32,
     mut ccontext: CoercionContext,
     mut cformat: CoercionForm,
     mut location: libc::c_int,
-    mut hideInputCoercion: bool_0,
+    mut hideInputCoercion: bool,
 ) -> *mut Node {
     let mut pathtype: CoercionPathType = COERCION_PATH_NONE;
     let mut funcId: Oid = 0;
@@ -1686,13 +1651,13 @@ unsafe extern "C" fn build_coercion_expression(
     mut pathtype: CoercionPathType,
     mut funcId: Oid,
     mut targetTypeId: Oid,
-    mut targetTypMod: int32,
+    mut targetTypMod: i32,
     mut ccontext: CoercionContext,
     mut cformat: CoercionForm,
     mut location: libc::c_int,
 ) -> *mut Node {
     let mut nargs: libc::c_int = 0 as libc::c_int;
-    if (funcId != 0 as libc::c_int as Oid) as libc::c_int as bool_0 != 0 {
+    if (funcId != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
         let mut tp: HeapTuple = 0 as *mut HeapTupleData;
         let mut procstruct: Form_pg_proc = 0 as *mut FormData_pg_proc;
         tp = SearchSysCache1(PROCOID as libc::c_int, funcId as Datum);
@@ -1761,7 +1726,7 @@ unsafe extern "C" fn build_coercion_expression(
             _result
         }) as *mut CaseTestExpr;
         let mut sourceBaseTypeId: Oid = 0;
-        let mut sourceBaseTypeMod: int32 = 0;
+        let mut sourceBaseTypeMod: i32 = 0;
         let mut targetElementType: Oid = 0;
         let mut elemexpr: *mut Node = 0 as *mut Node;
         sourceBaseTypeMod = exprTypmod(node);
@@ -1851,7 +1816,7 @@ unsafe extern "C" fn coerce_record_to_complex(
 ) -> *mut Node {
     let mut rowexpr: *mut RowExpr = 0 as *mut RowExpr;
     let mut baseTypeId: Oid = 0;
-    let mut baseTypeMod: int32 = -(1 as libc::c_int);
+    let mut baseTypeMod: i32 = -(1 as libc::c_int);
     let mut tupdesc: TupleDesc = 0 as *mut TupleDescData;
     let mut args: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut newargs: *mut List = 0 as *mut List;
@@ -1960,7 +1925,7 @@ unsafe extern "C" fn coerce_record_to_complex(
             ccontext,
             cformat,
             location,
-            0 as libc::c_int as bool_0,
+            false,
         );
     }
     return rowexpr as *mut Node;
@@ -1970,7 +1935,7 @@ pub unsafe extern "C" fn coerce_to_specific_type_typmod(
     mut pstate: *mut ParseState,
     mut node: *mut Node,
     mut targetTypeId: Oid,
-    mut targetTypmod: int32,
+    mut targetTypmod: i32,
     mut constructName: *const libc::c_char,
 ) -> *mut Node {
     let mut inputTypeId: Oid = exprType(node);
@@ -2073,10 +2038,10 @@ pub unsafe extern "C" fn select_common_typmod(
     mut pstate: *mut ParseState,
     mut exprs: *mut List,
     mut common_type: Oid,
-) -> int32 {
+) -> i32 {
     let mut lc: *mut ListCell = 0 as *mut ListCell;
-    let mut first: bool_0 = 1 as libc::c_int as bool_0;
-    let mut result: int32 = -(1 as libc::c_int);
+    let mut first: bool = true;
+    let mut result: i32 = -(1 as libc::c_int);
     let mut lc__state: ForEachState = {
         let mut init = ForEachState {
             l: exprs,
@@ -2087,10 +2052,10 @@ pub unsafe extern "C" fn select_common_typmod(
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
         lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
             as *mut ListCell;
-        1 as libc::c_int as bool_0 as libc::c_int
+        true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
-        0 as libc::c_int as bool_0 as libc::c_int
+        false as libc::c_int
     } != 0
     {
         let mut expr: *mut Node = (*lc).ptr_value as *mut Node;
@@ -2098,7 +2063,7 @@ pub unsafe extern "C" fn select_common_typmod(
             return -(1 as libc::c_int)
         } else if first != 0 {
             result = exprTypmod(expr);
-            first = 0 as libc::c_int as bool_0;
+            first = false;
         } else if result != exprTypmod(expr) {
             return -(1 as libc::c_int)
         }
@@ -2110,7 +2075,7 @@ pub unsafe extern "C" fn select_common_typmod(
 #[no_mangle]
 pub unsafe extern "C" fn TypeCategory(mut type_0: Oid) -> TYPCATEGORY {
     let mut typcategory: libc::c_char = 0;
-    let mut typispreferred: bool_0 = 0;
+    let mut typispreferred: bool = 0;
     get_type_category_preferred(type_0, &mut typcategory, &mut typispreferred);
     return typcategory;
 }
@@ -2144,23 +2109,23 @@ pub unsafe extern "C" fn find_typmod_coercion_function(
         *funcid = (*castForm).castfunc;
         ReleaseSysCache(tuple);
     }
-    if (*funcid != 0 as libc::c_int as Oid) as libc::c_int as bool_0 == 0 {
+    if (*funcid != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
         result = COERCION_PATH_NONE;
     }
     return result;
 }
-unsafe extern "C" fn is_complex_array(mut typid: Oid) -> bool_0 {
+unsafe extern "C" fn is_complex_array(mut typid: Oid) -> bool {
     let mut elemtype: Oid = get_element_type(typid);
-    return ((elemtype != 0 as libc::c_int as Oid) as libc::c_int as bool_0 as libc::c_int
+    return ((elemtype != 0 as libc::c_int as Oid) as libc::c_int as bool as libc::c_int
         != 0 && typeOrDomainTypeRelid(elemtype) != 0 as libc::c_int as Oid)
-        as libc::c_int as bool_0;
+        as libc::c_int as bool;
 }
 unsafe extern "C" fn typeIsOfTypedTable(
     mut reltypeId: Oid,
     mut reloftypeId: Oid,
-) -> bool_0 {
+) -> bool {
     let mut relid: Oid = typeOrDomainTypeRelid(reltypeId);
-    let mut result: bool_0 = 0 as libc::c_int as bool_0;
+    let mut result: bool = false;
     if relid != 0 {
         let mut tp: HeapTuple = 0 as *mut HeapTupleData;
         let mut reltup: Form_pg_class = 0 as *mut FormData_pg_class;
@@ -2188,7 +2153,7 @@ unsafe extern "C" fn typeIsOfTypedTable(
         reltup = ((*tp).t_data as *mut libc::c_char)
             .offset((*(*tp).t_data).t_hoff as libc::c_int as isize) as Form_pg_class;
         if (*reltup).reloftype == reloftypeId {
-            result = 1 as libc::c_int as bool_0;
+            result = true;
         }
         ReleaseSysCache(tp);
     }
