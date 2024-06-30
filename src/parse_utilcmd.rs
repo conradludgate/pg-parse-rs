@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type MemoryContextData;
@@ -309,7 +317,7 @@ pub type NameData = nameData;
 #[repr(C)]
 pub struct ErrorContextCallback {
     pub previous: *mut ErrorContextCallback,
-    pub callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+    pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
 pub type MemoryContext = *mut MemoryContextData;
@@ -804,7 +812,7 @@ pub struct FmgrInfo {
     pub fn_mcxt: MemoryContext,
     pub fn_expr: fmNodePtr,
 }
-pub type PGFunction = Option::<unsafe extern "C" fn(FunctionCallInfo) -> Datum>;
+pub type PGFunction = Option<unsafe extern "C" fn(FunctionCallInfo) -> Datum>;
 pub type FunctionCallInfo = *mut FunctionCallInfoBaseData;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -836,8 +844,8 @@ pub struct ItemPointerData_Inner {
     pub ip_posid: OffsetNumber,
 }
 #[allow(dead_code, non_upper_case_globals)]
-const ItemPointerData_PADDING: usize = ::core::mem::size_of::<ItemPointerData>()
-    - ::core::mem::size_of::<ItemPointerData_Inner>();
+const ItemPointerData_PADDING: usize =
+    ::core::mem::size_of::<ItemPointerData>() - ::core::mem::size_of::<ItemPointerData_Inner>();
 pub type ItemPointer = *mut ItemPointerData;
 pub type LOCKMODE = libc::c_int;
 #[derive(Copy, Clone)]
@@ -989,36 +997,25 @@ pub struct IndexAmRoutine {
     pub aminitparallelscan: aminitparallelscan_function,
     pub amparallelrescan: amparallelrescan_function,
 }
-pub type amparallelrescan_function = Option::<unsafe extern "C" fn(IndexScanDesc) -> ()>;
+pub type amparallelrescan_function = Option<unsafe extern "C" fn(IndexScanDesc) -> ()>;
 pub type IndexScanDesc = *mut IndexScanDescData;
-pub type aminitparallelscan_function = Option::<
-    unsafe extern "C" fn(*mut libc::c_void) -> (),
->;
-pub type amestimateparallelscan_function = Option::<unsafe extern "C" fn() -> usize>;
-pub type amrestrpos_function = Option::<unsafe extern "C" fn(IndexScanDesc) -> ()>;
-pub type ammarkpos_function = Option::<unsafe extern "C" fn(IndexScanDesc) -> ()>;
-pub type amendscan_function = Option::<unsafe extern "C" fn(IndexScanDesc) -> ()>;
-pub type amgetbitmap_function = Option::<
-    unsafe extern "C" fn(IndexScanDesc, *mut TIDBitmap) -> i64,
->;
-pub type amgettuple_function = Option::<
-    unsafe extern "C" fn(IndexScanDesc, ScanDirection) -> bool,
->;
-pub type amrescan_function = Option::<
-    unsafe extern "C" fn(IndexScanDesc, ScanKey, libc::c_int, ScanKey, libc::c_int) -> (),
->;
-pub type ambeginscan_function = Option::<
-    unsafe extern "C" fn(Relation, libc::c_int, libc::c_int) -> IndexScanDesc,
->;
+pub type aminitparallelscan_function = Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>;
+pub type amestimateparallelscan_function = Option<unsafe extern "C" fn() -> usize>;
+pub type amrestrpos_function = Option<unsafe extern "C" fn(IndexScanDesc) -> ()>;
+pub type ammarkpos_function = Option<unsafe extern "C" fn(IndexScanDesc) -> ()>;
+pub type amendscan_function = Option<unsafe extern "C" fn(IndexScanDesc) -> ()>;
+pub type amgetbitmap_function = Option<unsafe extern "C" fn(IndexScanDesc, *mut TIDBitmap) -> i64>;
+pub type amgettuple_function = Option<unsafe extern "C" fn(IndexScanDesc, ScanDirection) -> bool>;
+pub type amrescan_function =
+    Option<unsafe extern "C" fn(IndexScanDesc, ScanKey, libc::c_int, ScanKey, libc::c_int) -> ()>;
+pub type ambeginscan_function =
+    Option<unsafe extern "C" fn(Relation, libc::c_int, libc::c_int) -> IndexScanDesc>;
 pub type Relation = *mut RelationData;
-pub type amadjustmembers_function = Option::<
-    unsafe extern "C" fn(Oid, Oid, *mut List, *mut List) -> (),
->;
-pub type amvalidate_function = Option::<unsafe extern "C" fn(Oid) -> bool>;
-pub type ambuildphasename_function = Option::<
-    unsafe extern "C" fn(i64) -> *mut libc::c_char,
->;
-pub type amproperty_function = Option::<
+pub type amadjustmembers_function =
+    Option<unsafe extern "C" fn(Oid, Oid, *mut List, *mut List) -> ()>;
+pub type amvalidate_function = Option<unsafe extern "C" fn(Oid) -> bool>;
+pub type ambuildphasename_function = Option<unsafe extern "C" fn(i64) -> *mut libc::c_char>;
+pub type amproperty_function = Option<
     unsafe extern "C" fn(
         Oid,
         libc::c_int,
@@ -1048,10 +1045,8 @@ pub const AMPROP_NULLS_FIRST: IndexAMProperty = 3;
 pub const AMPROP_DESC: IndexAMProperty = 2;
 pub const AMPROP_ASC: IndexAMProperty = 1;
 pub const AMPROP_UNKNOWN: IndexAMProperty = 0;
-pub type amoptions_function = Option::<
-    unsafe extern "C" fn(Datum, bool) -> *mut bytea,
->;
-pub type amcostestimate_function = Option::<
+pub type amoptions_function = Option<unsafe extern "C" fn(Datum, bool) -> *mut bytea>;
+pub type amcostestimate_function = Option<
     unsafe extern "C" fn(
         *mut PlannerInfo,
         *mut IndexPath,
@@ -1063,10 +1058,8 @@ pub type amcostestimate_function = Option::<
         *mut libc::c_double,
     ) -> (),
 >;
-pub type amcanreturn_function = Option::<
-    unsafe extern "C" fn(Relation, libc::c_int) -> bool,
->;
-pub type amvacuumcleanup_function = Option::<
+pub type amcanreturn_function = Option<unsafe extern "C" fn(Relation, libc::c_int) -> bool>;
+pub type amvacuumcleanup_function = Option<
     unsafe extern "C" fn(
         *mut IndexVacuumInfo,
         *mut IndexBulkDeleteResult,
@@ -1095,7 +1088,7 @@ pub struct IndexVacuumInfo {
     pub strategy: BufferAccessStrategy,
 }
 pub type BufferAccessStrategy = *mut BufferAccessStrategyData;
-pub type ambulkdelete_function = Option::<
+pub type ambulkdelete_function = Option<
     unsafe extern "C" fn(
         *mut IndexVacuumInfo,
         *mut IndexBulkDeleteResult,
@@ -1103,10 +1096,9 @@ pub type ambulkdelete_function = Option::<
         *mut libc::c_void,
     ) -> *mut IndexBulkDeleteResult,
 >;
-pub type IndexBulkDeleteCallback = Option::<
-    unsafe extern "C" fn(ItemPointer, *mut libc::c_void) -> bool,
->;
-pub type aminsert_function = Option::<
+pub type IndexBulkDeleteCallback =
+    Option<unsafe extern "C" fn(ItemPointer, *mut libc::c_void) -> bool>;
+pub type aminsert_function = Option<
     unsafe extern "C" fn(
         Relation,
         *mut Datum,
@@ -1188,18 +1180,9 @@ pub struct ParamExternData {
     pub pflags: u16,
     pub ptype: Oid,
 }
-pub type ParserSetupHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut libc::c_void) -> (),
->;
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
+pub type ParserSetupHook = Option<unsafe extern "C" fn(*mut ParseState, *mut libc::c_void) -> ()>;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Param {
@@ -1216,9 +1199,8 @@ pub const PARAM_MULTIEXPR: ParamKind = 3;
 pub const PARAM_SUBLINK: ParamKind = 2;
 pub const PARAM_EXEC: ParamKind = 1;
 pub const PARAM_EXTERN: ParamKind = 0;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ParamRef {
@@ -1226,9 +1208,8 @@ pub struct ParamRef {
     pub number: libc::c_int,
     pub location: libc::c_int,
 }
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ColumnRef {
@@ -1236,9 +1217,8 @@ pub struct ColumnRef {
     pub fields: *mut List,
     pub location: libc::c_int,
 }
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -1508,16 +1488,10 @@ pub type CTEMaterialize = libc::c_uint;
 pub const CTEMaterializeNever: CTEMaterialize = 2;
 pub const CTEMaterializeAlways: CTEMaterialize = 1;
 pub const CTEMaterializeDefault: CTEMaterialize = 0;
-pub type ParamCompileHook = Option::<
-    unsafe extern "C" fn(
-        ParamListInfo,
-        *mut Param,
-        *mut ExprState,
-        *mut Datum,
-        *mut bool,
-    ) -> (),
+pub type ParamCompileHook = Option<
+    unsafe extern "C" fn(ParamListInfo, *mut Param, *mut ExprState, *mut Datum, *mut bool) -> (),
 >;
-pub type ParamFetchHook = Option::<
+pub type ParamFetchHook = Option<
     unsafe extern "C" fn(
         ParamListInfo,
         libc::c_int,
@@ -1564,29 +1538,18 @@ pub struct PlanState {
 #[repr(C)]
 pub struct TupleTableSlotOps {
     pub base_slot_size: isize,
-    pub init: Option::<unsafe extern "C" fn(*mut TupleTableSlot) -> ()>,
-    pub release: Option::<unsafe extern "C" fn(*mut TupleTableSlot) -> ()>,
-    pub clear: Option::<unsafe extern "C" fn(*mut TupleTableSlot) -> ()>,
-    pub getsomeattrs: Option::<
-        unsafe extern "C" fn(*mut TupleTableSlot, libc::c_int) -> (),
-    >,
-    pub getsysattr: Option::<
-        unsafe extern "C" fn(*mut TupleTableSlot, libc::c_int, *mut bool) -> Datum,
-    >,
-    pub materialize: Option::<unsafe extern "C" fn(*mut TupleTableSlot) -> ()>,
-    pub copyslot: Option::<
-        unsafe extern "C" fn(*mut TupleTableSlot, *mut TupleTableSlot) -> (),
-    >,
-    pub get_heap_tuple: Option::<unsafe extern "C" fn(*mut TupleTableSlot) -> HeapTuple>,
-    pub get_minimal_tuple: Option::<
-        unsafe extern "C" fn(*mut TupleTableSlot) -> MinimalTuple,
-    >,
-    pub copy_heap_tuple: Option::<
-        unsafe extern "C" fn(*mut TupleTableSlot) -> HeapTuple,
-    >,
-    pub copy_minimal_tuple: Option::<
-        unsafe extern "C" fn(*mut TupleTableSlot) -> MinimalTuple,
-    >,
+    pub init: Option<unsafe extern "C" fn(*mut TupleTableSlot) -> ()>,
+    pub release: Option<unsafe extern "C" fn(*mut TupleTableSlot) -> ()>,
+    pub clear: Option<unsafe extern "C" fn(*mut TupleTableSlot) -> ()>,
+    pub getsomeattrs: Option<unsafe extern "C" fn(*mut TupleTableSlot, libc::c_int) -> ()>,
+    pub getsysattr:
+        Option<unsafe extern "C" fn(*mut TupleTableSlot, libc::c_int, *mut bool) -> Datum>,
+    pub materialize: Option<unsafe extern "C" fn(*mut TupleTableSlot) -> ()>,
+    pub copyslot: Option<unsafe extern "C" fn(*mut TupleTableSlot, *mut TupleTableSlot) -> ()>,
+    pub get_heap_tuple: Option<unsafe extern "C" fn(*mut TupleTableSlot) -> HeapTuple>,
+    pub get_minimal_tuple: Option<unsafe extern "C" fn(*mut TupleTableSlot) -> MinimalTuple>,
+    pub copy_heap_tuple: Option<unsafe extern "C" fn(*mut TupleTableSlot) -> HeapTuple>,
+    pub copy_minimal_tuple: Option<unsafe extern "C" fn(*mut TupleTableSlot) -> MinimalTuple>,
 }
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1693,7 +1656,7 @@ pub struct ExprContext_CB {
     pub function: ExprContextCallbackFunction,
     pub arg: Datum,
 }
-pub type ExprContextCallbackFunction = Option::<unsafe extern "C" fn(Datum) -> ()>;
+pub type ExprContextCallbackFunction = Option<unsafe extern "C" fn(Datum) -> ()>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct EState {
@@ -2064,21 +2027,17 @@ pub struct WorkerInstrumentation {
     pub num_workers: libc::c_int,
     pub instrument: [Instrumentation; 0],
 }
-pub type ExecProcNodeMtd = Option::<
-    unsafe extern "C" fn(*mut PlanState) -> *mut TupleTableSlot,
->;
-pub type ExprStateEvalFunc = Option::<
-    unsafe extern "C" fn(*mut ExprState, *mut ExprContext, *mut bool) -> Datum,
->;
+pub type ExecProcNodeMtd = Option<unsafe extern "C" fn(*mut PlanState) -> *mut TupleTableSlot>;
+pub type ExprStateEvalFunc =
+    Option<unsafe extern "C" fn(*mut ExprState, *mut ExprContext, *mut bool) -> Datum>;
 pub type IndexUniqueCheck = libc::c_uint;
 pub const UNIQUE_CHECK_EXISTING: IndexUniqueCheck = 3;
 pub const UNIQUE_CHECK_PARTIAL: IndexUniqueCheck = 2;
 pub const UNIQUE_CHECK_YES: IndexUniqueCheck = 1;
 pub const UNIQUE_CHECK_NO: IndexUniqueCheck = 0;
-pub type ambuildempty_function = Option::<unsafe extern "C" fn(Relation) -> ()>;
-pub type ambuild_function = Option::<
-    unsafe extern "C" fn(Relation, Relation, *mut IndexInfo) -> *mut IndexBuildResult,
->;
+pub type ambuildempty_function = Option<unsafe extern "C" fn(Relation) -> ()>;
+pub type ambuild_function =
+    Option<unsafe extern "C" fn(Relation, Relation, *mut IndexInfo) -> *mut IndexBuildResult>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct IndexBuildResult {
@@ -3061,33 +3020,28 @@ unsafe extern "C" fn list_head(mut l: *const List) -> *mut ListCell {
 }
 #[inline]
 unsafe extern "C" fn list_length(mut l: *const List) -> libc::c_int {
-    return if !l.is_null() { (*l).length } else { 0 as libc::c_int };
+    return if !l.is_null() {
+        (*l).length
+    } else {
+        0 as libc::c_int
+    };
 }
 #[inline]
-unsafe extern "C" fn list_nth_cell(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut ListCell {
+unsafe extern "C" fn list_nth_cell(mut list: *const List, mut n: libc::c_int) -> *mut ListCell {
     return &mut *((*list).elements).offset(n as isize) as *mut ListCell;
 }
 #[inline]
-unsafe extern "C" fn list_nth(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut libc::c_void {
+unsafe extern "C" fn list_nth(mut list: *const List, mut n: libc::c_int) -> *mut libc::c_void {
     return (*list_nth_cell(list, n)).ptr_value;
 }
 #[inline]
 unsafe extern "C" fn lnext(mut l: *const List, mut c: *const ListCell) -> *mut ListCell {
     c = c.offset(1);
     c;
-    if c
-        < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell
-            as *const ListCell
-    {
-        return c as *mut ListCell
+    if c < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell as *const ListCell {
+        return c as *mut ListCell;
     } else {
-        return 0 as *mut ListCell
+        return 0 as *mut ListCell;
     };
 }
 #[inline]
@@ -3103,17 +3057,11 @@ unsafe extern "C" fn get_partition_exprs(mut key: PartitionKey) -> *mut List {
     return (*key).partexprs;
 }
 #[inline]
-unsafe extern "C" fn get_partition_col_typid(
-    mut key: PartitionKey,
-    mut col: libc::c_int,
-) -> Oid {
+unsafe extern "C" fn get_partition_col_typid(mut key: PartitionKey, mut col: libc::c_int) -> Oid {
     return *((*key).parttypid).offset(col as isize);
 }
 #[inline]
-unsafe extern "C" fn get_partition_col_typmod(
-    mut key: PartitionKey,
-    mut col: libc::c_int,
-) -> i32 {
+unsafe extern "C" fn get_partition_col_typmod(mut key: PartitionKey, mut col: libc::c_int) -> i32 {
     return *((*key).parttypmod).offset(col as isize);
 }
 #[inline]
@@ -3149,10 +3097,9 @@ unsafe extern "C" fn generateSerialExtraStmts(
         };
         init
     };
-    while if !(option__state.l).is_null() && option__state.i < (*option__state.l).length
-    {
-        option = &mut *((*option__state.l).elements).offset(option__state.i as isize)
-            as *mut ListCell;
+    while if !(option__state.l).is_null() && option__state.i < (*option__state.l).length {
+        option =
+            &mut *((*option__state.l).elements).offset(option__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         option = 0 as *mut ListCell;
@@ -3211,8 +3158,8 @@ unsafe extern "C" fn generateSerialExtraStmts(
     let mut __error_0: libc::c_int = 0;
     if errstart(elevel__0, 0 as *const libc::c_char) != 0 {
         errmsg_internal(
-            b"%s will create implicit sequence \"%s\" for serial column \"%s.%s\"\0"
-                as *const u8 as *const libc::c_char,
+            b"%s will create implicit sequence \"%s\" for serial column \"%s.%s\"\0" as *const u8
+                as *const libc::c_char,
             (*cxt).stmtType,
             sname,
             (*(*cxt).relation).relname,
@@ -3237,8 +3184,7 @@ unsafe extern "C" fn generateSerialExtraStmts(
     (*seqstmt).sequence = makeRangeVar(snamespace, sname, -(1 as libc::c_int));
     (*seqstmt).options = seqoptions;
     if seqtypid != 0 {
-        (*seqstmt)
-            .options = lcons(
+        (*seqstmt).options = lcons(
             makeDefElem(
                 b"as\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 makeTypeNameFromOid(seqtypid, -(1 as libc::c_int)) as *mut Node,
@@ -3272,8 +3218,7 @@ unsafe extern "C" fn generateSerialExtraStmts(
             ptr_value: makeString((*column).colname) as *mut libc::c_void,
         },
     );
-    (*altseqstmt)
-        .options = list_make1_impl(
+    (*altseqstmt).options = list_make1_impl(
         T_List,
         ListCell {
             ptr_value: makeDefElem(
@@ -3312,38 +3257,33 @@ unsafe extern "C" fn transformColumnDefinition(
         && list_length((*(*column).typeName).names) == 1 as libc::c_int
         && (*(*column).typeName).pct_type == 0
     {
-        let mut typname: *mut libc::c_char = (*((*list_nth_cell(
-            (*(*column).typeName).names,
-            0 as libc::c_int,
-        ))
-            .ptr_value as *mut Value))
-            .val
-            .str_0;
-        if strcmp(typname, b"smallserial\0" as *const u8 as *const libc::c_char)
-            == 0 as libc::c_int
-            || strcmp(typname, b"serial2\0" as *const u8 as *const libc::c_char)
-                == 0 as libc::c_int
+        let mut typname: *mut libc::c_char =
+            (*((*list_nth_cell((*(*column).typeName).names, 0 as libc::c_int)).ptr_value
+                as *mut Value))
+                .val
+                .str_0;
+        if strcmp(
+            typname,
+            b"smallserial\0" as *const u8 as *const libc::c_char,
+        ) == 0 as libc::c_int
+            || strcmp(typname, b"serial2\0" as *const u8 as *const libc::c_char) == 0 as libc::c_int
         {
             is_serial = true;
             (*(*column).typeName).names = 0 as *mut libc::c_void as *mut List;
         } else if strcmp(typname, b"serial\0" as *const u8 as *const libc::c_char)
             == 0 as libc::c_int
-            || strcmp(typname, b"serial4\0" as *const u8 as *const libc::c_char)
-                == 0 as libc::c_int
+            || strcmp(typname, b"serial4\0" as *const u8 as *const libc::c_char) == 0 as libc::c_int
         {
             is_serial = true;
             (*(*column).typeName).names = 0 as *mut libc::c_void as *mut List;
         } else if strcmp(typname, b"bigserial\0" as *const u8 as *const libc::c_char)
             == 0 as libc::c_int
-            || strcmp(typname, b"serial8\0" as *const u8 as *const libc::c_char)
-                == 0 as libc::c_int
+            || strcmp(typname, b"serial8\0" as *const u8 as *const libc::c_char) == 0 as libc::c_int
         {
             is_serial = true;
             (*(*column).typeName).names = 0 as *mut libc::c_void as *mut List;
         }
-        if is_serial as libc::c_int != 0
-            && !((*(*column).typeName).arrayBounds).is_null()
-        {
+        if is_serial as libc::c_int != 0 && !((*(*column).typeName).arrayBounds).is_null() {
             let elevel_: libc::c_int = 21 as libc::c_int;
             let mut __error: libc::c_int = 0;
             if elevel_ >= 21 as libc::c_int {
@@ -3386,16 +3326,12 @@ unsafe extern "C" fn transformColumnDefinition(
             (*_result).type_0 = T_TypeCast;
             _result
         }) as *mut TypeCast;
-        (*castnode)
-            .typeName = SystemTypeName(
-            b"regclass\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        );
+        (*castnode).typeName =
+            SystemTypeName(b"regclass\0" as *const u8 as *const libc::c_char as *mut libc::c_char);
         (*castnode).arg = snamenode as *mut Node;
         (*castnode).location = -(1 as libc::c_int);
         funccallnode = makeFuncCall(
-            SystemFuncName(
-                b"nextval\0" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            ),
+            SystemFuncName(b"nextval\0" as *const u8 as *const libc::c_char as *mut libc::c_char),
             list_make1_impl(
                 T_List,
                 ListCell {
@@ -3414,11 +3350,7 @@ unsafe extern "C" fn transformColumnDefinition(
         (*constraint).location = -(1 as libc::c_int);
         (*constraint).raw_expr = funccallnode as *mut Node;
         (*constraint).cooked_expr = 0 as *mut libc::c_char;
-        (*column)
-            .constraints = lappend(
-            (*column).constraints,
-            constraint as *mut libc::c_void,
-        );
+        (*column).constraints = lappend((*column).constraints, constraint as *mut libc::c_void);
         constraint = ({
             let mut _result: *mut Node = 0 as *mut Node;
             (*_result).type_0 = T_Constraint;
@@ -3426,11 +3358,7 @@ unsafe extern "C" fn transformColumnDefinition(
         }) as *mut Constraint;
         (*constraint).contype = CONSTR_NOTNULL;
         (*constraint).location = -(1 as libc::c_int);
-        (*column)
-            .constraints = lappend(
-            (*column).constraints,
-            constraint as *mut libc::c_void,
-        );
+        (*column).constraints = lappend((*column).constraints, constraint as *mut libc::c_void);
     }
     transformConstraintAttrs(cxt, (*column).constraints);
     saw_nullable = false;
@@ -3445,8 +3373,7 @@ unsafe extern "C" fn transformColumnDefinition(
         init
     };
     while if !(clist__state.l).is_null() && clist__state.i < (*clist__state.l).length {
-        clist = &mut *((*clist__state.l).elements).offset(clist__state.i as isize)
-            as *mut ListCell;
+        clist = &mut *((*clist__state.l).elements).offset(clist__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         clist = 0 as *mut ListCell;
@@ -3457,9 +3384,7 @@ unsafe extern "C" fn transformColumnDefinition(
         let mut current_block_145: u64;
         match (*constraint_0).contype as libc::c_uint {
             0 => {
-                if saw_nullable as libc::c_int != 0
-                    && (*column).is_not_null as libc::c_int != 0
-                {
+                if saw_nullable as libc::c_int != 0 && (*column).is_not_null as libc::c_int != 0 {
                     let elevel__0: libc::c_int = 21 as libc::c_int;
                     let mut __error_0: libc::c_int = 0;
                     if elevel__0 >= 21 as libc::c_int {
@@ -3566,11 +3491,8 @@ unsafe extern "C" fn transformColumnDefinition(
                 current_block_145 = 11957990509374275265;
             }
             5 => {
-                (*cxt)
-                    .ckconstraints = lappend(
-                    (*cxt).ckconstraints,
-                    constraint_0 as *mut libc::c_void,
-                );
+                (*cxt).ckconstraints =
+                    lappend((*cxt).ckconstraints, constraint_0 as *mut libc::c_void);
                 current_block_145 = 11957990509374275265;
             }
             6 => {
@@ -3614,18 +3536,14 @@ unsafe extern "C" fn transformColumnDefinition(
                         abort();
                     }
                 }
-                (*constraint_0)
-                    .fk_attrs = list_make1_impl(
+                (*constraint_0).fk_attrs = list_make1_impl(
                     T_List,
                     ListCell {
                         ptr_value: makeString((*column).colname) as *mut libc::c_void,
                     },
                 );
-                (*cxt)
-                    .fkconstraints = lappend(
-                    (*cxt).fkconstraints,
-                    constraint_0 as *mut libc::c_void,
-                );
+                (*cxt).fkconstraints =
+                    lappend((*cxt).fkconstraints, constraint_0 as *mut libc::c_void);
                 current_block_145 = 11957990509374275265;
             }
             10 | 11 | 12 | 13 => {
@@ -3636,8 +3554,7 @@ unsafe extern "C" fn transformColumnDefinition(
                 let mut __error_13: libc::c_int = 0;
                 if errstart(elevel__13, 0 as *const libc::c_char) != 0 {
                     errmsg_internal(
-                        b"unrecognized constraint type: %d\0" as *const u8
-                            as *const libc::c_char,
+                        b"unrecognized constraint type: %d\0" as *const u8 as *const libc::c_char,
                         (*constraint_0).contype as libc::c_uint,
                     );
                     errfinish(
@@ -3663,19 +3580,15 @@ unsafe extern "C" fn transformColumnDefinition(
                     }
                 }
                 if ((*constraint_0).keys).is_null() {
-                    (*constraint_0)
-                        .keys = list_make1_impl(
+                    (*constraint_0).keys = list_make1_impl(
                         T_List,
                         ListCell {
                             ptr_value: makeString((*column).colname) as *mut libc::c_void,
                         },
                     );
                 }
-                (*cxt)
-                    .ixconstraints = lappend(
-                    (*cxt).ixconstraints,
-                    constraint_0 as *mut libc::c_void,
-                );
+                (*cxt).ixconstraints =
+                    lappend((*cxt).ixconstraints, constraint_0 as *mut libc::c_void);
             }
             _ => {}
         }
@@ -3741,11 +3654,7 @@ unsafe extern "C" fn transformTableConstraint(
                     abort();
                 }
             }
-            (*cxt)
-                .ixconstraints = lappend(
-                (*cxt).ixconstraints,
-                constraint as *mut libc::c_void,
-            );
+            (*cxt).ixconstraints = lappend((*cxt).ixconstraints, constraint as *mut libc::c_void);
         }
         7 => {
             if (*cxt).isforeign != 0 {
@@ -3755,11 +3664,7 @@ unsafe extern "C" fn transformTableConstraint(
                     abort();
                 }
             }
-            (*cxt)
-                .ixconstraints = lappend(
-                (*cxt).ixconstraints,
-                constraint as *mut libc::c_void,
-            );
+            (*cxt).ixconstraints = lappend((*cxt).ixconstraints, constraint as *mut libc::c_void);
         }
         8 => {
             if (*cxt).isforeign != 0 {
@@ -3776,18 +3681,10 @@ unsafe extern "C" fn transformTableConstraint(
                     abort();
                 }
             }
-            (*cxt)
-                .ixconstraints = lappend(
-                (*cxt).ixconstraints,
-                constraint as *mut libc::c_void,
-            );
+            (*cxt).ixconstraints = lappend((*cxt).ixconstraints, constraint as *mut libc::c_void);
         }
         5 => {
-            (*cxt)
-                .ckconstraints = lappend(
-                (*cxt).ckconstraints,
-                constraint as *mut libc::c_void,
-            );
+            (*cxt).ckconstraints = lappend((*cxt).ckconstraints, constraint as *mut libc::c_void);
         }
         9 => {
             if (*cxt).isforeign != 0 {
@@ -3797,19 +3694,14 @@ unsafe extern "C" fn transformTableConstraint(
                     abort();
                 }
             }
-            (*cxt)
-                .fkconstraints = lappend(
-                (*cxt).fkconstraints,
-                constraint as *mut libc::c_void,
-            );
+            (*cxt).fkconstraints = lappend((*cxt).fkconstraints, constraint as *mut libc::c_void);
         }
         0 | 1 | 2 | 10 | 11 | 12 | 13 => {
             let elevel__4: libc::c_int = 21 as libc::c_int;
             let mut __error_4: libc::c_int = 0;
             if errstart(elevel__4, 0 as *const libc::c_char) != 0 {
                 errmsg_internal(
-                    b"invalid context for constraint type %d\0" as *const u8
-                        as *const libc::c_char,
+                    b"invalid context for constraint type %d\0" as *const u8 as *const libc::c_char,
                     (*constraint).contype as libc::c_uint,
                 );
                 errfinish(
@@ -3828,8 +3720,7 @@ unsafe extern "C" fn transformTableConstraint(
             let mut __error_5: libc::c_int = 0;
             if errstart(elevel__5, 0 as *const libc::c_char) != 0 {
                 errmsg_internal(
-                    b"unrecognized constraint type: %d\0" as *const u8
-                        as *const libc::c_char,
+                    b"unrecognized constraint type: %d\0" as *const u8 as *const libc::c_char,
                     (*constraint).contype as libc::c_uint,
                 );
                 errfinish(
@@ -3856,15 +3747,15 @@ unsafe extern "C" fn transformOfType(
     tuple = typenameType(0 as *mut ParseState, ofTypename, 0 as *mut i32);
     check_of_type(tuple);
     ofTypeId = (*(((*tuple).t_data as *mut libc::c_char)
-        .offset((*(*tuple).t_data).t_hoff as libc::c_int as isize) as Form_pg_type))
+        .offset((*(*tuple).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_type))
         .oid;
     (*ofTypename).typeOid = ofTypeId;
     tupdesc = lookup_rowtype_tupdesc(ofTypeId, -(1 as libc::c_int));
     i = 0 as libc::c_int;
     while i < (*tupdesc).natts {
-        let mut attr: Form_pg_attribute = &mut *((*tupdesc).attrs)
-            .as_mut_ptr()
-            .offset(i as isize) as *mut FormData_pg_attribute;
+        let mut attr: Form_pg_attribute =
+            &mut *((*tupdesc).attrs).as_mut_ptr().offset(i as isize) as *mut FormData_pg_attribute;
         let mut n: *mut ColumnDef = 0 as *mut ColumnDef;
         if !((*attr).attisdropped != 0) {
             n = ({
@@ -3893,10 +3784,7 @@ unsafe extern "C" fn transformOfType(
     DecrTupleDescRefCount(tupdesc);
     ReleaseSysCache(tuple);
 }
-unsafe extern "C" fn get_collation(
-    mut collation: Oid,
-    mut actual_datatype: Oid,
-) -> *mut List {
+unsafe extern "C" fn get_collation(mut collation: Oid, mut actual_datatype: Oid) -> *mut List {
     let mut result: *mut List = 0 as *mut List;
     let mut ht_coll: HeapTuple = 0 as *mut HeapTupleData;
     let mut coll_rec: Form_pg_collation = 0 as *mut FormData_pg_collation;
@@ -3914,8 +3802,7 @@ unsafe extern "C" fn get_collation(
         let mut __error: libc::c_int = 0;
         if errstart(elevel_, 0 as *const libc::c_char) != 0 {
             errmsg_internal(
-                b"cache lookup failed for collation %u\0" as *const u8
-                    as *const libc::c_char,
+                b"cache lookup failed for collation %u\0" as *const u8 as *const libc::c_char,
                 collation,
             );
             errfinish(
@@ -3946,10 +3833,7 @@ unsafe extern "C" fn get_collation(
     ReleaseSysCache(ht_coll);
     return result;
 }
-unsafe extern "C" fn get_opclass(
-    mut opclass: Oid,
-    mut actual_datatype: Oid,
-) -> *mut List {
+unsafe extern "C" fn get_opclass(mut opclass: Oid, mut actual_datatype: Oid) -> *mut List {
     let mut result: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut ht_opc: HeapTuple = 0 as *mut HeapTupleData;
     let mut opc_rec: Form_pg_opclass = 0 as *mut FormData_pg_opclass;
@@ -3959,8 +3843,7 @@ unsafe extern "C" fn get_opclass(
         let mut __error: libc::c_int = 0;
         if errstart(elevel_, 0 as *const libc::c_char) != 0 {
             errmsg_internal(
-                b"cache lookup failed for opclass %u\0" as *const u8
-                    as *const libc::c_char,
+                b"cache lookup failed for opclass %u\0" as *const u8 as *const libc::c_char,
                 opclass,
             );
             errfinish(
@@ -3975,14 +3858,11 @@ unsafe extern "C" fn get_opclass(
         }
     }
     opc_rec = ((*ht_opc).t_data as *mut libc::c_char)
-        .offset((*(*ht_opc).t_data).t_hoff as libc::c_int as isize) as Form_pg_opclass;
+        .offset((*(*ht_opc).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_opclass;
     if GetDefaultOpClass(actual_datatype, (*opc_rec).opcmethod) != opclass {
-        let mut nsp_name: *mut libc::c_char = get_namespace_name(
-            (*opc_rec).opcnamespace,
-        );
-        let mut opc_name: *mut libc::c_char = pstrdup(
-            ((*opc_rec).opcname.data).as_mut_ptr(),
-        );
+        let mut nsp_name: *mut libc::c_char = get_namespace_name((*opc_rec).opcnamespace);
+        let mut opc_name: *mut libc::c_char = pstrdup(((*opc_rec).opcname.data).as_mut_ptr());
         result = list_make2_impl(
             T_List,
             ListCell {
@@ -4009,8 +3889,7 @@ unsafe extern "C" fn transformIndexConstraints(mut cxt: *mut CreateStmtContext) 
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -4039,8 +3918,7 @@ unsafe extern "C" fn transformIndexConstraints(mut cxt: *mut CreateStmtContext) 
         init
     };
     while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
-        lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -4059,8 +3937,7 @@ unsafe extern "C" fn transformIndexConstraints(mut cxt: *mut CreateStmtContext) 
                 init
             };
             while if !(k__state.l).is_null() && k__state.i < (*k__state.l).length {
-                k = &mut *((*k__state.l).elements).offset(k__state.i as isize)
-                    as *mut ListCell;
+                k = &mut *((*k__state.l).elements).offset(k__state.i as isize) as *mut ListCell;
                 true as libc::c_int
             } else {
                 k = 0 as *mut ListCell;
@@ -4071,29 +3948,31 @@ unsafe extern "C" fn transformIndexConstraints(mut cxt: *mut CreateStmtContext) 
                 if equal(
                     (*index).indexParams as *const libc::c_void,
                     (*priorindex).indexParams as *const libc::c_void,
-                ) as libc::c_int != 0
+                ) as libc::c_int
+                    != 0
                     && equal(
                         (*index).indexIncludingParams as *const libc::c_void,
                         (*priorindex).indexIncludingParams as *const libc::c_void,
-                    ) as libc::c_int != 0
+                    ) as libc::c_int
+                        != 0
                     && equal(
                         (*index).whereClause as *const libc::c_void,
                         (*priorindex).whereClause as *const libc::c_void,
-                    ) as libc::c_int != 0
+                    ) as libc::c_int
+                        != 0
                     && equal(
                         (*index).excludeOpNames as *const libc::c_void,
                         (*priorindex).excludeOpNames as *const libc::c_void,
-                    ) as libc::c_int != 0
-                    && strcmp((*index).accessMethod, (*priorindex).accessMethod)
-                        == 0 as libc::c_int
-                    && (*index).deferrable as libc::c_int
-                        == (*priorindex).deferrable as libc::c_int
+                    ) as libc::c_int
+                        != 0
+                    && strcmp((*index).accessMethod, (*priorindex).accessMethod) == 0 as libc::c_int
+                    && (*index).deferrable as libc::c_int == (*priorindex).deferrable as libc::c_int
                     && (*index).initdeferred as libc::c_int
                         == (*priorindex).initdeferred as libc::c_int
                 {
-                    (*priorindex)
-                        .unique = ((*priorindex).unique as libc::c_int
-                        | (*index).unique as libc::c_int) as bool;
+                    (*priorindex).unique = ((*priorindex).unique as libc::c_int
+                        | (*index).unique as libc::c_int)
+                        as bool;
                     if ((*priorindex).idxname).is_null() {
                         (*priorindex).idxname = (*index).idxname;
                     }
@@ -4132,19 +4011,16 @@ unsafe extern "C" fn transformCheckConstraints(
             };
             init
         };
-        while if !(ckclist__state.l).is_null()
-            && ckclist__state.i < (*ckclist__state.l).length
-        {
-            ckclist = &mut *((*ckclist__state.l).elements)
-                .offset(ckclist__state.i as isize) as *mut ListCell;
+        while if !(ckclist__state.l).is_null() && ckclist__state.i < (*ckclist__state.l).length {
+            ckclist = &mut *((*ckclist__state.l).elements).offset(ckclist__state.i as isize)
+                as *mut ListCell;
             true as libc::c_int
         } else {
             ckclist = 0 as *mut ListCell;
             false as libc::c_int
         } != 0
         {
-            let mut constraint: *mut Constraint = (*ckclist).ptr_value
-                as *mut Constraint;
+            let mut constraint: *mut Constraint = (*ckclist).ptr_value as *mut Constraint;
             (*constraint).skip_validation = true;
             (*constraint).initially_valid = true;
             ckclist__state.i += 1;
@@ -4169,19 +4045,16 @@ unsafe extern "C" fn transformFKConstraints(
             };
             init
         };
-        while if !(fkclist__state.l).is_null()
-            && fkclist__state.i < (*fkclist__state.l).length
-        {
-            fkclist = &mut *((*fkclist__state.l).elements)
-                .offset(fkclist__state.i as isize) as *mut ListCell;
+        while if !(fkclist__state.l).is_null() && fkclist__state.i < (*fkclist__state.l).length {
+            fkclist = &mut *((*fkclist__state.l).elements).offset(fkclist__state.i as isize)
+                as *mut ListCell;
             true as libc::c_int
         } else {
             fkclist = 0 as *mut ListCell;
             false as libc::c_int
         } != 0
         {
-            let mut constraint: *mut Constraint = (*fkclist).ptr_value
-                as *mut Constraint;
+            let mut constraint: *mut Constraint = (*fkclist).ptr_value as *mut Constraint;
             (*constraint).skip_validation = true;
             (*constraint).initially_valid = true;
             fkclist__state.i += 1;
@@ -4207,16 +4080,15 @@ unsafe extern "C" fn transformFKConstraints(
         while if !(fkclist__state_0.l).is_null()
             && fkclist__state_0.i < (*fkclist__state_0.l).length
         {
-            fkclist = &mut *((*fkclist__state_0.l).elements)
-                .offset(fkclist__state_0.i as isize) as *mut ListCell;
+            fkclist = &mut *((*fkclist__state_0.l).elements).offset(fkclist__state_0.i as isize)
+                as *mut ListCell;
             true as libc::c_int
         } else {
             fkclist = 0 as *mut ListCell;
             false as libc::c_int
         } != 0
         {
-            let mut constraint_0: *mut Constraint = (*fkclist).ptr_value
-                as *mut Constraint;
+            let mut constraint_0: *mut Constraint = (*fkclist).ptr_value as *mut Constraint;
             let mut altercmd: *mut AlterTableCmd = ({
                 let mut _result: *mut Node = 0 as *mut Node;
                 (*_result).type_0 = T_AlterTableCmd;
@@ -4225,8 +4097,7 @@ unsafe extern "C" fn transformFKConstraints(
             (*altercmd).subtype = AT_AddConstraint;
             (*altercmd).name = 0 as *mut libc::c_char;
             (*altercmd).def = constraint_0 as *mut Node;
-            (*alterstmt)
-                .cmds = lappend((*alterstmt).cmds, altercmd as *mut libc::c_void);
+            (*alterstmt).cmds = lappend((*alterstmt).cmds, altercmd as *mut libc::c_void);
             fkclist__state_0.i += 1;
             fkclist__state_0.i;
         }
@@ -4250,24 +4121,11 @@ pub unsafe extern "C" fn transformIndexStmt(
     pstate = make_parsestate(0 as *mut ParseState);
     (*pstate).p_sourcetext = queryString;
     rel = relation_open(relid, 0 as libc::c_int);
-    nsitem = addRangeTableEntryForRelation(
-        pstate,
-        rel,
-        1 as libc::c_int,
-        0 as *mut Alias,
-        false,
-        true,
-    );
-    addNSItemToQuery(
-        pstate,
-        nsitem,
-        false,
-        true,
-        true,
-    );
+    nsitem =
+        addRangeTableEntryForRelation(pstate, rel, 1 as libc::c_int, 0 as *mut Alias, false, true);
+    addNSItemToQuery(pstate, nsitem, false, true, true);
     if !((*stmt).whereClause).is_null() {
-        (*stmt)
-            .whereClause = transformWhereClause(
+        (*stmt).whereClause = transformWhereClause(
             pstate,
             (*stmt).whereClause,
             EXPR_KIND_INDEX_PREDICATE,
@@ -4295,8 +4153,7 @@ pub unsafe extern "C" fn transformIndexStmt(
             if ((*ielem).indexcolname).is_null() {
                 (*ielem).indexcolname = FigureIndexColname((*ielem).expr);
             }
-            (*ielem)
-                .expr = transformExpr(pstate, (*ielem).expr, EXPR_KIND_INDEX_EXPRESSION);
+            (*ielem).expr = transformExpr(pstate, (*ielem).expr, EXPR_KIND_INDEX_EXPRESSION);
             assign_expr_collations(pstate, (*ielem).expr);
         }
         l__state.i += 1;
@@ -4330,8 +4187,7 @@ unsafe extern "C" fn transformConstraintAttrs(
         init
     };
     while if !(clist__state.l).is_null() && clist__state.i < (*clist__state.l).length {
-        clist = &mut *((*clist__state.l).elements).offset(clist__state.i as isize)
-            as *mut ListCell;
+        clist = &mut *((*clist__state.l).elements).offset(clist__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         clist = 0 as *mut ListCell;
@@ -4501,22 +4357,17 @@ unsafe extern "C" fn transformColumnType(
     mut cxt: *mut CreateStmtContext,
     mut column: *mut ColumnDef,
 ) {
-    let mut ctype: Type = typenameType(
-        (*cxt).pstate,
-        (*column).typeName,
-        0 as *mut i32,
-    );
+    let mut ctype: Type = typenameType((*cxt).pstate, (*column).typeName, 0 as *mut i32);
     if !((*column).collClause).is_null() {
         let mut typtup: Form_pg_type = ((*ctype).t_data as *mut libc::c_char)
-            .offset((*(*ctype).t_data).t_hoff as libc::c_int as isize) as Form_pg_type;
+            .offset((*(*ctype).t_data).t_hoff as libc::c_int as isize)
+            as Form_pg_type;
         LookupCollation(
             (*cxt).pstate,
             (*(*column).collClause).collname,
             (*(*column).collClause).location,
         );
-        if ((*typtup).typcollation != 0 as libc::c_int as Oid) as libc::c_int as bool
-            == 0
-        {
+        if ((*typtup).typcollation != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
             let elevel_: libc::c_int = 21 as libc::c_int;
             let mut __error: libc::c_int = 0;
             if elevel_ >= 21 as libc::c_int {
@@ -4527,9 +4378,7 @@ unsafe extern "C" fn transformColumnType(
     ReleaseSysCache(ctype);
 }
 #[no_mangle]
-pub unsafe extern "C" fn transformCreateSchemaStmt(
-    mut stmt: *mut CreateSchemaStmt,
-) -> *mut List {
+pub unsafe extern "C" fn transformCreateSchemaStmt(mut stmt: *mut CreateSchemaStmt) -> *mut List {
     let mut cxt: CreateSchemaStmtContext = CreateSchemaStmtContext {
         stmtType: 0 as *const libc::c_char,
         schemaname: 0 as *mut libc::c_char,
@@ -4559,11 +4408,9 @@ pub unsafe extern "C" fn transformCreateSchemaStmt(
         };
         init
     };
-    while if !(elements__state.l).is_null()
-        && elements__state.i < (*elements__state.l).length
-    {
-        elements = &mut *((*elements__state.l).elements)
-            .offset(elements__state.i as isize) as *mut ListCell;
+    while if !(elements__state.l).is_null() && elements__state.i < (*elements__state.l).length {
+        elements = &mut *((*elements__state.l).elements).offset(elements__state.i as isize)
+            as *mut ListCell;
         true as libc::c_int
     } else {
         elements = 0 as *mut ListCell;
@@ -4605,8 +4452,7 @@ pub unsafe extern "C" fn transformCreateSchemaStmt(
                 let mut __error: libc::c_int = 0;
                 if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                     errmsg_internal(
-                        b"unrecognized node type: %d\0" as *const u8
-                            as *const libc::c_char,
+                        b"unrecognized node type: %d\0" as *const u8 as *const libc::c_char,
                         (*(element as *const Node)).type_0 as libc::c_int,
                     );
                     errfinish(
@@ -4659,8 +4505,7 @@ unsafe extern "C" fn transformPartitionCmd(
     let mut __error_2: libc::c_int = 0;
     if errstart(elevel__2, 0 as *const libc::c_char) != 0 {
         errmsg_internal(
-            b"\"%s\" is not a partitioned table or index\0" as *const u8
-                as *const libc::c_char,
+            b"\"%s\" is not a partitioned table or index\0" as *const u8 as *const libc::c_char,
             ((*(*parentRel).rd_rel).relname.data).as_mut_ptr(),
         );
         errfinish(
@@ -4732,8 +4577,7 @@ pub unsafe extern "C" fn transformPartitionBound(
                 abort();
             }
         }
-        if *((*key).partattrs).offset(0 as libc::c_int as isize) as libc::c_int
-            != 0 as libc::c_int
+        if *((*key).partattrs).offset(0 as libc::c_int as isize) as libc::c_int != 0 as libc::c_int
         {
             colname = get_attname(
                 (*parent).rd_id,
@@ -4763,8 +4607,8 @@ pub unsafe extern "C" fn transformPartitionBound(
             init
         };
         while if !(cell__state.l).is_null() && cell__state.i < (*cell__state.l).length {
-            cell = &mut *((*cell__state.l).elements).offset(cell__state.i as isize)
-                as *mut ListCell;
+            cell =
+                &mut *((*cell__state.l).elements).offset(cell__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             cell = 0 as *mut ListCell;
@@ -4791,11 +4635,9 @@ pub unsafe extern "C" fn transformPartitionBound(
                 };
                 init
             };
-            while if !(cell2__state.l).is_null()
-                && cell2__state.i < (*cell2__state.l).length
-            {
-                cell2 = &mut *((*cell2__state.l).elements)
-                    .offset(cell2__state.i as isize) as *mut ListCell;
+            while if !(cell2__state.l).is_null() && cell2__state.i < (*cell2__state.l).length {
+                cell2 = &mut *((*cell2__state.l).elements).offset(cell2__state.i as isize)
+                    as *mut ListCell;
                 true as libc::c_int
             } else {
                 cell2 = 0 as *mut ListCell;
@@ -4803,9 +4645,7 @@ pub unsafe extern "C" fn transformPartitionBound(
             } != 0
             {
                 let mut value2: *mut Const = (*cell2).ptr_value as *mut Const;
-                if equal(value as *const libc::c_void, value2 as *const libc::c_void)
-                    != 0
-                {
+                if equal(value as *const libc::c_void, value2 as *const libc::c_void) != 0 {
                     duplicate = true;
                     break;
                 } else {
@@ -4814,11 +4654,8 @@ pub unsafe extern "C" fn transformPartitionBound(
                 }
             }
             if !(duplicate != 0) {
-                (*result_spec)
-                    .listdatums = lappend(
-                    (*result_spec).listdatums,
-                    value as *mut libc::c_void,
-                );
+                (*result_spec).listdatums =
+                    lappend((*result_spec).listdatums, value as *mut libc::c_void);
             }
             cell__state.i += 1;
             cell__state.i;
@@ -4845,25 +4682,16 @@ pub unsafe extern "C" fn transformPartitionBound(
                 abort();
             }
         }
-        (*result_spec)
-            .lowerdatums = transformPartitionRangeBounds(
-            pstate,
-            (*spec).lowerdatums,
-            parent,
-        );
-        (*result_spec)
-            .upperdatums = transformPartitionRangeBounds(
-            pstate,
-            (*spec).upperdatums,
-            parent,
-        );
+        (*result_spec).lowerdatums =
+            transformPartitionRangeBounds(pstate, (*spec).lowerdatums, parent);
+        (*result_spec).upperdatums =
+            transformPartitionRangeBounds(pstate, (*spec).upperdatums, parent);
     } else {
         let elevel__7: libc::c_int = 21 as libc::c_int;
         let mut __error_7: libc::c_int = 0;
         if errstart(elevel__7, 0 as *const libc::c_char) != 0 {
             errmsg_internal(
-                b"unexpected partition strategy: %d\0" as *const u8
-                    as *const libc::c_char,
+                b"unexpected partition strategy: %d\0" as *const u8 as *const libc::c_char,
                 strategy as libc::c_int,
             );
             errfinish(
@@ -4900,8 +4728,7 @@ unsafe extern "C" fn transformPartitionRangeBounds(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -4916,9 +4743,9 @@ unsafe extern "C" fn transformPartitionRangeBounds(
             let mut cref: *mut ColumnRef = expr as *mut ColumnRef;
             let mut cname: *mut libc::c_char = 0 as *mut libc::c_char;
             if list_length((*cref).fields) == 1 as libc::c_int
-                && (*((*list_nth_cell((*cref).fields, 0 as libc::c_int)).ptr_value
-                    as *const Node))
-                    .type_0 as libc::c_uint == T_String as libc::c_int as libc::c_uint
+                && (*((*list_nth_cell((*cref).fields, 0 as libc::c_int)).ptr_value as *const Node))
+                    .type_0 as libc::c_uint
+                    == T_String as libc::c_int as libc::c_uint
             {
                 cname = (*((*list_nth_cell((*cref).fields, 0 as libc::c_int)).ptr_value
                     as *mut Value))
@@ -4936,10 +4763,8 @@ unsafe extern "C" fn transformPartitionRangeBounds(
                     }) as *mut PartitionRangeDatum;
                     (*prd).kind = PARTITION_RANGE_DATUM_MINVALUE;
                     (*prd).value = 0 as *mut Node;
-                } else if strcmp(
-                    b"maxvalue\0" as *const u8 as *const libc::c_char,
-                    cname,
-                ) == 0 as libc::c_int
+                } else if strcmp(b"maxvalue\0" as *const u8 as *const libc::c_char, cname)
+                    == 0 as libc::c_int
                 {
                     prd = ({
                         let mut _result: *mut Node = 0 as *mut Node;
@@ -4957,8 +4782,7 @@ unsafe extern "C" fn transformPartitionRangeBounds(
             let mut coltypmod: i32 = 0;
             let mut partcollation: Oid = 0;
             let mut value: *mut Const = 0 as *mut Const;
-            if *((*key).partattrs).offset(i as isize) as libc::c_int != 0 as libc::c_int
-            {
+            if *((*key).partattrs).offset(i as isize) as libc::c_int != 0 as libc::c_int {
                 colname = get_attname(
                     (*parent).rd_id,
                     *((*key).partattrs).offset(i as isize),
@@ -5013,10 +4837,7 @@ unsafe extern "C" fn transformPartitionRangeBounds(
     validateInfiniteBounds(pstate, result);
     return result;
 }
-unsafe extern "C" fn validateInfiniteBounds(
-    mut pstate: *mut ParseState,
-    mut blist: *mut List,
-) {
+unsafe extern "C" fn validateInfiniteBounds(mut pstate: *mut ParseState, mut blist: *mut List) {
     let mut lc: *mut ListCell = 0 as *mut ListCell;
     let mut kind: PartitionRangeDatumKind = PARTITION_RANGE_DATUM_VALUE;
     let mut lc__state: ForEachState = {
@@ -5027,16 +4848,14 @@ unsafe extern "C" fn validateInfiniteBounds(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
         false as libc::c_int
     } != 0
     {
-        let mut prd: *mut PartitionRangeDatum = (*lc).ptr_value
-            as *mut PartitionRangeDatum;
+        let mut prd: *mut PartitionRangeDatum = (*lc).ptr_value as *mut PartitionRangeDatum;
         if !(kind as libc::c_int == (*prd).kind as libc::c_int) {
             match kind as libc::c_int {
                 0 => {
@@ -5090,13 +4909,11 @@ unsafe extern "C" fn transformPartitionBoundValue(
             abort();
         }
     }
-    if !((*(value as *const Node)).type_0 as libc::c_uint
-        == T_Const as libc::c_int as libc::c_uint)
+    if !((*(value as *const Node)).type_0 as libc::c_uint == T_Const as libc::c_int as libc::c_uint)
     {
         assign_expr_collations(pstate, value);
         value = expression_planner(value as *mut Expr) as *mut Node;
-        value = evaluate_expr(value as *mut Expr, colType, colTypmod, partCollation)
-            as *mut Node;
+        value = evaluate_expr(value as *mut Expr, colType, colTypmod, partCollation) as *mut Node;
         if !((*(value as *const Node)).type_0 as libc::c_uint
             == T_Const as libc::c_int as libc::c_uint)
         {

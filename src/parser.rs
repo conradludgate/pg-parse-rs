@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types, linkage)]
 // extern "C" {
 //     pub type SelectLimit;
@@ -87,14 +95,14 @@ pub struct _RuneCharClass {
 pub struct _RuneLocale {
     pub __magic: [libc::c_char; 8],
     pub __encoding: [libc::c_char; 32],
-    pub __sgetrune: Option::<
+    pub __sgetrune: Option<
         unsafe extern "C" fn(
             *const libc::c_char,
             __darwin_size_t,
             *mut *const libc::c_char,
         ) -> __darwin_rune_t,
     >,
-    pub __sputrune: Option::<
+    pub __sputrune: Option<
         unsafe extern "C" fn(
             __darwin_rune_t,
             *mut libc::c_char,
@@ -118,7 +126,7 @@ pub struct _RuneLocale {
 #[repr(C)]
 pub struct ErrorContextCallback {
     pub previous: *mut ErrorContextCallback,
-    pub callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+    pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
 pub type pg_wchar = libc::c_uint;
@@ -923,9 +931,8 @@ pub struct FunctionParameter {
     pub mode: FunctionParameterMode,
     pub defexpr: *mut Node,
 }
-pub type ScanKeywordHashFunc = Option::<
-    unsafe extern "C" fn(*const libc::c_void, isize) -> libc::c_int,
->;
+pub type ScanKeywordHashFunc =
+    Option<unsafe extern "C" fn(*const libc::c_void, isize) -> libc::c_int>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ScanKeywordList {
@@ -1042,8 +1049,7 @@ unsafe extern "C" fn __isctype(
     return if _c < 0 as libc::c_int || _c >= (1 as libc::c_int) << 8 as libc::c_int {
         0 as libc::c_int
     } else {
-        (_DefaultRuneLocale.__runetype[_c as usize] as libc::c_ulong & _f != 0)
-            as libc::c_int
+        (_DefaultRuneLocale.__runetype[_c as usize] as libc::c_ulong & _f != 0) as libc::c_int
     };
 }
 #[no_mangle]
@@ -1059,13 +1065,13 @@ unsafe extern "C" fn is_valid_unicode_codepoint(mut c: pg_wchar) -> bool {
 }
 #[inline]
 unsafe extern "C" fn is_utf16_surrogate_first(mut c: pg_wchar) -> bool {
-    return (c >= 0xd800 as libc::c_int as pg_wchar
-        && c <= 0xdbff as libc::c_int as pg_wchar) as libc::c_int as bool;
+    return (c >= 0xd800 as libc::c_int as pg_wchar && c <= 0xdbff as libc::c_int as pg_wchar)
+        as libc::c_int as bool;
 }
 #[inline]
 unsafe extern "C" fn is_utf16_surrogate_second(mut c: pg_wchar) -> bool {
-    return (c >= 0xdc00 as libc::c_int as pg_wchar
-        && c <= 0xdfff as libc::c_int as pg_wchar) as libc::c_int as bool;
+    return (c >= 0xdc00 as libc::c_int as pg_wchar && c <= 0xdfff as libc::c_int as pg_wchar)
+        as libc::c_int as bool;
 }
 #[inline]
 unsafe extern "C" fn surrogate_pair_to_codepoint(
@@ -1147,8 +1153,7 @@ pub unsafe extern "C" fn base_yylex(
     mut llocp: *mut libc::c_int,
     mut yyscanner: core_yyscan_t,
 ) -> libc::c_int {
-    let mut yyextra: *mut base_yy_extra_type = *(yyscanner
-        as *mut *mut base_yy_extra_type);
+    let mut yyextra: *mut base_yy_extra_type = *(yyscanner as *mut *mut base_yy_extra_type);
     let mut cur_token: libc::c_int = 0;
     let mut next_token: libc::c_int = 0;
     let mut cur_token_length: libc::c_int = 0;
@@ -1175,14 +1180,12 @@ pub unsafe extern "C" fn base_yylex(
             cur_token_length = 4 as libc::c_int;
         }
         259 | 262 => {
-            cur_token_length = strlen(
-                ((*yyextra).core_yy_extra.scanbuf).offset(*llocp as isize),
-            ) as libc::c_int;
+            cur_token_length =
+                strlen(((*yyextra).core_yy_extra.scanbuf).offset(*llocp as isize)) as libc::c_int;
         }
         _ => return cur_token,
     }
-    (*yyextra)
-        .lookahead_end = ((*yyextra).core_yy_extra.scanbuf)
+    (*yyextra).lookahead_end = ((*yyextra).core_yy_extra.scanbuf)
         .offset(*llocp as isize)
         .offset(cur_token_length as isize);
     cur_yylloc = *llocp;
@@ -1194,63 +1197,49 @@ pub unsafe extern "C" fn base_yylex(
     *(*yyextra).lookahead_end = '\0' as i32 as libc::c_char;
     (*yyextra).have_lookahead = true;
     match cur_token {
-        520 => {
-            match next_token {
-                304 | 447 | 484 | 442 | 627 => {
-                    cur_token = 727 as libc::c_int;
-                }
-                _ => {}
+        520 => match next_token {
+            304 | 447 | 484 | 442 | 627 => {
+                cur_token = 727 as libc::c_int;
             }
-        }
-        527 => {
-            match next_token {
-                415 | 477 => {
-                    cur_token = 728 as libc::c_int;
-                }
-                _ => {}
+            _ => {}
+        },
+        527 => match next_token {
+            415 | 477 => {
+                cur_token = 728 as libc::c_int;
             }
-        }
-        706 => {
-            match next_token {
-                661 | 542 => {
-                    cur_token = 729 as libc::c_int;
-                }
-                _ => {}
+            _ => {}
+        },
+        706 => match next_token {
+            661 | 542 => {
+                cur_token = 729 as libc::c_int;
             }
-        }
+            _ => {}
+        },
         259 | 262 => {
             if next_token == 675 as libc::c_int {
                 let mut escstr: *const libc::c_char = 0 as *const libc::c_char;
                 cur_yylloc = *llocp;
                 *(*yyextra).lookahead_end = (*yyextra).lookahead_hold_char;
-                next_token = core_yylex(
-                    &mut (*yyextra).lookahead_yylval,
-                    llocp,
-                    yyscanner,
-                );
+                next_token = core_yylex(&mut (*yyextra).lookahead_yylval, llocp, yyscanner);
                 if next_token != 261 as libc::c_int {
                     scanner_yyerror(
-                        b"UESCAPE must be followed by a simple string literal\0"
-                            as *const u8 as *const libc::c_char,
+                        b"UESCAPE must be followed by a simple string literal\0" as *const u8
+                            as *const libc::c_char,
                         yyscanner,
                     );
                 }
                 escstr = (*yyextra).lookahead_yylval.str_0;
                 if strlen(escstr) != 1 as libc::c_int as libc::c_ulong
-                    || check_uescapechar(
-                        *escstr.offset(0 as libc::c_int as isize) as libc::c_uchar,
-                    ) == 0
+                    || check_uescapechar(*escstr.offset(0 as libc::c_int as isize) as libc::c_uchar)
+                        == 0
                 {
                     scanner_yyerror(
-                        b"invalid Unicode escape character\0" as *const u8
-                            as *const libc::c_char,
+                        b"invalid Unicode escape character\0" as *const u8 as *const libc::c_char,
                         yyscanner,
                     );
                 }
                 *llocp = cur_yylloc;
-                (*lvalp)
-                    .core_yystype
-                    .str_0 = str_udeescape(
+                (*lvalp).core_yystype.str_0 = str_udeescape(
                     (*lvalp).core_yystype.str_0,
                     *escstr.offset(0 as libc::c_int as isize),
                     *llocp,
@@ -1258,9 +1247,7 @@ pub unsafe extern "C" fn base_yylex(
                 );
                 (*yyextra).have_lookahead = false;
             } else {
-                (*lvalp)
-                    .core_yystype
-                    .str_0 = str_udeescape(
+                (*lvalp).core_yystype.str_0 = str_udeescape(
                     (*lvalp).core_yystype.str_0,
                     '\\' as i32 as libc::c_char,
                     *llocp,
@@ -1295,12 +1282,10 @@ unsafe extern "C" fn hexval(mut c: libc::c_uchar) -> libc::c_uint {
     let elevel_: libc::c_int = 21 as libc::c_int;
     let mut __error: libc::c_int = 0;
     if errstart(elevel_, 0 as *const libc::c_char) != 0 {
-        errmsg_internal(
-            b"invalid hexadecimal digit\0" as *const u8 as *const libc::c_char,
-        );
+        errmsg_internal(b"invalid hexadecimal digit\0" as *const u8 as *const libc::c_char);
         errfinish(
-            b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parser.c\0"
-                as *const u8 as *const libc::c_char,
+            b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parser.c\0" as *const u8
+                as *const libc::c_char,
             310 as libc::c_int,
             0 as *const libc::c_char,
         );
@@ -1317,21 +1302,15 @@ unsafe extern "C" fn check_unicode_value(mut c: pg_wchar) {
         if errstart(elevel_, 0 as *const libc::c_char) != 0 {
             errcode(
                 ('4' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                    + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                        << 6 as libc::c_int)
-                    + (('6' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                        << 12 as libc::c_int)
-                    + (('0' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                        << 18 as libc::c_int)
-                    + (('1' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                        << 24 as libc::c_int),
+                    + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int) << 6 as libc::c_int)
+                    + (('6' as i32 - '0' as i32 & 0x3f as libc::c_int) << 12 as libc::c_int)
+                    + (('0' as i32 - '0' as i32 & 0x3f as libc::c_int) << 18 as libc::c_int)
+                    + (('1' as i32 - '0' as i32 & 0x3f as libc::c_int) << 24 as libc::c_int),
             );
-            errmsg(
-                b"invalid Unicode escape value\0" as *const u8 as *const libc::c_char,
-            );
+            errmsg(b"invalid Unicode escape value\0" as *const u8 as *const libc::c_char);
             errfinish(
-                b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parser.c\0"
-                    as *const u8 as *const libc::c_char,
+                b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parser.c\0" as *const u8
+                    as *const libc::c_char,
                 321 as libc::c_int,
                 0 as *const libc::c_char,
             );
@@ -1342,13 +1321,15 @@ unsafe extern "C" fn check_unicode_value(mut c: pg_wchar) {
     }
 }
 unsafe extern "C" fn check_uescapechar(mut escape: libc::c_uchar) -> bool {
-    if isxdigit(escape as libc::c_int) != 0 || escape as libc::c_int == '+' as i32
-        || escape as libc::c_int == '\'' as i32 || escape as libc::c_int == '"' as i32
+    if isxdigit(escape as libc::c_int) != 0
+        || escape as libc::c_int == '+' as i32
+        || escape as libc::c_int == '\'' as i32
+        || escape as libc::c_int == '"' as i32
         || scanner_isspace(escape as libc::c_char) as libc::c_int != 0
     {
-        return false
+        return false;
     } else {
-        return true
+        return true;
     };
 }
 unsafe extern "C" fn str_udeescape(
@@ -1384,25 +1365,20 @@ unsafe extern "C" fn str_udeescape(
             break;
         }
         let mut out_dist: isize = out.offset_from(new) as libc::c_long as isize;
-        if out_dist
-            > new_len.wrapping_sub((16 as libc::c_int + 1 as libc::c_int) as isize)
-        {
+        if out_dist > new_len.wrapping_sub((16 as libc::c_int + 1 as libc::c_int) as isize) {
             new_len = new_len * 2 as libc::c_int as isize;
             new = repalloc(new as *mut libc::c_void, new_len) as *mut libc::c_char;
             out = new.offset(out_dist as isize);
         }
-        if *in_0.offset(0 as libc::c_int as isize) as libc::c_int
-            == escape as libc::c_int
-        {
+        if *in_0.offset(0 as libc::c_int as isize) as libc::c_int == escape as libc::c_int {
             setup_scanner_errposition_callback(
                 &mut scbstate,
                 yyscanner,
-                (in_0.offset_from(str) as libc::c_long + position as libc::c_long
+                (in_0.offset_from(str) as libc::c_long
+                    + position as libc::c_long
                     + 3 as libc::c_int as libc::c_long) as libc::c_int,
             );
-            if *in_0.offset(1 as libc::c_int as isize) as libc::c_int
-                == escape as libc::c_int
-            {
+            if *in_0.offset(1 as libc::c_int as isize) as libc::c_int == escape as libc::c_int {
                 if pair_first != 0 {
                     current_block = 2947293050515664763;
                     break;
@@ -1412,25 +1388,18 @@ unsafe extern "C" fn str_udeescape(
                 *fresh0 = escape;
                 in_0 = in_0.offset(2 as libc::c_int as isize);
             } else if isxdigit(
-                *in_0.offset(1 as libc::c_int as isize) as libc::c_uchar as libc::c_int,
+                *in_0.offset(1 as libc::c_int as isize) as libc::c_uchar as libc::c_int
             ) != 0
-                && isxdigit(
-                    *in_0.offset(2 as libc::c_int as isize) as libc::c_uchar
-                        as libc::c_int,
-                ) != 0
-                && isxdigit(
-                    *in_0.offset(3 as libc::c_int as isize) as libc::c_uchar
-                        as libc::c_int,
-                ) != 0
-                && isxdigit(
-                    *in_0.offset(4 as libc::c_int as isize) as libc::c_uchar
-                        as libc::c_int,
-                ) != 0
+                && isxdigit(*in_0.offset(2 as libc::c_int as isize) as libc::c_uchar as libc::c_int)
+                    != 0
+                && isxdigit(*in_0.offset(3 as libc::c_int as isize) as libc::c_uchar as libc::c_int)
+                    != 0
+                && isxdigit(*in_0.offset(4 as libc::c_int as isize) as libc::c_uchar as libc::c_int)
+                    != 0
             {
                 let mut unicode: pg_wchar = 0;
-                unicode = (hexval(
-                    *in_0.offset(1 as libc::c_int as isize) as libc::c_uchar,
-                ) << 12 as libc::c_int)
+                unicode = (hexval(*in_0.offset(1 as libc::c_int as isize) as libc::c_uchar)
+                    << 12 as libc::c_int)
                     .wrapping_add(
                         hexval(*in_0.offset(2 as libc::c_int as isize) as libc::c_uchar)
                             << 8 as libc::c_int,
@@ -1439,9 +1408,9 @@ unsafe extern "C" fn str_udeescape(
                         hexval(*in_0.offset(3 as libc::c_int as isize) as libc::c_uchar)
                             << 4 as libc::c_int,
                     )
-                    .wrapping_add(
-                        hexval(*in_0.offset(4 as libc::c_int as isize) as libc::c_uchar),
-                    );
+                    .wrapping_add(hexval(
+                        *in_0.offset(4 as libc::c_int as isize) as libc::c_uchar
+                    ));
                 check_unicode_value(unicode);
                 if pair_first != 0 {
                     if !(is_utf16_surrogate_second(unicode) != 0) {
@@ -1461,37 +1430,23 @@ unsafe extern "C" fn str_udeescape(
                     out = out.offset(strlen(out) as isize);
                 }
                 in_0 = in_0.offset(5 as libc::c_int as isize);
-            } else if *in_0.offset(1 as libc::c_int as isize) as libc::c_int
-                == '+' as i32
-                && isxdigit(
-                    *in_0.offset(2 as libc::c_int as isize) as libc::c_uchar
-                        as libc::c_int,
-                ) != 0
-                && isxdigit(
-                    *in_0.offset(3 as libc::c_int as isize) as libc::c_uchar
-                        as libc::c_int,
-                ) != 0
-                && isxdigit(
-                    *in_0.offset(4 as libc::c_int as isize) as libc::c_uchar
-                        as libc::c_int,
-                ) != 0
-                && isxdigit(
-                    *in_0.offset(5 as libc::c_int as isize) as libc::c_uchar
-                        as libc::c_int,
-                ) != 0
-                && isxdigit(
-                    *in_0.offset(6 as libc::c_int as isize) as libc::c_uchar
-                        as libc::c_int,
-                ) != 0
-                && isxdigit(
-                    *in_0.offset(7 as libc::c_int as isize) as libc::c_uchar
-                        as libc::c_int,
-                ) != 0
+            } else if *in_0.offset(1 as libc::c_int as isize) as libc::c_int == '+' as i32
+                && isxdigit(*in_0.offset(2 as libc::c_int as isize) as libc::c_uchar as libc::c_int)
+                    != 0
+                && isxdigit(*in_0.offset(3 as libc::c_int as isize) as libc::c_uchar as libc::c_int)
+                    != 0
+                && isxdigit(*in_0.offset(4 as libc::c_int as isize) as libc::c_uchar as libc::c_int)
+                    != 0
+                && isxdigit(*in_0.offset(5 as libc::c_int as isize) as libc::c_uchar as libc::c_int)
+                    != 0
+                && isxdigit(*in_0.offset(6 as libc::c_int as isize) as libc::c_uchar as libc::c_int)
+                    != 0
+                && isxdigit(*in_0.offset(7 as libc::c_int as isize) as libc::c_uchar as libc::c_int)
+                    != 0
             {
                 let mut unicode_0: pg_wchar = 0;
-                unicode_0 = (hexval(
-                    *in_0.offset(2 as libc::c_int as isize) as libc::c_uchar,
-                ) << 20 as libc::c_int)
+                unicode_0 = (hexval(*in_0.offset(2 as libc::c_int as isize) as libc::c_uchar)
+                    << 20 as libc::c_int)
                     .wrapping_add(
                         hexval(*in_0.offset(3 as libc::c_int as isize) as libc::c_uchar)
                             << 16 as libc::c_int,
@@ -1508,9 +1463,9 @@ unsafe extern "C" fn str_udeescape(
                         hexval(*in_0.offset(6 as libc::c_int as isize) as libc::c_uchar)
                             << 4 as libc::c_int,
                     )
-                    .wrapping_add(
-                        hexval(*in_0.offset(7 as libc::c_int as isize) as libc::c_uchar),
-                    );
+                    .wrapping_add(hexval(
+                        *in_0.offset(7 as libc::c_int as isize) as libc::c_uchar
+                    ));
                 check_unicode_value(unicode_0);
                 if pair_first != 0 {
                     if !(is_utf16_surrogate_second(unicode_0) != 0) {
@@ -1536,8 +1491,7 @@ unsafe extern "C" fn str_udeescape(
                 if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                     errcode(
                         ('4' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                            + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                                << 6 as libc::c_int)
+                            + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int) << 6 as libc::c_int)
                             + (('6' as i32 - '0' as i32 & 0x3f as libc::c_int)
                                 << 12 as libc::c_int)
                             + (('0' as i32 - '0' as i32 & 0x3f as libc::c_int)
@@ -1545,9 +1499,7 @@ unsafe extern "C" fn str_udeescape(
                             + (('1' as i32 - '0' as i32 & 0x3f as libc::c_int)
                                 << 24 as libc::c_int),
                     );
-                    errmsg(
-                        b"invalid Unicode escape\0" as *const u8 as *const libc::c_char,
-                    );
+                    errmsg(b"invalid Unicode escape\0" as *const u8 as *const libc::c_char);
                     errhint(
                         b"Unicode escapes must be \\XXXX or \\+XXXXXX.\0" as *const u8
                             as *const libc::c_char,
@@ -1597,13 +1549,14 @@ unsafe extern "C" fn str_udeescape(
         );
         errmsg(b"invalid Unicode surrogate pair\0" as *const u8 as *const libc::c_char);
         scanner_errposition(
-            (in_0.offset_from(str) as libc::c_long + position as libc::c_long
+            (in_0.offset_from(str) as libc::c_long
+                + position as libc::c_long
                 + 3 as libc::c_int as libc::c_long) as libc::c_int,
             yyscanner,
         );
         errfinish(
-            b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parser.c\0"
-                as *const u8 as *const libc::c_char,
+            b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parser.c\0" as *const u8
+                as *const libc::c_char,
             499 as libc::c_int,
             0 as *const libc::c_char,
         );

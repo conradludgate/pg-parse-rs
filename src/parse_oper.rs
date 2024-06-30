@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type MemoryContextData;
@@ -139,7 +147,7 @@ pub type NameData = nameData;
 #[repr(C)]
 pub struct ErrorContextCallback {
     pub previous: *mut ErrorContextCallback,
-    pub callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+    pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
 pub type MemoryContext = *mut MemoryContextData;
@@ -167,8 +175,8 @@ pub struct ItemPointerData_Inner {
     pub ip_posid: OffsetNumber,
 }
 #[allow(dead_code, non_upper_case_globals)]
-const ItemPointerData_PADDING: usize = ::core::mem::size_of::<ItemPointerData>()
-    - ::core::mem::size_of::<ItemPointerData_Inner>();
+const ItemPointerData_PADDING: usize =
+    ::core::mem::size_of::<ItemPointerData>() - ::core::mem::size_of::<ItemPointerData_Inner>();
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HeapTupleHeaderData {
@@ -1062,24 +1070,14 @@ pub struct FormData_pg_operator {
 }
 pub type Form_pg_operator = *mut FormData_pg_operator;
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -1153,20 +1151,13 @@ pub struct ParseCallbackState {
     pub location: libc::c_int,
     pub errcallback: ErrorContextCallback,
 }
-pub type HashValueFunc = Option::<
-    unsafe extern "C" fn(*const libc::c_void, usize) -> u32,
+pub type HashValueFunc = Option<unsafe extern "C" fn(*const libc::c_void, usize) -> u32>;
+pub type HashCompareFunc =
+    Option<unsafe extern "C" fn(*const libc::c_void, *const libc::c_void, usize) -> libc::c_int>;
+pub type HashCopyFunc = Option<
+    unsafe extern "C" fn(*mut libc::c_void, *const libc::c_void, usize) -> *mut libc::c_void,
 >;
-pub type HashCompareFunc = Option::<
-    unsafe extern "C" fn(*const libc::c_void, *const libc::c_void, usize) -> libc::c_int,
->;
-pub type HashCopyFunc = Option::<
-    unsafe extern "C" fn(
-        *mut libc::c_void,
-        *const libc::c_void,
-        usize,
-    ) -> *mut libc::c_void,
->;
-pub type HashAllocFunc = Option::<unsafe extern "C" fn(usize) -> *mut libc::c_void>;
+pub type HashAllocFunc = Option<unsafe extern "C" fn(usize) -> *mut libc::c_void>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HASHELEMENT {
@@ -1226,7 +1217,7 @@ pub struct FmgrInfo {
     pub fn_mcxt: MemoryContext,
     pub fn_expr: fmNodePtr,
 }
-pub type PGFunction = Option::<unsafe extern "C" fn(FunctionCallInfo) -> Datum>;
+pub type PGFunction = Option<unsafe extern "C" fn(FunctionCallInfo) -> Datum>;
 pub type FunctionCallInfo = *mut FunctionCallInfoBaseData;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1266,9 +1257,7 @@ pub struct OprCacheEntry {
 }
 pub const OPEROID: SysCacheIdentifier = 38;
 pub const CASTSOURCETARGET: SysCacheIdentifier = 12;
-pub type SyscacheCallbackFunction = Option::<
-    unsafe extern "C" fn(Datum, libc::c_int, u32) -> (),
->;
+pub type SyscacheCallbackFunction = Option<unsafe extern "C" fn(Datum, libc::c_int, u32) -> ()>;
 pub const OPERNAMENSP: SysCacheIdentifier = 37;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1391,10 +1380,7 @@ pub const AMOID: SysCacheIdentifier = 2;
 pub const AMNAME: SysCacheIdentifier = 1;
 pub const AGGFNOID: SysCacheIdentifier = 0;
 #[inline]
-unsafe extern "C" fn list_nth_cell(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut ListCell {
+unsafe extern "C" fn list_nth_cell(mut list: *const List, mut n: libc::c_int) -> *mut ListCell {
     return &mut *((*list).elements).offset(n as isize) as *mut ListCell;
 }
 #[no_mangle]
@@ -1442,10 +1428,8 @@ pub unsafe extern "C" fn LookupOperWithArgs(
     let mut oprright: *mut TypeName = 0 as *mut TypeName;
     let mut leftoid: Oid = 0;
     let mut rightoid: Oid = 0;
-    oprleft = (*list_nth_cell((*oper_0).objargs, 0 as libc::c_int)).ptr_value
-        as *mut TypeName;
-    oprright = (*list_nth_cell((*oper_0).objargs, 1 as libc::c_int)).ptr_value
-        as *mut TypeName;
+    oprleft = (*list_nth_cell((*oper_0).objargs, 0 as libc::c_int)).ptr_value as *mut TypeName;
+    oprright = (*list_nth_cell((*oper_0).objargs, 1 as libc::c_int)).ptr_value as *mut TypeName;
     if oprleft.is_null() {
         leftoid = 0 as libc::c_int as Oid;
     } else {
@@ -1483,8 +1467,8 @@ pub unsafe extern "C" fn get_sort_group_operators(
     let mut gt_opr: Oid = 0;
     let mut hashable: bool = false;
     if !isHashable.is_null() {
-        cache_flags = 0x2 as libc::c_int | 0x1 as libc::c_int | 0x4 as libc::c_int
-            | 0x10 as libc::c_int;
+        cache_flags =
+            0x2 as libc::c_int | 0x1 as libc::c_int | 0x4 as libc::c_int | 0x10 as libc::c_int;
     } else {
         cache_flags = 0x2 as libc::c_int | 0x1 as libc::c_int | 0x4 as libc::c_int;
     }
@@ -1492,10 +1476,8 @@ pub unsafe extern "C" fn get_sort_group_operators(
     lt_opr = (*typentry).lt_opr;
     eq_opr = (*typentry).eq_opr;
     gt_opr = (*typentry).gt_opr;
-    hashable = ((*typentry).hash_proc != 0 as libc::c_int as Oid) as libc::c_int
-        as bool;
-    if needLT as libc::c_int != 0
-        && (lt_opr != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
+    hashable = ((*typentry).hash_proc != 0 as libc::c_int as Oid) as libc::c_int as bool;
+    if needLT as libc::c_int != 0 && (lt_opr != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
         || needGT as libc::c_int != 0
             && (gt_opr != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
     {
@@ -1505,8 +1487,7 @@ pub unsafe extern "C" fn get_sort_group_operators(
             abort();
         }
     }
-    if needEQ as libc::c_int != 0
-        && (eq_opr != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
+    if needEQ as libc::c_int != 0 && (eq_opr != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
     {
         let elevel__0: libc::c_int = 21 as libc::c_int;
         let mut __error_0: libc::c_int = 0;
@@ -1530,13 +1511,15 @@ pub unsafe extern "C" fn get_sort_group_operators(
 #[no_mangle]
 pub unsafe extern "C" fn oprid(mut op: Operator) -> Oid {
     return (*(((*op).t_data as *mut libc::c_char)
-        .offset((*(*op).t_data).t_hoff as libc::c_int as isize) as Form_pg_operator))
+        .offset((*(*op).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_operator))
         .oid;
 }
 #[no_mangle]
 pub unsafe extern "C" fn oprfuncid(mut op: Operator) -> Oid {
     let mut pgopform: Form_pg_operator = ((*op).t_data as *mut libc::c_char)
-        .offset((*(*op).t_data).t_hoff as libc::c_int as isize) as Form_pg_operator;
+        .offset((*(*op).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_operator;
     return (*pgopform).oprcode;
 }
 unsafe extern "C" fn oper_select_candidate(
@@ -1595,11 +1578,7 @@ pub unsafe extern "C" fn oper(
     operOid = binary_oper_exact(opname, ltypeId, rtypeId);
     if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
         let mut clist: FuncCandidateList = 0 as *mut _FuncCandidateList;
-        clist = OpernameGetCandidates(
-            opname,
-            'b' as i32 as libc::c_char,
-            false,
-        );
+        clist = OpernameGetCandidates(opname, 'b' as i32 as libc::c_char, false);
         if !clist.is_null() {
             let mut inputOids: [Oid; 2] = [0; 2];
             if rtypeId == 0 as libc::c_int as Oid {
@@ -1711,14 +1690,7 @@ pub unsafe extern "C" fn left_oper(
     let mut key_ok: bool = false;
     let mut fdresult: FuncDetailCode = FUNCDETAIL_NOTFOUND;
     let mut tup: HeapTuple = 0 as HeapTuple;
-    key_ok = make_oper_cache_key(
-        pstate,
-        &mut key,
-        op,
-        0 as libc::c_int as Oid,
-        arg,
-        location,
-    );
+    key_ok = make_oper_cache_key(pstate, &mut key, op, 0 as libc::c_int as Oid, arg, location);
     if key_ok != 0 {
         operOid = find_oper_cache_entry(&mut key);
         if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
@@ -1731,28 +1703,19 @@ pub unsafe extern "C" fn left_oper(
     operOid = OpernameGetOprid(op, 0 as libc::c_int as Oid, arg);
     if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
         let mut clist: FuncCandidateList = 0 as *mut _FuncCandidateList;
-        clist = OpernameGetCandidates(
-            op,
-            'l' as i32 as libc::c_char,
-            false,
-        );
+        clist = OpernameGetCandidates(op, 'l' as i32 as libc::c_char, false);
         if !clist.is_null() {
             let mut clisti: FuncCandidateList = 0 as *mut _FuncCandidateList;
             clisti = clist;
             while !clisti.is_null() {
                 *((*clisti).args)
                     .as_mut_ptr()
-                    .offset(
-                        0 as libc::c_int as isize,
-                    ) = *((*clisti).args).as_mut_ptr().offset(1 as libc::c_int as isize);
+                    .offset(0 as libc::c_int as isize) = *((*clisti).args)
+                    .as_mut_ptr()
+                    .offset(1 as libc::c_int as isize);
                 clisti = (*clisti).next;
             }
-            fdresult = oper_select_candidate(
-                1 as libc::c_int,
-                &mut arg,
-                clist,
-                &mut operOid,
-            );
+            fdresult = oper_select_candidate(1 as libc::c_int, &mut arg, clist, &mut operOid);
         }
     }
     if (operOid != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
@@ -1831,14 +1794,7 @@ pub unsafe extern "C" fn make_op(
     } else {
         ltypeId = exprType(ltree);
         rtypeId = exprType(rtree);
-        tup = oper(
-            pstate,
-            opname,
-            ltypeId,
-            rtypeId,
-            false,
-            location,
-        );
+        tup = oper(pstate, opname, ltypeId, rtypeId, false, location);
     }
     opform = ((*tup).t_data as *mut libc::c_char)
         .offset((*(*tup).t_data).t_hoff as libc::c_int as isize) as Form_pg_operator;
@@ -1934,18 +1890,12 @@ unsafe extern "C" fn find_oper_cache_entry(mut key: *mut OprCacheKey) -> Oid {
         );
         CacheRegisterSyscacheCallback(
             OPERNAMENSP as libc::c_int,
-            Some(
-                InvalidateOprCacheCallBack
-                    as unsafe extern "C" fn(Datum, libc::c_int, u32) -> (),
-            ),
+            Some(InvalidateOprCacheCallBack as unsafe extern "C" fn(Datum, libc::c_int, u32) -> ()),
             0 as libc::c_int as Datum,
         );
         CacheRegisterSyscacheCallback(
             CASTSOURCETARGET as libc::c_int,
-            Some(
-                InvalidateOprCacheCallBack
-                    as unsafe extern "C" fn(Datum, libc::c_int, u32) -> (),
-            ),
+            Some(InvalidateOprCacheCallBack as unsafe extern "C" fn(Datum, libc::c_int, u32) -> ()),
             0 as libc::c_int as Datum,
         );
     }
@@ -1993,14 +1943,12 @@ unsafe extern "C" fn InvalidateOprCacheCallBack(
             HASH_REMOVE,
             0 as *mut bool,
         ))
-            .is_null()
+        .is_null()
         {
             let elevel_: libc::c_int = 21 as libc::c_int;
             let mut __error: libc::c_int = 0;
             if errstart(elevel_, 0 as *const libc::c_char) != 0 {
-                errmsg_internal(
-                    b"hash table corrupted\0" as *const u8 as *const libc::c_char,
-                );
+                errmsg_internal(b"hash table corrupted\0" as *const u8 as *const libc::c_char);
                 errfinish(
                     b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_oper.c\0"
                         as *const u8 as *const libc::c_char,
@@ -2012,5 +1960,5 @@ unsafe extern "C" fn InvalidateOprCacheCallBack(
                 abort();
             }
         }
-    };
+    }
 }

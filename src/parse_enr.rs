@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type AttrMissing;
@@ -818,24 +826,14 @@ pub struct EphemeralNamedRelationMetadataData {
 pub type EphemeralNamedRelationMetadata = *mut EphemeralNamedRelationMetadataData;
 pub type Relation = *mut RelationData;
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;

@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(linkage)]
 // extern "C" {
 //     fn abort() -> !;
@@ -55,14 +63,14 @@ pub struct _RuneCharClass {
 pub struct _RuneLocale {
     pub __magic: [libc::c_char; 8],
     pub __encoding: [libc::c_char; 32],
-    pub __sgetrune: Option::<
+    pub __sgetrune: Option<
         unsafe extern "C" fn(
             *const libc::c_char,
             __darwin_size_t,
             *mut *const libc::c_char,
         ) -> __darwin_rune_t,
     >,
-    pub __sputrune: Option::<
+    pub __sputrune: Option<
         unsafe extern "C" fn(
             __darwin_rune_t,
             *mut libc::c_char,
@@ -87,13 +95,9 @@ unsafe extern "C" fn isascii(mut _c: libc::c_int) -> libc::c_int {
     return (_c & !(0x7f as libc::c_int) == 0 as libc::c_int) as libc::c_int;
 }
 #[inline]
-unsafe extern "C" fn __istype(
-    mut _c: __darwin_ct_rune_t,
-    mut _f: libc::c_ulong,
-) -> libc::c_int {
+unsafe extern "C" fn __istype(mut _c: __darwin_ct_rune_t, mut _f: libc::c_ulong) -> libc::c_int {
     return if isascii(_c) != 0 {
-        (_DefaultRuneLocale.__runetype[_c as usize] as libc::c_ulong & _f != 0)
-            as libc::c_int
+        (_DefaultRuneLocale.__runetype[_c as usize] as libc::c_ulong & _f != 0) as libc::c_int
     } else {
         (__maskrune(_c, _f) != 0) as libc::c_int
     };
@@ -129,8 +133,8 @@ pub unsafe extern "C" fn downcase_identifier(
     let mut i: libc::c_int = 0;
     let mut enc_is_single_byte: bool = false;
     result = palloc((len + 1 as libc::c_int) as usize) as *mut libc::c_char;
-    enc_is_single_byte = (pg_database_encoding_max_length() == 1 as libc::c_int)
-        as libc::c_int as bool;
+    enc_is_single_byte =
+        (pg_database_encoding_max_length() == 1 as libc::c_int) as libc::c_int as bool;
     i = 0 as libc::c_int;
     while i < len {
         let mut ch: libc::c_uchar = *ident.offset(i as isize) as libc::c_uchar;
@@ -166,14 +170,10 @@ pub unsafe extern "C" fn truncate_identifier(
             if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                 errcode(
                     ('4' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                        + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                            << 6 as libc::c_int)
-                        + (('6' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                            << 12 as libc::c_int)
-                        + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                            << 18 as libc::c_int)
-                        + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                            << 24 as libc::c_int),
+                        + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int) << 6 as libc::c_int)
+                        + (('6' as i32 - '0' as i32 & 0x3f as libc::c_int) << 12 as libc::c_int)
+                        + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int) << 18 as libc::c_int)
+                        + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int) << 24 as libc::c_int),
                 );
                 errmsg(
                     b"identifier \"%s\" will be truncated to \"%.*s\"\0" as *const u8
@@ -198,8 +198,10 @@ pub unsafe extern "C" fn truncate_identifier(
 }
 #[no_mangle]
 pub unsafe extern "C" fn scanner_isspace(mut ch: libc::c_char) -> bool {
-    if ch as libc::c_int == ' ' as i32 || ch as libc::c_int == '\t' as i32
-        || ch as libc::c_int == '\n' as i32 || ch as libc::c_int == '\r' as i32
+    if ch as libc::c_int == ' ' as i32
+        || ch as libc::c_int == '\t' as i32
+        || ch as libc::c_int == '\n' as i32
+        || ch as libc::c_int == '\r' as i32
         || ch as libc::c_int == '\u{c}' as i32
     {
         return true;

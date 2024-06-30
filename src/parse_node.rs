@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type RelationData;
@@ -53,7 +61,7 @@ pub type Index = libc::c_uint;
 #[repr(C)]
 pub struct ErrorContextCallback {
     pub previous: *mut ErrorContextCallback,
-    pub callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+    pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
 pub type Datum = usize;
@@ -832,24 +840,14 @@ pub struct CommonTableExpr {
     pub ctecolcollations: *mut List,
 }
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -916,16 +914,10 @@ pub struct ParseNamespaceColumn {
     pub p_varattnosyn: AttrNumber,
     pub p_dontexpand: bool,
 }
-pub type SubscriptTransform = Option::<
-    unsafe extern "C" fn(
-        *mut SubscriptingRef,
-        *mut List,
-        *mut ParseState,
-        bool,
-        bool,
-    ) -> (),
+pub type SubscriptTransform = Option<
+    unsafe extern "C" fn(*mut SubscriptingRef, *mut List, *mut ParseState, bool, bool) -> (),
 >;
-pub type SubscriptExecSetup = Option::<
+pub type SubscriptExecSetup = Option<
     unsafe extern "C" fn(
         *const SubscriptingRef,
         *mut SubscriptingRefState,
@@ -949,12 +941,9 @@ pub struct ParseCallbackState {
     pub errcallback: ErrorContextCallback,
 }
 #[no_mangle]
-pub unsafe extern "C" fn make_parsestate(
-    mut parentParseState: *mut ParseState,
-) -> *mut ParseState {
+pub unsafe extern "C" fn make_parsestate(mut parentParseState: *mut ParseState) -> *mut ParseState {
     let mut pstate: *mut ParseState = 0 as *mut ParseState;
-    pstate = palloc0(::core::mem::size_of::<ParseState>() as libc::c_ulong)
-        as *mut ParseState;
+    pstate = palloc0(::core::mem::size_of::<ParseState>() as libc::c_ulong) as *mut ParseState;
     (*pstate).parentParseState = parentParseState;
     (*pstate).p_next_resno = 1 as libc::c_int;
     (*pstate).p_resolve_unknowns = true;
@@ -1006,19 +995,14 @@ pub unsafe extern "C" fn setup_parser_errposition_callback(
 ) {
     (*pcbstate).pstate = pstate;
     (*pcbstate).location = location;
-    (*pcbstate)
-        .errcallback
-        .callback = Some(
-        pcb_error_callback as unsafe extern "C" fn(*mut libc::c_void) -> (),
-    );
+    (*pcbstate).errcallback.callback =
+        Some(pcb_error_callback as unsafe extern "C" fn(*mut libc::c_void) -> ());
     (*pcbstate).errcallback.arg = pcbstate as *mut libc::c_void;
     (*pcbstate).errcallback.previous = error_context_stack;
     error_context_stack = &mut (*pcbstate).errcallback;
 }
 #[no_mangle]
-pub unsafe extern "C" fn cancel_parser_errposition_callback(
-    mut pcbstate: *mut ParseCallbackState,
-) {
+pub unsafe extern "C" fn cancel_parser_errposition_callback(mut pcbstate: *mut ParseCallbackState) {
     error_context_stack = (*pcbstate).errcallback.previous;
 }
 #[no_mangle]
@@ -1061,8 +1045,7 @@ pub unsafe extern "C" fn transformContainerSubscripts(
         init
     };
     while if !(idx__state.l).is_null() && idx__state.i < (*idx__state.l).length {
-        idx = &mut *((*idx__state.l).elements).offset(idx__state.i as isize)
-            as *mut ListCell;
+        idx = &mut *((*idx__state.l).elements).offset(idx__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         idx = 0 as *mut ListCell;
@@ -1088,10 +1071,13 @@ pub unsafe extern "C" fn transformContainerSubscripts(
     (*sbsref).reftypmod = containerTypMod;
     (*sbsref).refexpr = containerBase as *mut Expr;
     (*sbsref).refassgnexpr = 0 as *mut Expr;
-    ((*sbsroutines).transform)
-        .expect(
-            "non-null function pointer",
-        )(sbsref, indirection, pstate, isSlice, isAssignment);
+    ((*sbsroutines).transform).expect("non-null function pointer")(
+        sbsref,
+        indirection,
+        pstate,
+        isSlice,
+        isAssignment,
+    );
     if ((*sbsref).refrestype != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
         let elevel__0: libc::c_int = 21 as libc::c_int;
         let mut __error_0: libc::c_int = 0;
@@ -1129,18 +1115,15 @@ pub unsafe extern "C" fn make_const(
             typebyval = true;
         }
         223 => {
-            if scanint8((*value).val.str_0, true, &mut val64) != 0
-            {
+            if scanint8((*value).val.str_0, true, &mut val64) != 0 {
                 let mut val32: i32 = val64 as i32;
                 if val64 == val32 as i64 {
                     val = val32 as Datum;
-                    typelen = ::core::mem::size_of::<i32>() as libc::c_ulong
-                        as libc::c_int;
+                    typelen = ::core::mem::size_of::<i32>() as libc::c_ulong as libc::c_int;
                     typebyval = true;
                 } else {
                     val = i64GetDatum(val64);
-                    typelen = ::core::mem::size_of::<int64>() as libc::c_ulong
-                        as libc::c_int;
+                    typelen = ::core::mem::size_of::<int64>() as libc::c_ulong as libc::c_int;
                     typebyval = false;
                 }
             } else {

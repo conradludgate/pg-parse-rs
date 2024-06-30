@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type MemoryContextData;
@@ -376,7 +384,7 @@ pub type NameData = nameData;
 #[repr(C)]
 pub struct ErrorContextCallback {
     pub previous: *mut ErrorContextCallback,
-    pub callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+    pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
 pub type MemoryContext = *mut MemoryContextData;
@@ -404,8 +412,8 @@ pub struct ItemPointerData_Inner {
     pub ip_posid: OffsetNumber,
 }
 #[allow(dead_code, non_upper_case_globals)]
-const ItemPointerData_PADDING: usize = ::core::mem::size_of::<ItemPointerData>()
-    - ::core::mem::size_of::<ItemPointerData_Inner>();
+const ItemPointerData_PADDING: usize =
+    ::core::mem::size_of::<ItemPointerData>() - ::core::mem::size_of::<ItemPointerData_Inner>();
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HeapTupleHeaderData {
@@ -1753,7 +1761,7 @@ pub struct FmgrInfo {
     pub fn_expr: fmNodePtr,
 }
 pub type fmNodePtr = *mut Node;
-pub type PGFunction = Option::<unsafe extern "C" fn(FunctionCallInfo) -> Datum>;
+pub type PGFunction = Option<unsafe extern "C" fn(FunctionCallInfo) -> Datum>;
 pub type FunctionCallInfo = *mut FunctionCallInfoBaseData;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1951,24 +1959,14 @@ pub struct ParseState {
     pub p_coerce_param_hook: CoerceParamHook,
     pub p_ref_hook_state: *mut libc::c_void,
 }
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -2042,9 +2040,8 @@ pub struct ParseCallbackState {
     pub location: libc::c_int,
     pub errcallback: ErrorContextCallback,
 }
-pub type post_parse_analyze_hook_type = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut Query) -> (),
->;
+pub type post_parse_analyze_hook_type =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Query) -> ()>;
 #[inline]
 unsafe extern "C" fn list_head(mut l: *const List) -> *mut ListCell {
     return if !l.is_null() {
@@ -2055,33 +2052,28 @@ unsafe extern "C" fn list_head(mut l: *const List) -> *mut ListCell {
 }
 #[inline]
 unsafe extern "C" fn list_length(mut l: *const List) -> libc::c_int {
-    return if !l.is_null() { (*l).length } else { 0 as libc::c_int };
+    return if !l.is_null() {
+        (*l).length
+    } else {
+        0 as libc::c_int
+    };
 }
 #[inline]
-unsafe extern "C" fn list_nth_cell(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut ListCell {
+unsafe extern "C" fn list_nth_cell(mut list: *const List, mut n: libc::c_int) -> *mut ListCell {
     return &mut *((*list).elements).offset(n as isize) as *mut ListCell;
 }
 #[inline]
-unsafe extern "C" fn list_nth(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut libc::c_void {
+unsafe extern "C" fn list_nth(mut list: *const List, mut n: libc::c_int) -> *mut libc::c_void {
     return (*list_nth_cell(list, n)).ptr_value;
 }
 #[inline]
 unsafe extern "C" fn lnext(mut l: *const List, mut c: *const ListCell) -> *mut ListCell {
     c = c.offset(1);
     c;
-    if c
-        < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell
-            as *const ListCell
-    {
-        return c as *mut ListCell
+    if c < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell as *const ListCell {
+        return c as *mut ListCell;
     } else {
-        return 0 as *mut ListCell
+        return 0 as *mut ListCell;
     };
 }
 #[no_mangle]
@@ -2206,9 +2198,7 @@ pub unsafe extern "C" fn transformStmt(
             let mut n: *mut SelectStmt = parseTree as *mut SelectStmt;
             if !((*n).valuesLists).is_null() {
                 result = transformValuesClause(pstate, n);
-            } else if (*n).op as libc::c_uint
-                == SETOP_NONE as libc::c_int as libc::c_uint
-            {
+            } else if (*n).op as libc::c_uint == SETOP_NONE as libc::c_int as libc::c_uint {
                 result = transformSelectStmt(pstate, n);
             } else {
                 result = transformSetOperationStmt(pstate, n);
@@ -2218,19 +2208,13 @@ pub unsafe extern "C" fn transformStmt(
             result = transformPLAssignStmt(pstate, parseTree as *mut PLAssignStmt);
         }
         299 => {
-            result = transformDeclareCursorStmt(
-                pstate,
-                parseTree as *mut DeclareCursorStmt,
-            );
+            result = transformDeclareCursorStmt(pstate, parseTree as *mut DeclareCursorStmt);
         }
         271 => {
             result = transformExplainStmt(pstate, parseTree as *mut ExplainStmt);
         }
         272 => {
-            result = transformCreateTableAsStmt(
-                pstate,
-                parseTree as *mut CreateTableAsStmt,
-            );
+            result = transformCreateTableAsStmt(pstate, parseTree as *mut CreateTableAsStmt);
         }
         346 => {
             result = transformCallStmt(pstate, parseTree as *mut CallStmt);
@@ -2250,9 +2234,7 @@ pub unsafe extern "C" fn transformStmt(
     return result;
 }
 #[no_mangle]
-pub unsafe extern "C" fn analyze_requires_snapshot(
-    mut parseTree: *mut RawStmt,
-) -> bool {
+pub unsafe extern "C" fn analyze_requires_snapshot(mut parseTree: *mut RawStmt) -> bool {
     let mut result: bool = false;
     match (*((*parseTree).stmt as *const Node)).type_0 as libc::c_uint {
         234 | 235 | 236 | 237 | 238 => {
@@ -2284,8 +2266,7 @@ unsafe extern "C" fn transformDeleteStmt(
         (*qry).cteList = transformWithClause(pstate, (*stmt).withClause);
         (*qry).hasModifyingCTE = (*pstate).p_hasModifyingCTE;
     }
-    (*qry)
-        .resultRelation = setTargetTable(
+    (*qry).resultRelation = setTargetTable(
         pstate,
         (*stmt).relation,
         (*(*stmt).relation).inh,
@@ -2356,20 +2337,17 @@ unsafe extern "C" fn transformInsertRow(
     };
     loop {
         lc = (if !(lc__state.l1).is_null() && lc__state.i < (*lc__state.l1).length {
-            &mut *((*lc__state.l1).elements).offset(lc__state.i as isize)
-                as *mut ListCell
+            &mut *((*lc__state.l1).elements).offset(lc__state.i as isize) as *mut ListCell
         } else {
             0 as *mut ListCell
         });
         icols = (if !(lc__state.l2).is_null() && lc__state.i < (*lc__state.l2).length {
-            &mut *((*lc__state.l2).elements).offset(lc__state.i as isize)
-                as *mut ListCell
+            &mut *((*lc__state.l2).elements).offset(lc__state.i as isize) as *mut ListCell
         } else {
             0 as *mut ListCell
         });
         attnos = (if !(lc__state.l3).is_null() && lc__state.i < (*lc__state.l3).length {
-            &mut *((*lc__state.l3).elements).offset(lc__state.i as isize)
-                as *mut ListCell
+            &mut *((*lc__state.l3).elements).offset(lc__state.i as isize) as *mut ListCell
         } else {
             0 as *mut ListCell
         });
@@ -2394,8 +2372,8 @@ unsafe extern "C" fn transformInsertRow(
                     == T_FieldStore as libc::c_int as libc::c_uint
                 {
                     let mut fstore: *mut FieldStore = expr as *mut FieldStore;
-                    expr = (*list_nth_cell((*fstore).newvals, 0 as libc::c_int))
-                        .ptr_value as *mut Expr;
+                    expr = (*list_nth_cell((*fstore).newvals, 0 as libc::c_int)).ptr_value
+                        as *mut Expr;
                 } else {
                     if !((*(expr as *const Node)).type_0 as libc::c_uint
                         == T_SubscriptingRef as libc::c_int as libc::c_uint)
@@ -2456,28 +2434,10 @@ unsafe extern "C" fn transformOnConflictClause(
         exclRte = (*exclNSItem).p_rte;
         exclRelIndex = (*exclNSItem).p_rtindex;
         (*exclRte).requiredPerms = 0 as libc::c_int as AclMode;
-        exclRelTlist = BuildOnConflictExcludedTargetlist(
-            targetrel,
-            exclRelIndex as Index,
-        );
-        addNSItemToQuery(
-            pstate,
-            exclNSItem,
-            false,
-            true,
-            true,
-        );
-        addNSItemToQuery(
-            pstate,
-            (*pstate).p_target_nsitem,
-            false,
-            true,
-            true,
-        );
-        onConflictSet = transformUpdateTargetList(
-            pstate,
-            (*onConflictClause).targetList,
-        );
+        exclRelTlist = BuildOnConflictExcludedTargetlist(targetrel, exclRelIndex as Index);
+        addNSItemToQuery(pstate, exclNSItem, false, true, true);
+        addNSItemToQuery(pstate, (*pstate).p_target_nsitem, false, true, true);
+        onConflictSet = transformUpdateTargetList(pstate, (*onConflictClause).targetList);
         onConflictWhere = transformWhereClause(
             pstate,
             (*onConflictClause).whereClause,
@@ -2513,7 +2473,8 @@ pub unsafe extern "C" fn BuildOnConflictExcludedTargetlist(
     while attno < (*(*targetrel).rd_rel).relnatts as libc::c_int {
         let mut attr: Form_pg_attribute = &mut *((*(*targetrel).rd_att).attrs)
             .as_mut_ptr()
-            .offset(attno as isize) as *mut FormData_pg_attribute;
+            .offset(attno as isize)
+            as *mut FormData_pg_attribute;
         let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
         if (*attr).attisdropped != 0 {
             name = 0 as *mut libc::c_char;
@@ -2582,12 +2543,7 @@ unsafe extern "C" fn transformSelectStmt(
     (*pstate).p_locking_clause = (*stmt).lockingClause;
     (*pstate).p_windowdefs = (*stmt).windowClause;
     transformFromClause(pstate, (*stmt).fromClause);
-    (*qry)
-        .targetList = transformTargetList(
-        pstate,
-        (*stmt).targetList,
-        EXPR_KIND_SELECT_TARGET,
-    );
+    (*qry).targetList = transformTargetList(pstate, (*stmt).targetList, EXPR_KIND_SELECT_TARGET);
     markTargetListOrigins(pstate, (*qry).targetList);
     qual = transformWhereClause(
         pstate,
@@ -2595,23 +2551,20 @@ unsafe extern "C" fn transformSelectStmt(
         EXPR_KIND_WHERE,
         b"WHERE\0" as *const u8 as *const libc::c_char,
     );
-    (*qry)
-        .havingQual = transformWhereClause(
+    (*qry).havingQual = transformWhereClause(
         pstate,
         (*stmt).havingClause,
         EXPR_KIND_HAVING,
         b"HAVING\0" as *const u8 as *const libc::c_char,
     );
-    (*qry)
-        .sortClause = transformSortClause(
+    (*qry).sortClause = transformSortClause(
         pstate,
         (*stmt).sortClause,
         &mut (*qry).targetList,
         EXPR_KIND_ORDER_BY,
         false,
     );
-    (*qry)
-        .groupClause = transformGroupClause(
+    (*qry).groupClause = transformGroupClause(
         pstate,
         (*stmt).groupClause,
         &mut (*qry).groupingSets,
@@ -2623,20 +2576,12 @@ unsafe extern "C" fn transformSelectStmt(
     if ((*stmt).distinctClause).is_null() {
         (*qry).distinctClause = 0 as *mut libc::c_void as *mut List;
         (*qry).hasDistinctOn = false;
-    } else if ((*list_nth_cell((*stmt).distinctClause, 0 as libc::c_int)).ptr_value)
-        .is_null()
-    {
-        (*qry)
-            .distinctClause = transformDistinctClause(
-            pstate,
-            &mut (*qry).targetList,
-            (*qry).sortClause,
-            false,
-        );
+    } else if ((*list_nth_cell((*stmt).distinctClause, 0 as libc::c_int)).ptr_value).is_null() {
+        (*qry).distinctClause =
+            transformDistinctClause(pstate, &mut (*qry).targetList, (*qry).sortClause, false);
         (*qry).hasDistinctOn = false;
     } else {
-        (*qry)
-            .distinctClause = transformDistinctOnClause(
+        (*qry).distinctClause = transformDistinctOnClause(
             pstate,
             (*stmt).distinctClause,
             &mut (*qry).targetList,
@@ -2644,16 +2589,14 @@ unsafe extern "C" fn transformSelectStmt(
         );
         (*qry).hasDistinctOn = true;
     }
-    (*qry)
-        .limitOffset = transformLimitClause(
+    (*qry).limitOffset = transformLimitClause(
         pstate,
         (*stmt).limitOffset,
         EXPR_KIND_OFFSET,
         b"OFFSET\0" as *const u8 as *const libc::c_char,
         (*stmt).limitOption,
     );
-    (*qry)
-        .limitCount = transformLimitClause(
+    (*qry).limitCount = transformLimitClause(
         pstate,
         (*stmt).limitCount,
         EXPR_KIND_LIMIT,
@@ -2661,12 +2604,8 @@ unsafe extern "C" fn transformSelectStmt(
         (*stmt).limitOption,
     );
     (*qry).limitOption = (*stmt).limitOption;
-    (*qry)
-        .windowClause = transformWindowDefinitions(
-        pstate,
-        (*pstate).p_windowdefs,
-        &mut (*qry).targetList,
-    );
+    (*qry).windowClause =
+        transformWindowDefinitions(pstate, (*pstate).p_windowdefs, &mut (*qry).targetList);
     if (*pstate).p_resolve_unknowns != 0 {
         resolveTargetListUnknowns(pstate, (*qry).targetList);
     }
@@ -2691,18 +2630,15 @@ unsafe extern "C" fn transformSelectStmt(
         false as libc::c_int
     } != 0
     {
-        transformLockingClause(
-            pstate,
-            qry,
-            (*l).ptr_value as *mut LockingClause,
-            false,
-        );
+        transformLockingClause(pstate, qry, (*l).ptr_value as *mut LockingClause, false);
         l__state.i += 1;
         l__state.i;
     }
     assign_query_collations(pstate, qry);
-    if (*pstate).p_hasAggs as libc::c_int != 0 || !((*qry).groupClause).is_null()
-        || !((*qry).groupingSets).is_null() || !((*qry).havingQual).is_null()
+    if (*pstate).p_hasAggs as libc::c_int != 0
+        || !((*qry).groupClause).is_null()
+        || !((*qry).groupingSets).is_null()
+        || !((*qry).havingQual).is_null()
     {
         parseCheckAggregates(pstate, qry);
     }
@@ -2742,8 +2678,7 @@ unsafe extern "C" fn transformValuesClause(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -2751,12 +2686,7 @@ unsafe extern "C" fn transformValuesClause(
     } != 0
     {
         let mut sublist: *mut List = (*lc).ptr_value as *mut List;
-        sublist = transformExpressionList(
-            pstate,
-            sublist,
-            EXPR_KIND_VALUES,
-            false,
-        );
+        sublist = transformExpressionList(pstate, sublist, EXPR_KIND_VALUES, false);
         if sublist_length < 0 as libc::c_int {
             sublist_length = list_length(sublist);
             colexprs = palloc0(
@@ -2779,8 +2709,7 @@ unsafe extern "C" fn transformValuesClause(
             init
         };
         while if !(lc2__state.l).is_null() && lc2__state.i < (*lc2__state.l).length {
-            lc2 = &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize)
-                as *mut ListCell;
+            lc2 = &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             lc2 = 0 as *mut ListCell;
@@ -2818,8 +2747,7 @@ unsafe extern "C" fn transformValuesClause(
             init
         };
         while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
-            lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
-                as *mut ListCell;
+            lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             lc = 0 as *mut ListCell;
@@ -2838,11 +2766,7 @@ unsafe extern "C" fn transformValuesClause(
             lc__state_0.i;
         }
         coltypmod = select_common_typmod(pstate, *colexprs.offset(i as isize), coltype);
-        colcoll = select_common_collation(
-            pstate,
-            *colexprs.offset(i as isize),
-            true,
-        );
+        colcoll = select_common_collation(pstate, *colexprs.offset(i as isize), true);
         coltypes = lappend_oid(coltypes, coltype);
         coltypmods = lappend_int(coltypmods, coltypmod);
         colcollations = lappend_oid(colcollations, colcoll);
@@ -2858,8 +2782,7 @@ unsafe extern "C" fn transformValuesClause(
         init
     };
     while if !(lc__state_1.l).is_null() && lc__state_1.i < (*lc__state_1.l).length {
-        lc = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -2890,19 +2813,13 @@ unsafe extern "C" fn transformValuesClause(
             init
         };
         loop {
-            lc = (if !(lc__state_2.l1).is_null()
-                && lc__state_2.i < (*lc__state_2.l1).length
-            {
-                &mut *((*lc__state_2.l1).elements).offset(lc__state_2.i as isize)
-                    as *mut ListCell
+            lc = (if !(lc__state_2.l1).is_null() && lc__state_2.i < (*lc__state_2.l1).length {
+                &mut *((*lc__state_2.l1).elements).offset(lc__state_2.i as isize) as *mut ListCell
             } else {
                 0 as *mut ListCell
             });
-            lc2 = (if !(lc__state_2.l2).is_null()
-                && lc__state_2.i < (*lc__state_2.l2).length
-            {
-                &mut *((*lc__state_2.l2).elements).offset(lc__state_2.i as isize)
-                    as *mut ListCell
+            lc2 = (if !(lc__state_2.l2).is_null() && lc__state_2.i < (*lc__state_2.l2).length {
+                &mut *((*lc__state_2.l2).elements).offset(lc__state_2.i as isize) as *mut ListCell
             } else {
                 0 as *mut ListCell
             });
@@ -2920,8 +2837,7 @@ unsafe extern "C" fn transformValuesClause(
         i;
     }
     if !((*pstate).p_rtable).is_null()
-        && contain_vars_of_level(exprsLists as *mut Node, 0 as libc::c_int)
-            as libc::c_int != 0
+        && contain_vars_of_level(exprsLists as *mut Node, 0 as libc::c_int) as libc::c_int != 0
     {
         lateral = true;
     }
@@ -2935,38 +2851,23 @@ unsafe extern "C" fn transformValuesClause(
         lateral,
         true,
     );
-    addNSItemToQuery(
-        pstate,
-        nsitem,
-        true,
-        true,
-        true,
-    );
-    (*qry)
-        .targetList = expandNSItemAttrs(
-        pstate,
-        nsitem,
-        0 as libc::c_int,
-        -(1 as libc::c_int),
-    );
-    (*qry)
-        .sortClause = transformSortClause(
+    addNSItemToQuery(pstate, nsitem, true, true, true);
+    (*qry).targetList = expandNSItemAttrs(pstate, nsitem, 0 as libc::c_int, -(1 as libc::c_int));
+    (*qry).sortClause = transformSortClause(
         pstate,
         (*stmt).sortClause,
         &mut (*qry).targetList,
         EXPR_KIND_ORDER_BY,
         false,
     );
-    (*qry)
-        .limitOffset = transformLimitClause(
+    (*qry).limitOffset = transformLimitClause(
         pstate,
         (*stmt).limitOffset,
         EXPR_KIND_OFFSET,
         b"OFFSET\0" as *const u8 as *const libc::c_char,
         (*stmt).limitOption,
     );
-    (*qry)
-        .limitCount = transformLimitClause(
+    (*qry).limitCount = transformLimitClause(
         pstate,
         (*stmt).limitCount,
         EXPR_KIND_LIMIT,
@@ -3022,8 +2923,7 @@ unsafe extern "C" fn transformSetOperationStmt(
     (*qry).commandType = CMD_SELECT;
     leftmostSelect = (*stmt).larg;
     while !leftmostSelect.is_null()
-        && (*leftmostSelect).op as libc::c_uint
-            != SETOP_NONE as libc::c_int as libc::c_uint
+        && (*leftmostSelect).op as libc::c_uint != SETOP_NONE as libc::c_int as libc::c_uint
     {
         leftmostSelect = (*leftmostSelect).larg;
     }
@@ -3056,12 +2956,8 @@ unsafe extern "C" fn transformSetOperationStmt(
         (*qry).cteList = transformWithClause(pstate, withClause);
         (*qry).hasModifyingCTE = (*pstate).p_hasModifyingCTE;
     }
-    sostmt = transformSetOperationTree(
-        pstate,
-        stmt,
-        true,
-        0 as *mut *mut List,
-    ) as *mut SetOperationStmt;
+    sostmt =
+        transformSetOperationTree(pstate, stmt, true, 0 as *mut *mut List) as *mut SetOperationStmt;
     (*qry).setOperations = sostmt as *mut Node;
     node = (*sostmt).larg;
     while !node.is_null()
@@ -3079,9 +2975,7 @@ unsafe extern "C" fn transformSetOperationStmt(
     targetnames = 0 as *mut libc::c_void as *mut List;
     sortnscolumns = palloc0(
         (list_length((*sostmt).colTypes) as libc::c_ulong)
-            .wrapping_mul(
-                ::core::mem::size_of::<ParseNamespaceColumn>() as libc::c_ulong,
-            ),
+            .wrapping_mul(::core::mem::size_of::<ParseNamespaceColumn>() as libc::c_ulong),
     ) as *mut ParseNamespaceColumn;
     sortcolindex = 0 as libc::c_int;
     let mut lct__state: ForFourState = {
@@ -3096,33 +2990,26 @@ unsafe extern "C" fn transformSetOperationStmt(
     };
     loop {
         lct = (if !(lct__state.l1).is_null() && lct__state.i < (*lct__state.l1).length {
-            &mut *((*lct__state.l1).elements).offset(lct__state.i as isize)
-                as *mut ListCell
+            &mut *((*lct__state.l1).elements).offset(lct__state.i as isize) as *mut ListCell
         } else {
             0 as *mut ListCell
         });
         lcm = (if !(lct__state.l2).is_null() && lct__state.i < (*lct__state.l2).length {
-            &mut *((*lct__state.l2).elements).offset(lct__state.i as isize)
-                as *mut ListCell
+            &mut *((*lct__state.l2).elements).offset(lct__state.i as isize) as *mut ListCell
         } else {
             0 as *mut ListCell
         });
         lcc = (if !(lct__state.l3).is_null() && lct__state.i < (*lct__state.l3).length {
-            &mut *((*lct__state.l3).elements).offset(lct__state.i as isize)
-                as *mut ListCell
+            &mut *((*lct__state.l3).elements).offset(lct__state.i as isize) as *mut ListCell
         } else {
             0 as *mut ListCell
         });
-        left_tlist = (if !(lct__state.l4).is_null()
-            && lct__state.i < (*lct__state.l4).length
-        {
-            &mut *((*lct__state.l4).elements).offset(lct__state.i as isize)
-                as *mut ListCell
+        left_tlist = (if !(lct__state.l4).is_null() && lct__state.i < (*lct__state.l4).length {
+            &mut *((*lct__state.l4).elements).offset(lct__state.i as isize) as *mut ListCell
         } else {
             0 as *mut ListCell
         });
-        if !(!lct.is_null() && !lcm.is_null() && !lcc.is_null() && !left_tlist.is_null())
-        {
+        if !(!lct.is_null() && !lcm.is_null() && !lcc.is_null() && !left_tlist.is_null()) {
             break;
         }
         let mut colType: Oid = (*lct).oid_value;
@@ -3144,12 +3031,7 @@ unsafe extern "C" fn transformSetOperationStmt(
         (*var).location = exprLocation((*lefttle).expr as *mut Node);
         let fresh1 = (*pstate).p_next_resno;
         (*pstate).p_next_resno = (*pstate).p_next_resno + 1;
-        tle = makeTargetEntry(
-            var as *mut Expr,
-            fresh1 as AttrNumber,
-            colName,
-            false,
-        );
+        tle = makeTargetEntry(var as *mut Expr, fresh1 as AttrNumber, colName, false);
         (*qry).targetList = lappend((*qry).targetList, tle as *mut libc::c_void);
         targetvars = lappend(targetvars, var as *mut libc::c_void);
         targetnames = lappend(targetnames, makeString(colName) as *mut libc::c_void);
@@ -3180,16 +3062,9 @@ unsafe extern "C" fn transformSetOperationStmt(
     );
     sv_namespace = (*pstate).p_namespace;
     (*pstate).p_namespace = 0 as *mut libc::c_void as *mut List;
-    addNSItemToQuery(
-        pstate,
-        jnsitem,
-        false,
-        false,
-        true,
-    );
+    addNSItemToQuery(pstate, jnsitem, false, false, true);
     tllen = list_length((*qry).targetList);
-    (*qry)
-        .sortClause = transformSortClause(
+    (*qry).sortClause = transformSortClause(
         pstate,
         sortClause,
         &mut (*qry).targetList,
@@ -3205,16 +3080,14 @@ unsafe extern "C" fn transformSetOperationStmt(
             abort();
         }
     }
-    (*qry)
-        .limitOffset = transformLimitClause(
+    (*qry).limitOffset = transformLimitClause(
         pstate,
         limitOffset,
         EXPR_KIND_OFFSET,
         b"OFFSET\0" as *const u8 as *const libc::c_char,
         (*stmt).limitOption,
     );
-    (*qry)
-        .limitCount = transformLimitClause(
+    (*qry).limitCount = transformLimitClause(
         pstate,
         limitCount,
         EXPR_KIND_LIMIT,
@@ -3243,27 +3116,22 @@ unsafe extern "C" fn transformSetOperationStmt(
         false as libc::c_int
     } != 0
     {
-        transformLockingClause(
-            pstate,
-            qry,
-            (*l).ptr_value as *mut LockingClause,
-            false,
-        );
+        transformLockingClause(pstate, qry, (*l).ptr_value as *mut LockingClause, false);
         l__state.i += 1;
         l__state.i;
     }
     assign_query_collations(pstate, qry);
-    if (*pstate).p_hasAggs as libc::c_int != 0 || !((*qry).groupClause).is_null()
-        || !((*qry).groupingSets).is_null() || !((*qry).havingQual).is_null()
+    if (*pstate).p_hasAggs as libc::c_int != 0
+        || !((*qry).groupClause).is_null()
+        || !((*qry).groupingSets).is_null()
+        || !((*qry).havingQual).is_null()
     {
         parseCheckAggregates(pstate, qry);
     }
     return qry;
 }
 #[no_mangle]
-pub unsafe extern "C" fn makeSortGroupClauseForSetOp(
-    mut rescoltype: Oid,
-) -> *mut SortGroupClause {
+pub unsafe extern "C" fn makeSortGroupClauseForSetOp(mut rescoltype: Oid) -> *mut SortGroupClause {
     let mut grpcl: *mut SortGroupClause = ({
         let mut _result: *mut Node = 0 as *mut Node;
         (*_result).type_0 = T_SortGroupClause;
@@ -3323,19 +3191,13 @@ unsafe extern "C" fn determineRecursiveColTypes(
         init
     };
     loop {
-        nrtl = (if !(nrtl__state.l1).is_null()
-            && nrtl__state.i < (*nrtl__state.l1).length
-        {
-            &mut *((*nrtl__state.l1).elements).offset(nrtl__state.i as isize)
-                as *mut ListCell
+        nrtl = (if !(nrtl__state.l1).is_null() && nrtl__state.i < (*nrtl__state.l1).length {
+            &mut *((*nrtl__state.l1).elements).offset(nrtl__state.i as isize) as *mut ListCell
         } else {
             0 as *mut ListCell
         });
-        left_tlist = (if !(nrtl__state.l2).is_null()
-            && nrtl__state.i < (*nrtl__state.l2).length
-        {
-            &mut *((*nrtl__state.l2).elements).offset(nrtl__state.i as isize)
-                as *mut ListCell
+        left_tlist = (if !(nrtl__state.l2).is_null() && nrtl__state.i < (*nrtl__state.l2).length {
+            &mut *((*nrtl__state.l2).elements).offset(nrtl__state.i as isize) as *mut ListCell
         } else {
             0 as *mut ListCell
         });
@@ -3349,12 +3211,7 @@ unsafe extern "C" fn determineRecursiveColTypes(
         colName = pstrdup((*lefttle).resname);
         let fresh2 = next_resno;
         next_resno = next_resno + 1;
-        tle = makeTargetEntry(
-            (*nrtle).expr,
-            fresh2 as AttrNumber,
-            colName,
-            false,
-        );
+        tle = makeTargetEntry((*nrtle).expr, fresh2 as AttrNumber, colName, false);
         targetList = lappend(targetList, tle as *mut libc::c_void);
         nrtl__state.i += 1;
         nrtl__state.i;
@@ -3379,8 +3236,7 @@ unsafe extern "C" fn transformUpdateStmt(
         (*qry).cteList = transformWithClause(pstate, (*stmt).withClause);
         (*qry).hasModifyingCTE = (*pstate).p_hasModifyingCTE;
     }
-    (*qry)
-        .resultRelation = setTargetTable(
+    (*qry).resultRelation = setTargetTable(
         pstate,
         (*stmt).relation,
         (*(*stmt).relation).inh,
@@ -3417,12 +3273,9 @@ unsafe extern "C" fn transformUpdateTargetList(
     let mut orig_tl: *mut ListCell = 0 as *mut ListCell;
     let mut tl: *mut ListCell = 0 as *mut ListCell;
     tlist = transformTargetList(pstate, origTlist, EXPR_KIND_UPDATE_SOURCE);
-    if (*pstate).p_next_resno
-        <= (*(*(*pstate).p_target_relation).rd_rel).relnatts as libc::c_int
-    {
-        (*pstate)
-            .p_next_resno = (*(*(*pstate).p_target_relation).rd_rel).relnatts
-            as libc::c_int + 1 as libc::c_int;
+    if (*pstate).p_next_resno <= (*(*(*pstate).p_target_relation).rd_rel).relnatts as libc::c_int {
+        (*pstate).p_next_resno =
+            (*(*(*pstate).p_target_relation).rd_rel).relnatts as libc::c_int + 1 as libc::c_int;
     }
     target_rte = (*(*pstate).p_target_nsitem).p_rte;
     orig_tl = list_head(origTlist);
@@ -3434,8 +3287,7 @@ unsafe extern "C" fn transformUpdateTargetList(
         init
     };
     while if !(tl__state.l).is_null() && tl__state.i < (*tl__state.l).length {
-        tl = &mut *((*tl__state.l).elements).offset(tl__state.i as isize)
-            as *mut ListCell;
+        tl = &mut *((*tl__state.l).elements).offset(tl__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         tl = 0 as *mut ListCell;
@@ -3471,11 +3323,7 @@ unsafe extern "C" fn transformUpdateTargetList(
                 }
             }
             origTarget = (*orig_tl).ptr_value as *mut ResTarget;
-            attrno = attnameAttNum(
-                (*pstate).p_target_relation,
-                (*origTarget).name,
-                true,
-            );
+            attrno = attnameAttNum((*pstate).p_target_relation, (*origTarget).name, true);
             if attrno == 0 as libc::c_int {
                 let elevel__0: libc::c_int = 21 as libc::c_int;
                 let mut __error_0: libc::c_int = 0;
@@ -3491,11 +3339,8 @@ unsafe extern "C" fn transformUpdateTargetList(
                 (*origTarget).indirection,
                 (*origTarget).location,
             );
-            (*target_rte)
-                .updatedCols = bms_add_member(
-                (*target_rte).updatedCols,
-                attrno - -(7 as libc::c_int),
-            );
+            (*target_rte).updatedCols =
+                bms_add_member((*target_rte).updatedCols, attrno - -(7 as libc::c_int));
             orig_tl = lnext(origTlist, orig_tl);
         }
         tl__state.i += 1;
@@ -3510,8 +3355,8 @@ unsafe extern "C" fn transformUpdateTargetList(
                     as *const libc::c_char,
             );
             errfinish(
-                b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/analyze.c\0"
-                    as *const u8 as *const libc::c_char,
+                b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/analyze.c\0" as *const u8
+                    as *const libc::c_char,
                 2361 as libc::c_int,
                 0 as *const libc::c_char,
             );
@@ -3554,9 +3399,7 @@ unsafe extern "C" fn transformDeclareCursorStmt(
 ) -> *mut Query {
     let mut result: *mut Query = 0 as *mut Query;
     let mut query: *mut Query = 0 as *mut Query;
-    if (*stmt).options & 0x2 as libc::c_int != 0
-        && (*stmt).options & 0x4 as libc::c_int != 0
-    {
+    if (*stmt).options & 0x2 as libc::c_int != 0 && (*stmt).options & 0x4 as libc::c_int != 0 {
         let elevel_: libc::c_int = 21 as libc::c_int;
         let mut __error: libc::c_int = 0;
         if elevel_ >= 21 as libc::c_int {
@@ -3565,10 +3408,8 @@ unsafe extern "C" fn transformDeclareCursorStmt(
     }
     query = transformStmt(pstate, (*stmt).query);
     (*stmt).query = query as *mut Node;
-    if !((*(query as *const Node)).type_0 as libc::c_uint
-        == T_Query as libc::c_int as libc::c_uint)
-        || (*query).commandType as libc::c_uint
-            != CMD_SELECT as libc::c_int as libc::c_uint
+    if !((*(query as *const Node)).type_0 as libc::c_uint == T_Query as libc::c_int as libc::c_uint)
+        || (*query).commandType as libc::c_uint != CMD_SELECT as libc::c_int as libc::c_uint
     {
         let elevel__0: libc::c_int = 21 as libc::c_int;
         let mut __error_0: libc::c_int = 0;
@@ -3578,8 +3419,8 @@ unsafe extern "C" fn transformDeclareCursorStmt(
                     as *const libc::c_char,
             );
             errfinish(
-                b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/analyze.c\0"
-                    as *const u8 as *const libc::c_char,
+                b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/analyze.c\0" as *const u8
+                    as *const libc::c_char,
                 2698 as libc::c_int,
                 0 as *const libc::c_char,
             );
@@ -3657,8 +3498,7 @@ unsafe extern "C" fn transformCallStmt(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -3667,8 +3507,11 @@ unsafe extern "C" fn transformCallStmt(
     {
         targs = lappend(
             targs,
-            transformExpr(pstate, (*lc).ptr_value as *mut Node, EXPR_KIND_CALL_ARGUMENT)
-                as *mut libc::c_void,
+            transformExpr(
+                pstate,
+                (*lc).ptr_value as *mut Node,
+                EXPR_KIND_CALL_ARGUMENT,
+            ) as *mut libc::c_void,
         );
         lc__state.i += 1;
         lc__state.i;
@@ -3694,9 +3537,7 @@ unsafe extern "C" fn transformCallStmt(
     return result;
 }
 #[no_mangle]
-pub unsafe extern "C" fn LCS_asString(
-    mut strength: LockClauseStrength,
-) -> *const libc::c_char {
+pub unsafe extern "C" fn LCS_asString(mut strength: LockClauseStrength) -> *const libc::c_char {
     match strength as libc::c_uint {
         1 => return b"FOR KEY SHARE\0" as *const u8 as *const libc::c_char,
         2 => return b"FOR SHARE\0" as *const u8 as *const libc::c_char,
@@ -3707,10 +3548,7 @@ pub unsafe extern "C" fn LCS_asString(
     return b"FOR some\0" as *const u8 as *const libc::c_char;
 }
 #[no_mangle]
-pub unsafe extern "C" fn CheckSelectLocking(
-    mut qry: *mut Query,
-    mut strength: LockClauseStrength,
-) {
+pub unsafe extern "C" fn CheckSelectLocking(mut qry: *mut Query, mut strength: LockClauseStrength) {
     if !((*qry).setOperations).is_null() {
         let elevel_: libc::c_int = 21 as libc::c_int;
         let mut __error: libc::c_int = 0;
@@ -3791,8 +3629,7 @@ unsafe extern "C" fn transformLockingClause(
             init
         };
         while if !(rt__state.l).is_null() && rt__state.i < (*rt__state.l).length {
-            rt = &mut *((*rt__state.l).elements).offset(rt__state.i as isize)
-                as *mut ListCell;
+            rt = &mut *((*rt__state.l).elements).offset(rt__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             rt = 0 as *mut ListCell;
@@ -3804,30 +3641,12 @@ unsafe extern "C" fn transformLockingClause(
             i;
             match (*rte).rtekind as libc::c_uint {
                 0 => {
-                    applyLockingClause(
-                        qry,
-                        i,
-                        (*lc).strength,
-                        (*lc).waitPolicy,
-                        pushedDown,
-                    );
-                    (*rte).requiredPerms
-                        |= ((1 as libc::c_int) << 2 as libc::c_int) as AclMode;
+                    applyLockingClause(qry, i, (*lc).strength, (*lc).waitPolicy, pushedDown);
+                    (*rte).requiredPerms |= ((1 as libc::c_int) << 2 as libc::c_int) as AclMode;
                 }
                 1 => {
-                    applyLockingClause(
-                        qry,
-                        i,
-                        (*lc).strength,
-                        (*lc).waitPolicy,
-                        pushedDown,
-                    );
-                    transformLockingClause(
-                        pstate,
-                        (*rte).subquery,
-                        allrels,
-                        true,
-                    );
+                    applyLockingClause(qry, i, (*lc).strength, (*lc).waitPolicy, pushedDown);
+                    transformLockingClause(pstate, (*rte).subquery, allrels, true);
                 }
                 _ => {}
             }
@@ -3843,8 +3662,7 @@ unsafe extern "C" fn transformLockingClause(
             init
         };
         while if !(l__state.l).is_null() && l__state.i < (*l__state.l).length {
-            l = &mut *((*l__state.l).elements).offset(l__state.i as isize)
-                as *mut ListCell;
+            l = &mut *((*l__state.l).elements).offset(l__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             l = 0 as *mut ListCell;
@@ -3852,8 +3670,7 @@ unsafe extern "C" fn transformLockingClause(
         } != 0
         {
             let mut thisrel: *mut RangeVar = (*l).ptr_value as *mut RangeVar;
-            if !((*thisrel).catalogname).is_null() || !((*thisrel).schemaname).is_null()
-            {
+            if !((*thisrel).catalogname).is_null() || !((*thisrel).schemaname).is_null() {
                 let elevel_: libc::c_int = 21 as libc::c_int;
                 let mut __error: libc::c_int = 0;
                 if elevel_ >= 21 as libc::c_int {
@@ -3868,9 +3685,7 @@ unsafe extern "C" fn transformLockingClause(
                 };
                 init
             };
-            while if !(rt__state_0.l).is_null()
-                && rt__state_0.i < (*rt__state_0.l).length
-            {
+            while if !(rt__state_0.l).is_null() && rt__state_0.i < (*rt__state_0.l).length {
                 rt = &mut *((*rt__state_0.l).elements).offset(rt__state_0.i as isize)
                     as *mut ListCell;
                 true as libc::c_int
@@ -3879,13 +3694,10 @@ unsafe extern "C" fn transformLockingClause(
                 false as libc::c_int
             } != 0
             {
-                let mut rte_0: *mut RangeTblEntry = (*rt).ptr_value
-                    as *mut RangeTblEntry;
+                let mut rte_0: *mut RangeTblEntry = (*rt).ptr_value as *mut RangeTblEntry;
                 i = i.wrapping_add(1);
                 i;
-                if strcmp((*(*rte_0).eref).aliasname, (*thisrel).relname)
-                    == 0 as libc::c_int
-                {
+                if strcmp((*(*rte_0).eref).aliasname, (*thisrel).relname) == 0 as libc::c_int {
                     match (*rte_0).rtekind as libc::c_uint {
                         0 => {
                             applyLockingClause(
@@ -3895,8 +3707,8 @@ unsafe extern "C" fn transformLockingClause(
                                 (*lc).waitPolicy,
                                 pushedDown,
                             );
-                            (*rte_0).requiredPerms
-                                |= ((1 as libc::c_int) << 2 as libc::c_int) as AclMode;
+                            (*rte_0).requiredPerms |=
+                                ((1 as libc::c_int) << 2 as libc::c_int) as AclMode;
                         }
                         1 => {
                             applyLockingClause(
@@ -3906,12 +3718,7 @@ unsafe extern "C" fn transformLockingClause(
                                 (*lc).waitPolicy,
                                 pushedDown,
                             );
-                            transformLockingClause(
-                                pstate,
-                                (*rte_0).subquery,
-                                allrels,
-                                true,
-                            );
+                            transformLockingClause(pstate, (*rte_0).subquery, allrels, true);
                         }
                         2 => {
                             let elevel__0: libc::c_int = 21 as libc::c_int;
@@ -4008,23 +3815,17 @@ pub unsafe extern "C" fn applyLockingClause(
     }
     rc = get_parse_rowmark(qry, rtindex);
     if !rc.is_null() {
-        (*rc)
-            .strength = (if (*rc).strength as libc::c_uint > strength as libc::c_uint {
+        (*rc).strength = (if (*rc).strength as libc::c_uint > strength as libc::c_uint {
             (*rc).strength as libc::c_uint
         } else {
             strength as libc::c_uint
         }) as LockClauseStrength;
-        (*rc)
-            .waitPolicy = (if (*rc).waitPolicy as libc::c_uint
-            > waitPolicy as libc::c_uint
-        {
+        (*rc).waitPolicy = (if (*rc).waitPolicy as libc::c_uint > waitPolicy as libc::c_uint {
             (*rc).waitPolicy as libc::c_uint
         } else {
             waitPolicy as libc::c_uint
         }) as LockWaitPolicy;
-        (*rc)
-            .pushedDown = ((*rc).pushedDown as libc::c_int & pushedDown as libc::c_int)
-            as bool;
+        (*rc).pushedDown = ((*rc).pushedDown as libc::c_int & pushedDown as libc::c_int) as bool;
         return;
     }
     rc = ({

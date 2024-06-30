@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type RelationData;
@@ -943,24 +951,14 @@ pub struct CommonTableExpr {
 }
 pub type Relation = *mut RelationData;
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -1052,26 +1050,24 @@ unsafe extern "C" fn list_head(mut l: *const List) -> *mut ListCell {
 }
 #[inline]
 unsafe extern "C" fn list_length(mut l: *const List) -> libc::c_int {
-    return if !l.is_null() { (*l).length } else { 0 as libc::c_int };
+    return if !l.is_null() {
+        (*l).length
+    } else {
+        0 as libc::c_int
+    };
 }
 #[inline]
-unsafe extern "C" fn list_nth_cell(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut ListCell {
+unsafe extern "C" fn list_nth_cell(mut list: *const List, mut n: libc::c_int) -> *mut ListCell {
     return &mut *((*list).elements).offset(n as isize) as *mut ListCell;
 }
 #[inline]
 unsafe extern "C" fn lnext(mut l: *const List, mut c: *const ListCell) -> *mut ListCell {
     c = c.offset(1);
     c;
-    if c
-        < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell
-            as *const ListCell
-    {
-        return c as *mut ListCell
+    if c < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell as *const ListCell {
+        return c as *mut ListCell;
     } else {
-        return 0 as *mut ListCell
+        return 0 as *mut ListCell;
     };
 }
 #[no_mangle]
@@ -1082,14 +1078,12 @@ pub unsafe extern "C" fn assign_query_collations(
     query_tree_walker(
         query,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                assign_query_collations_walker
-                    as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            assign_query_collations_walker
+                as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
+        )),
         pstate as *mut libc::c_void,
         0x8 as libc::c_int | 0x2 as libc::c_int,
     );
@@ -1106,9 +1100,7 @@ unsafe extern "C" fn assign_query_collations_walker(
     {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_List as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_List as libc::c_int as libc::c_uint {
         assign_list_collations(pstate, node as *mut List);
     } else {
         assign_expr_collations(pstate, node);
@@ -1116,10 +1108,7 @@ unsafe extern "C" fn assign_query_collations_walker(
     return false;
 }
 #[no_mangle]
-pub unsafe extern "C" fn assign_list_collations(
-    mut pstate: *mut ParseState,
-    mut exprs: *mut List,
-) {
+pub unsafe extern "C" fn assign_list_collations(mut pstate: *mut ParseState, mut exprs: *mut List) {
     let mut lc: *mut ListCell = 0 as *mut ListCell;
     let mut lc__state: ForEachState = {
         let mut init = ForEachState {
@@ -1129,8 +1118,7 @@ pub unsafe extern "C" fn assign_list_collations(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -1144,10 +1132,7 @@ pub unsafe extern "C" fn assign_list_collations(
     }
 }
 #[no_mangle]
-pub unsafe extern "C" fn assign_expr_collations(
-    mut pstate: *mut ParseState,
-    mut expr: *mut Node,
-) {
+pub unsafe extern "C" fn assign_expr_collations(mut pstate: *mut ParseState, mut expr: *mut Node) {
     let mut context: assign_collations_context = assign_collations_context {
         pstate: 0 as *mut ParseState,
         collation: 0,
@@ -1181,9 +1166,7 @@ pub unsafe extern "C" fn select_common_collation(
     context.strength = COLLATE_NONE;
     context.location = -(1 as libc::c_int);
     assign_collations_walker(exprs as *mut Node, &mut context);
-    if context.strength as libc::c_uint
-        == COLLATE_CONFLICT as libc::c_int as libc::c_uint
-    {
+    if context.strength as libc::c_uint == COLLATE_CONFLICT as libc::c_int as libc::c_uint {
         if none_ok != 0 {
             return 0 as libc::c_int as Oid;
         }
@@ -1208,8 +1191,7 @@ unsafe extern "C" fn assign_aggregate_collations(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -1244,8 +1226,7 @@ unsafe extern "C" fn assign_ordered_set_collations(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -1302,21 +1283,18 @@ unsafe extern "C" fn assign_hypothetical_collations(
         paircontext.location2 = -(1 as libc::c_int);
         assign_collations_walker(h_arg, &mut paircontext);
         assign_collations_walker((*s_tle).expr as *mut Node, &mut paircontext);
-        if paircontext.strength as libc::c_uint
-            == COLLATE_CONFLICT as libc::c_int as libc::c_uint
-        {
+        if paircontext.strength as libc::c_uint == COLLATE_CONFLICT as libc::c_int as libc::c_uint {
             let elevel_: libc::c_int = 21 as libc::c_int;
             let mut __error: libc::c_int = 0;
             if elevel_ >= 21 as libc::c_int {
                 abort();
             }
         }
-        if (paircontext.collation != 0 as libc::c_int as Oid) as libc::c_int as bool
-            as libc::c_int != 0
+        if (paircontext.collation != 0 as libc::c_int as Oid) as libc::c_int as bool as libc::c_int
+            != 0
             && paircontext.collation != exprCollation((*s_tle).expr as *mut Node)
         {
-            (*s_tle)
-                .expr = makeRelabelType(
+            (*s_tle).expr = makeRelabelType(
                 (*s_tle).expr,
                 exprType((*s_tle).expr as *mut Node),
                 exprTypmod((*s_tle).expr as *mut Node),

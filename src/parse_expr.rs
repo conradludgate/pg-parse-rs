@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type RelationData;
@@ -1441,24 +1449,14 @@ pub struct CommonTableExpr {
 }
 pub type Relation = *mut RelationData;
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -1540,13 +1538,14 @@ pub const CRERR_NO_COLUMN: C2RustUnnamed = 0;
 pub type C2RustUnnamed = libc::c_uint;
 #[inline]
 unsafe extern "C" fn list_length(mut l: *const List) -> libc::c_int {
-    return if !l.is_null() { (*l).length } else { 0 as libc::c_int };
+    return if !l.is_null() {
+        (*l).length
+    } else {
+        0 as libc::c_int
+    };
 }
 #[inline]
-unsafe extern "C" fn list_nth_cell(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut ListCell {
+unsafe extern "C" fn list_nth_cell(mut list: *const List, mut n: libc::c_int) -> *mut ListCell {
     return &mut *((*list).elements).offset(n as isize) as *mut ListCell;
 }
 #[inline]
@@ -1555,10 +1554,7 @@ unsafe extern "C" fn list_last_cell(mut list: *const List) -> *mut ListCell {
         as *mut ListCell;
 }
 #[inline]
-unsafe extern "C" fn list_nth(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut libc::c_void {
+unsafe extern "C" fn list_nth(mut list: *const List, mut n: libc::c_int) -> *mut libc::c_void {
     return (*list_nth_cell(list, n)).ptr_value;
 }
 #[no_mangle]
@@ -1648,8 +1644,7 @@ unsafe extern "C" fn transformExprRecurse(
                     let mut __error: libc::c_int = 0;
                     if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                         errmsg_internal(
-                            b"unrecognized A_Expr kind: %d\0" as *const u8
-                                as *const libc::c_char,
+                            b"unrecognized A_Expr kind: %d\0" as *const u8 as *const libc::c_char,
                             (*a).kind as libc::c_uint,
                         );
                         errfinish(
@@ -1680,8 +1675,7 @@ unsafe extern "C" fn transformExprRecurse(
         }
         116 => {
             let mut na: *mut NamedArgExpr = expr as *mut NamedArgExpr;
-            (*na)
-                .arg = transformExprRecurse(pstate, (*na).arg as *mut Node) as *mut Expr;
+            (*na).arg = transformExprRecurse(pstate, (*na).arg as *mut Node) as *mut Expr;
             result = expr;
         }
         122 => {
@@ -1691,11 +1685,7 @@ unsafe extern "C" fn transformExprRecurse(
             result = transformCaseExpr(pstate, expr as *mut CaseExpr);
         }
         136 => {
-            result = transformRowExpr(
-                pstate,
-                expr as *mut RowExpr,
-                false,
-            );
+            result = transformRowExpr(pstate, expr as *mut RowExpr, false);
         }
         138 => {
             result = transformCoalesceExpr(pstate, expr as *mut CoalesceExpr);
@@ -1827,12 +1817,7 @@ unsafe extern "C" fn transformIndirection(
                 location,
             );
             if newresult.is_null() {
-                unknown_attribute(
-                    pstate,
-                    result,
-                    (*(n as *mut Value)).val.str_0,
-                    location,
-                );
+                unknown_attribute(pstate, result, (*(n as *mut Value)).val.str_0, location);
             }
             result = newresult;
         }
@@ -1865,16 +1850,16 @@ unsafe extern "C" fn transformColumnRef(
     let mut err: *const libc::c_char = 0 as *const libc::c_char;
     err = 0 as *const libc::c_char;
     match (*pstate).p_expr_kind as libc::c_uint {
-        1 | 2 | 3 | 4 | 5 | 6 | 35 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17
-        | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 29 | 30 | 31 | 32 | 33 | 34
-        | 37 | 38 | 39 | 40 | 41 => {}
+        1 | 2 | 3 | 4 | 5 | 6 | 35 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18
+        | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 29 | 30 | 31 | 32 | 33 | 34 | 37 | 38
+        | 39 | 40 | 41 => {}
         28 => {
             err = b"cannot use column reference in DEFAULT expression\0" as *const u8
                 as *const libc::c_char;
         }
         36 => {
-            err = b"cannot use column reference in partition bound expression\0"
-                as *const u8 as *const libc::c_char;
+            err = b"cannot use column reference in partition bound expression\0" as *const u8
+                as *const libc::c_char;
         }
         0 | _ => {}
     }
@@ -1886,26 +1871,17 @@ unsafe extern "C" fn transformColumnRef(
         }
     }
     if ((*pstate).p_pre_columnref_hook).is_some() {
-        node = ((*pstate).p_pre_columnref_hook)
-            .expect("non-null function pointer")(pstate, cref);
+        node = ((*pstate).p_pre_columnref_hook).expect("non-null function pointer")(pstate, cref);
         if !node.is_null() {
             return node;
         }
     }
     match list_length((*cref).fields) {
         1 => {
-            let mut field1: *mut Node = (*list_nth_cell(
-                (*cref).fields,
-                0 as libc::c_int,
-            ))
-                .ptr_value as *mut Node;
+            let mut field1: *mut Node =
+                (*list_nth_cell((*cref).fields, 0 as libc::c_int)).ptr_value as *mut Node;
             colname = (*(field1 as *mut Value)).val.str_0;
-            node = colNameToVar(
-                pstate,
-                colname,
-                false,
-                (*cref).location,
-            );
+            node = colNameToVar(pstate, colname, false, (*cref).location);
             if node.is_null() {
                 nsitem = refnameNamespaceItem(
                     pstate,
@@ -1915,34 +1891,18 @@ unsafe extern "C" fn transformColumnRef(
                     &mut levels_up,
                 );
                 if !nsitem.is_null() {
-                    node = transformWholeRowRef(
-                        pstate,
-                        nsitem,
-                        levels_up,
-                        (*cref).location,
-                    );
+                    node = transformWholeRowRef(pstate, nsitem, levels_up, (*cref).location);
                 }
             }
         }
         2 => {
-            let mut field1_0: *mut Node = (*list_nth_cell(
-                (*cref).fields,
-                0 as libc::c_int,
-            ))
-                .ptr_value as *mut Node;
-            let mut field2: *mut Node = (*list_nth_cell(
-                (*cref).fields,
-                1 as libc::c_int,
-            ))
-                .ptr_value as *mut Node;
+            let mut field1_0: *mut Node =
+                (*list_nth_cell((*cref).fields, 0 as libc::c_int)).ptr_value as *mut Node;
+            let mut field2: *mut Node =
+                (*list_nth_cell((*cref).fields, 1 as libc::c_int)).ptr_value as *mut Node;
             relname = (*(field1_0 as *mut Value)).val.str_0;
-            nsitem = refnameNamespaceItem(
-                pstate,
-                nspname,
-                relname,
-                (*cref).location,
-                &mut levels_up,
-            );
+            nsitem =
+                refnameNamespaceItem(pstate, nspname, relname, (*cref).location, &mut levels_up);
             if nsitem.is_null() {
                 crerr = CRERR_NO_RTE;
             } else if (*(field2 as *const Node)).type_0 as libc::c_uint
@@ -1951,20 +1911,9 @@ unsafe extern "C" fn transformColumnRef(
                 node = transformWholeRowRef(pstate, nsitem, levels_up, (*cref).location);
             } else {
                 colname = (*(field2 as *mut Value)).val.str_0;
-                node = scanNSItemForColumn(
-                    pstate,
-                    nsitem,
-                    levels_up,
-                    colname,
-                    (*cref).location,
-                );
+                node = scanNSItemForColumn(pstate, nsitem, levels_up, colname, (*cref).location);
                 if node.is_null() {
-                    node = transformWholeRowRef(
-                        pstate,
-                        nsitem,
-                        levels_up,
-                        (*cref).location,
-                    );
+                    node = transformWholeRowRef(pstate, nsitem, levels_up, (*cref).location);
                     node = ParseFuncOrColumn(
                         pstate,
                         list_make1_impl(
@@ -1988,30 +1937,16 @@ unsafe extern "C" fn transformColumnRef(
             }
         }
         3 => {
-            let mut field1_1: *mut Node = (*list_nth_cell(
-                (*cref).fields,
-                0 as libc::c_int,
-            ))
-                .ptr_value as *mut Node;
-            let mut field2_0: *mut Node = (*list_nth_cell(
-                (*cref).fields,
-                1 as libc::c_int,
-            ))
-                .ptr_value as *mut Node;
-            let mut field3: *mut Node = (*list_nth_cell(
-                (*cref).fields,
-                2 as libc::c_int,
-            ))
-                .ptr_value as *mut Node;
+            let mut field1_1: *mut Node =
+                (*list_nth_cell((*cref).fields, 0 as libc::c_int)).ptr_value as *mut Node;
+            let mut field2_0: *mut Node =
+                (*list_nth_cell((*cref).fields, 1 as libc::c_int)).ptr_value as *mut Node;
+            let mut field3: *mut Node =
+                (*list_nth_cell((*cref).fields, 2 as libc::c_int)).ptr_value as *mut Node;
             nspname = (*(field1_1 as *mut Value)).val.str_0;
             relname = (*(field2_0 as *mut Value)).val.str_0;
-            nsitem = refnameNamespaceItem(
-                pstate,
-                nspname,
-                relname,
-                (*cref).location,
-                &mut levels_up,
-            );
+            nsitem =
+                refnameNamespaceItem(pstate, nspname, relname, (*cref).location, &mut levels_up);
             if nsitem.is_null() {
                 crerr = CRERR_NO_RTE;
             } else if (*(field3 as *const Node)).type_0 as libc::c_uint
@@ -2020,20 +1955,9 @@ unsafe extern "C" fn transformColumnRef(
                 node = transformWholeRowRef(pstate, nsitem, levels_up, (*cref).location);
             } else {
                 colname = (*(field3 as *mut Value)).val.str_0;
-                node = scanNSItemForColumn(
-                    pstate,
-                    nsitem,
-                    levels_up,
-                    colname,
-                    (*cref).location,
-                );
+                node = scanNSItemForColumn(pstate, nsitem, levels_up, colname, (*cref).location);
                 if node.is_null() {
-                    node = transformWholeRowRef(
-                        pstate,
-                        nsitem,
-                        levels_up,
-                        (*cref).location,
-                    );
+                    node = transformWholeRowRef(pstate, nsitem, levels_up, (*cref).location);
                     node = ParseFuncOrColumn(
                         pstate,
                         list_make1_impl(
@@ -2057,26 +1981,14 @@ unsafe extern "C" fn transformColumnRef(
             }
         }
         4 => {
-            let mut field1_2: *mut Node = (*list_nth_cell(
-                (*cref).fields,
-                0 as libc::c_int,
-            ))
-                .ptr_value as *mut Node;
-            let mut field2_1: *mut Node = (*list_nth_cell(
-                (*cref).fields,
-                1 as libc::c_int,
-            ))
-                .ptr_value as *mut Node;
-            let mut field3_0: *mut Node = (*list_nth_cell(
-                (*cref).fields,
-                2 as libc::c_int,
-            ))
-                .ptr_value as *mut Node;
-            let mut field4: *mut Node = (*list_nth_cell(
-                (*cref).fields,
-                3 as libc::c_int,
-            ))
-                .ptr_value as *mut Node;
+            let mut field1_2: *mut Node =
+                (*list_nth_cell((*cref).fields, 0 as libc::c_int)).ptr_value as *mut Node;
+            let mut field2_1: *mut Node =
+                (*list_nth_cell((*cref).fields, 1 as libc::c_int)).ptr_value as *mut Node;
+            let mut field3_0: *mut Node =
+                (*list_nth_cell((*cref).fields, 2 as libc::c_int)).ptr_value as *mut Node;
+            let mut field4: *mut Node =
+                (*list_nth_cell((*cref).fields, 3 as libc::c_int)).ptr_value as *mut Node;
             let mut catname: *mut libc::c_char = 0 as *mut libc::c_char;
             catname = (*(field1_2 as *mut Value)).val.str_0;
             nspname = (*(field2_1 as *mut Value)).val.str_0;
@@ -2096,28 +2008,13 @@ unsafe extern "C" fn transformColumnRef(
                 } else if (*(field4 as *const Node)).type_0 as libc::c_uint
                     == T_A_Star as libc::c_int as libc::c_uint
                 {
-                    node = transformWholeRowRef(
-                        pstate,
-                        nsitem,
-                        levels_up,
-                        (*cref).location,
-                    );
+                    node = transformWholeRowRef(pstate, nsitem, levels_up, (*cref).location);
                 } else {
                     colname = (*(field4 as *mut Value)).val.str_0;
-                    node = scanNSItemForColumn(
-                        pstate,
-                        nsitem,
-                        levels_up,
-                        colname,
-                        (*cref).location,
-                    );
+                    node =
+                        scanNSItemForColumn(pstate, nsitem, levels_up, colname, (*cref).location);
                     if node.is_null() {
-                        node = transformWholeRowRef(
-                            pstate,
-                            nsitem,
-                            levels_up,
-                            (*cref).location,
-                        );
+                        node = transformWholeRowRef(pstate, nsitem, levels_up, (*cref).location);
                         node = ParseFuncOrColumn(
                             pstate,
                             list_make1_impl(
@@ -2147,8 +2044,9 @@ unsafe extern "C" fn transformColumnRef(
     }
     if ((*pstate).p_post_columnref_hook).is_some() {
         let mut hookresult: *mut Node = 0 as *mut Node;
-        hookresult = ((*pstate).p_post_columnref_hook)
-            .expect("non-null function pointer")(pstate, cref, node);
+        hookresult = ((*pstate).p_post_columnref_hook).expect("non-null function pointer")(
+            pstate, cref, node,
+        );
         if node.is_null() {
             node = hookresult;
         } else if !hookresult.is_null() {
@@ -2165,10 +2063,7 @@ unsafe extern "C" fn transformColumnRef(
                 errorMissingColumn(pstate, relname, colname, (*cref).location);
             }
             1 => {
-                errorMissingRTE(
-                    pstate,
-                    makeRangeVar(nspname, relname, (*cref).location),
-                );
+                errorMissingRTE(pstate, makeRangeVar(nspname, relname, (*cref).location));
             }
             2 => {
                 let elevel__1: libc::c_int = 21 as libc::c_int;
@@ -2195,8 +2090,7 @@ unsafe extern "C" fn transformParamRef(
 ) -> *mut Node {
     let mut result: *mut Node = 0 as *mut Node;
     if ((*pstate).p_paramref_hook).is_some() {
-        result = ((*pstate).p_paramref_hook)
-            .expect("non-null function pointer")(pstate, pref);
+        result = ((*pstate).p_paramref_hook).expect("non-null function pointer")(pstate, pref);
     } else {
         result = 0 as *mut Node;
     }
@@ -2258,7 +2152,8 @@ unsafe extern "C" fn transformAExprOp(
         result = transformExprRecurse(pstate, n as *mut Node);
     } else if !lexpr.is_null()
         && (*(lexpr as *const Node)).type_0 as libc::c_uint
-            == T_RowExpr as libc::c_int as libc::c_uint && !rexpr.is_null()
+            == T_RowExpr as libc::c_int as libc::c_uint
+        && !rexpr.is_null()
         && (*(rexpr as *const Node)).type_0 as libc::c_uint
             == T_SubLink as libc::c_int as libc::c_uint
         && (*(rexpr as *mut SubLink)).subLinkType as libc::c_uint
@@ -2272,7 +2167,8 @@ unsafe extern "C" fn transformAExprOp(
         result = transformExprRecurse(pstate, s as *mut Node);
     } else if !lexpr.is_null()
         && (*(lexpr as *const Node)).type_0 as libc::c_uint
-            == T_RowExpr as libc::c_int as libc::c_uint && !rexpr.is_null()
+            == T_RowExpr as libc::c_int as libc::c_uint
+        && !rexpr.is_null()
         && (*(rexpr as *const Node)).type_0 as libc::c_uint
             == T_RowExpr as libc::c_int as libc::c_uint
     {
@@ -2289,8 +2185,7 @@ unsafe extern "C" fn transformAExprOp(
         let mut last_srf: *mut Node = (*pstate).p_last_srf;
         lexpr = transformExprRecurse(pstate, lexpr);
         rexpr = transformExprRecurse(pstate, rexpr);
-        result = make_op(pstate, (*a).name, lexpr, rexpr, last_srf, (*a).location)
-            as *mut Node;
+        result = make_op(pstate, (*a).name, lexpr, rexpr, last_srf, (*a).location) as *mut Node;
     }
     return result;
 }
@@ -2300,14 +2195,7 @@ unsafe extern "C" fn transformAExprOpAny(
 ) -> *mut Node {
     let mut lexpr: *mut Node = transformExprRecurse(pstate, (*a).lexpr);
     let mut rexpr: *mut Node = transformExprRecurse(pstate, (*a).rexpr);
-    return make_scalar_array_op(
-        pstate,
-        (*a).name,
-        true,
-        lexpr,
-        rexpr,
-        (*a).location,
-    ) as *mut Node;
+    return make_scalar_array_op(pstate, (*a).name, true, lexpr, rexpr, (*a).location) as *mut Node;
 }
 unsafe extern "C" fn transformAExprOpAll(
     mut pstate: *mut ParseState,
@@ -2315,14 +2203,8 @@ unsafe extern "C" fn transformAExprOpAll(
 ) -> *mut Node {
     let mut lexpr: *mut Node = transformExprRecurse(pstate, (*a).lexpr);
     let mut rexpr: *mut Node = transformExprRecurse(pstate, (*a).rexpr);
-    return make_scalar_array_op(
-        pstate,
-        (*a).name,
-        false,
-        lexpr,
-        rexpr,
-        (*a).location,
-    ) as *mut Node;
+    return make_scalar_array_op(pstate, (*a).name, false, lexpr, rexpr, (*a).location)
+        as *mut Node;
 }
 unsafe extern "C" fn transformAExprDistinct(
     mut pstate: *mut ParseState,
@@ -2341,7 +2223,8 @@ unsafe extern "C" fn transformAExprDistinct(
     rexpr = transformExprRecurse(pstate, rexpr);
     if !lexpr.is_null()
         && (*(lexpr as *const Node)).type_0 as libc::c_uint
-            == T_RowExpr as libc::c_int as libc::c_uint && !rexpr.is_null()
+            == T_RowExpr as libc::c_int as libc::c_uint
+        && !rexpr.is_null()
         && (*(rexpr as *const Node)).type_0 as libc::c_uint
             == T_RowExpr as libc::c_int as libc::c_uint
     {
@@ -2353,8 +2236,7 @@ unsafe extern "C" fn transformAExprDistinct(
             (*a).location,
         );
     } else {
-        result = make_distinct_op(pstate, (*a).name, lexpr, rexpr, (*a).location)
-            as *mut Node;
+        result = make_distinct_op(pstate, (*a).name, lexpr, rexpr, (*a).location) as *mut Node;
     }
     if (*a).kind as libc::c_uint == AEXPR_NOT_DISTINCT as libc::c_int as libc::c_uint {
         result = makeBoolExpr(
@@ -2551,8 +2433,7 @@ unsafe extern "C" fn transformAExprBetween(
             let mut __error: libc::c_int = 0;
             if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                 errmsg_internal(
-                    b"unrecognized A_Expr kind: %d\0" as *const u8
-                        as *const libc::c_char,
+                    b"unrecognized A_Expr kind: %d\0" as *const u8 as *const libc::c_char,
                     (*a).kind as libc::c_uint,
                 );
                 errfinish(
@@ -2616,8 +2497,7 @@ unsafe extern "C" fn transformBoolExpr(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -2649,8 +2529,7 @@ unsafe extern "C" fn transformFuncCall(
         init
     };
     while if !(args__state.l).is_null() && args__state.i < (*args__state.l).length {
-        args = &mut *((*args__state.l).elements).offset(args__state.i as isize)
-            as *mut ListCell;
+        args = &mut *((*args__state.l).elements).offset(args__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         args = 0 as *mut ListCell;
@@ -2659,8 +2538,7 @@ unsafe extern "C" fn transformFuncCall(
     {
         targs = lappend(
             targs,
-            transformExprRecurse(pstate, (*args).ptr_value as *mut Node)
-                as *mut libc::c_void,
+            transformExprRecurse(pstate, (*args).ptr_value as *mut Node) as *mut libc::c_void,
         );
         args__state.i += 1;
         args__state.i;
@@ -2673,9 +2551,7 @@ unsafe extern "C" fn transformFuncCall(
             };
             init
         };
-        while if !(args__state_0.l).is_null()
-            && args__state_0.i < (*args__state_0.l).length
-        {
+        while if !(args__state_0.l).is_null() && args__state_0.i < (*args__state_0.l).length {
             args = &mut *((*args__state_0.l).elements).offset(args__state_0.i as isize)
                 as *mut ListCell;
             true as libc::c_int
@@ -2687,8 +2563,7 @@ unsafe extern "C" fn transformFuncCall(
             let mut arg: *mut SortBy = (*args).ptr_value as *mut SortBy;
             targs = lappend(
                 targs,
-                transformExpr(pstate, (*arg).node, EXPR_KIND_ORDER_BY)
-                    as *mut libc::c_void,
+                transformExpr(pstate, (*arg).node, EXPR_KIND_ORDER_BY) as *mut libc::c_void,
             );
             args__state_0.i += 1;
             args__state_0.i;
@@ -2735,20 +2610,13 @@ unsafe extern "C" fn transformMultiAssignRef(
                 0 as *mut libc::c_char,
                 true,
             );
-            (*pstate)
-                .p_multiassign_exprs = lappend(
-                (*pstate).p_multiassign_exprs,
-                tle as *mut libc::c_void,
-            );
+            (*pstate).p_multiassign_exprs =
+                lappend((*pstate).p_multiassign_exprs, tle as *mut libc::c_void);
             (*sublink).subLinkId = list_length((*pstate).p_multiassign_exprs);
         } else if (*((*maref).source as *const Node)).type_0 as libc::c_uint
             == T_RowExpr as libc::c_int as libc::c_uint
         {
-            rexpr = transformRowExpr(
-                pstate,
-                (*maref).source as *mut RowExpr,
-                true,
-            ) as *mut RowExpr;
+            rexpr = transformRowExpr(pstate, (*maref).source as *mut RowExpr, true) as *mut RowExpr;
             if list_length((*rexpr).args) != (*maref).ncolumns {
                 let elevel__0: libc::c_int = 21 as libc::c_int;
                 let mut __error_0: libc::c_int = 0;
@@ -2762,11 +2630,8 @@ unsafe extern "C" fn transformMultiAssignRef(
                 0 as *mut libc::c_char,
                 true,
             );
-            (*pstate)
-                .p_multiassign_exprs = lappend(
-                (*pstate).p_multiassign_exprs,
-                tle as *mut libc::c_void,
-            );
+            (*pstate).p_multiassign_exprs =
+                lappend((*pstate).p_multiassign_exprs, tle as *mut libc::c_void);
         } else {
             let elevel__1: libc::c_int = 21 as libc::c_int;
             let mut __error_1: libc::c_int = 0;
@@ -2775,8 +2640,7 @@ unsafe extern "C" fn transformMultiAssignRef(
             }
         }
     } else {
-        tle = (*list_last_cell((*pstate).p_multiassign_exprs)).ptr_value
-            as *mut TargetEntry;
+        tle = (*list_last_cell((*pstate).p_multiassign_exprs)).ptr_value as *mut TargetEntry;
     }
     if (*((*tle).expr as *const Node)).type_0 as libc::c_uint
         == T_SubLink as libc::c_int as libc::c_uint
@@ -2784,8 +2648,7 @@ unsafe extern "C" fn transformMultiAssignRef(
         let mut param: *mut Param = 0 as *mut Param;
         sublink = (*tle).expr as *mut SubLink;
         qtree = (*sublink).subselect as *mut Query;
-        tle = list_nth((*qtree).targetList, (*maref).colno - 1 as libc::c_int)
-            as *mut TargetEntry;
+        tle = list_nth((*qtree).targetList, (*maref).colno - 1 as libc::c_int) as *mut TargetEntry;
         param = ({
             let mut _result: *mut Node = 0 as *mut Node;
             (*_result).type_0 = T_Param;
@@ -2806,8 +2669,7 @@ unsafe extern "C" fn transformMultiAssignRef(
         rexpr = (*tle).expr as *mut RowExpr;
         result = list_nth((*rexpr).args, (*maref).colno - 1 as libc::c_int) as *mut Node;
         if (*maref).colno == (*maref).ncolumns {
-            (*pstate)
-                .p_multiassign_exprs = list_delete_last((*pstate).p_multiassign_exprs);
+            (*pstate).p_multiassign_exprs = list_delete_last((*pstate).p_multiassign_exprs);
         }
         return result;
     }
@@ -2815,12 +2677,11 @@ unsafe extern "C" fn transformMultiAssignRef(
     let mut __error_2: libc::c_int = 0;
     if errstart(elevel__2, 0 as *const libc::c_char) != 0 {
         errmsg_internal(
-            b"unexpected expr type in multiassign list\0" as *const u8
-                as *const libc::c_char,
+            b"unexpected expr type in multiassign list\0" as *const u8 as *const libc::c_char,
         );
         errfinish(
-            b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_expr.c\0"
-                as *const u8 as *const libc::c_char,
+            b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_expr.c\0" as *const u8
+                as *const libc::c_char,
             1537 as libc::c_int,
             0 as *const libc::c_char,
         );
@@ -2897,8 +2758,7 @@ unsafe extern "C" fn transformCaseExpr(
             ) as *mut Node;
         }
         (*neww).expr = transformExprRecurse(pstate, warg) as *mut Expr;
-        (*neww)
-            .expr = coerce_to_boolean(
+        (*neww).expr = coerce_to_boolean(
             pstate,
             (*neww).expr as *mut Node,
             b"CASE/WHEN\0" as *const u8 as *const libc::c_char,
@@ -2932,8 +2792,7 @@ unsafe extern "C" fn transformCaseExpr(
         0 as *mut *mut Node,
     );
     (*newc).casetype = ptype;
-    (*newc)
-        .defresult = coerce_to_common_type(
+    (*newc).defresult = coerce_to_common_type(
         pstate,
         (*newc).defresult as *mut Node,
         ptype,
@@ -2947,8 +2806,7 @@ unsafe extern "C" fn transformCaseExpr(
         init
     };
     while if !(l__state_0.l).is_null() && l__state_0.i < (*l__state_0.l).length {
-        l = &mut *((*l__state_0.l).elements).offset(l__state_0.i as isize)
-            as *mut ListCell;
+        l = &mut *((*l__state_0.l).elements).offset(l__state_0.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         l = 0 as *mut ListCell;
@@ -2956,8 +2814,7 @@ unsafe extern "C" fn transformCaseExpr(
     } != 0
     {
         let mut w_0: *mut CaseWhen = (*l).ptr_value as *mut CaseWhen;
-        (*w_0)
-            .result = coerce_to_common_type(
+        (*w_0).result = coerce_to_common_type(
             pstate,
             (*w_0).result as *mut Node,
             ptype,
@@ -2986,47 +2843,41 @@ unsafe extern "C" fn transformSubLink(
     err = 0 as *const libc::c_char;
     match (*pstate).p_expr_kind as libc::c_uint {
         1 => {}
-        2 | 3 | 4 | 5 | 6 | 35 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18
-        | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 41 => {}
+        2 | 3 | 4 | 5 | 6 | 35 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19
+        | 20 | 21 | 22 | 23 | 24 | 25 | 41 => {}
         26 | 27 => {
-            err = b"cannot use subquery in check constraint\0" as *const u8
-                as *const libc::c_char;
+            err = b"cannot use subquery in check constraint\0" as *const u8 as *const libc::c_char;
         }
         28 | 29 => {
-            err = b"cannot use subquery in DEFAULT expression\0" as *const u8
-                as *const libc::c_char;
+            err =
+                b"cannot use subquery in DEFAULT expression\0" as *const u8 as *const libc::c_char;
         }
         30 => {
-            err = b"cannot use subquery in index expression\0" as *const u8
-                as *const libc::c_char;
+            err = b"cannot use subquery in index expression\0" as *const u8 as *const libc::c_char;
         }
         31 => {
-            err = b"cannot use subquery in index predicate\0" as *const u8
-                as *const libc::c_char;
+            err = b"cannot use subquery in index predicate\0" as *const u8 as *const libc::c_char;
         }
         32 => {
             err = b"cannot use subquery in transform expression\0" as *const u8
                 as *const libc::c_char;
         }
         33 => {
-            err = b"cannot use subquery in EXECUTE parameter\0" as *const u8
-                as *const libc::c_char;
+            err = b"cannot use subquery in EXECUTE parameter\0" as *const u8 as *const libc::c_char;
         }
         34 => {
             err = b"cannot use subquery in trigger WHEN condition\0" as *const u8
                 as *const libc::c_char;
         }
         36 => {
-            err = b"cannot use subquery in partition bound\0" as *const u8
-                as *const libc::c_char;
+            err = b"cannot use subquery in partition bound\0" as *const u8 as *const libc::c_char;
         }
         37 => {
             err = b"cannot use subquery in partition key expression\0" as *const u8
                 as *const libc::c_char;
         }
         38 => {
-            err = b"cannot use subquery in CALL argument\0" as *const u8
-                as *const libc::c_char;
+            err = b"cannot use subquery in CALL argument\0" as *const u8 as *const libc::c_char;
         }
         39 => {
             err = b"cannot use subquery in COPY FROM WHERE condition\0" as *const u8
@@ -3053,17 +2904,14 @@ unsafe extern "C" fn transformSubLink(
         false,
         true,
     );
-    if !((*(qtree as *const Node)).type_0 as libc::c_uint
-        == T_Query as libc::c_int as libc::c_uint)
-        || (*qtree).commandType as libc::c_uint
-            != CMD_SELECT as libc::c_int as libc::c_uint
+    if !((*(qtree as *const Node)).type_0 as libc::c_uint == T_Query as libc::c_int as libc::c_uint)
+        || (*qtree).commandType as libc::c_uint != CMD_SELECT as libc::c_int as libc::c_uint
     {
         let elevel__0: libc::c_int = 21 as libc::c_int;
         let mut __error_0: libc::c_int = 0;
         if errstart(elevel__0, 0 as *const libc::c_char) != 0 {
             errmsg_internal(
-                b"unexpected non-SELECT command in SubLink\0" as *const u8
-                    as *const libc::c_char,
+                b"unexpected non-SELECT command in SubLink\0" as *const u8 as *const libc::c_char,
             );
             errfinish(
                 b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_expr.c\0"
@@ -3077,15 +2925,11 @@ unsafe extern "C" fn transformSubLink(
         }
     }
     (*sublink).subselect = qtree as *mut Node;
-    if (*sublink).subLinkType as libc::c_uint
-        == EXISTS_SUBLINK as libc::c_int as libc::c_uint
-    {
+    if (*sublink).subLinkType as libc::c_uint == EXISTS_SUBLINK as libc::c_int as libc::c_uint {
         (*sublink).testexpr = 0 as *mut Node;
         (*sublink).operName = 0 as *mut libc::c_void as *mut List;
-    } else if (*sublink).subLinkType as libc::c_uint
-        == EXPR_SUBLINK as libc::c_int as libc::c_uint
-        || (*sublink).subLinkType as libc::c_uint
-            == ARRAY_SUBLINK as libc::c_int as libc::c_uint
+    } else if (*sublink).subLinkType as libc::c_uint == EXPR_SUBLINK as libc::c_int as libc::c_uint
+        || (*sublink).subLinkType as libc::c_uint == ARRAY_SUBLINK as libc::c_int as libc::c_uint
     {
         if count_nonjunk_tlist_entries((*qtree).targetList) != 1 as libc::c_int {
             let elevel__1: libc::c_int = 21 as libc::c_int;
@@ -3107,8 +2951,7 @@ unsafe extern "C" fn transformSubLink(
         let mut right_list: *mut List = 0 as *mut List;
         let mut l: *mut ListCell = 0 as *mut ListCell;
         if ((*sublink).operName).is_null() {
-            (*sublink)
-                .operName = list_make1_impl(
+            (*sublink).operName = list_make1_impl(
                 T_List,
                 ListCell {
                     ptr_value: makeString(
@@ -3140,8 +2983,7 @@ unsafe extern "C" fn transformSubLink(
             init
         };
         while if !(l__state.l).is_null() && l__state.i < (*l__state.l).length {
-            l = &mut *((*l__state.l).elements).offset(l__state.i as isize)
-                as *mut ListCell;
+            l = &mut *((*l__state.l).elements).offset(l__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             l = 0 as *mut ListCell;
@@ -3181,8 +3023,7 @@ unsafe extern "C" fn transformSubLink(
                 abort();
             }
         }
-        (*sublink)
-            .testexpr = make_row_comparison_op(
+        (*sublink).testexpr = make_row_comparison_op(
             pstate,
             (*sublink).operName,
             left_list,
@@ -3217,11 +3058,9 @@ unsafe extern "C" fn transformArrayExpr(
         };
         init
     };
-    while if !(element__state.l).is_null()
-        && element__state.i < (*element__state.l).length
-    {
-        element = &mut *((*element__state.l).elements).offset(element__state.i as isize)
-            as *mut ListCell;
+    while if !(element__state.l).is_null() && element__state.i < (*element__state.l).length {
+        element =
+            &mut *((*element__state.l).elements).offset(element__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         element = 0 as *mut ListCell;
@@ -3243,8 +3082,7 @@ unsafe extern "C" fn transformArrayExpr(
             (*newa).multidims = true;
         } else {
             newe = transformExprRecurse(pstate, e);
-            if (*newa).multidims == 0
-                && get_element_type(exprType(newe)) != 0 as libc::c_int as Oid
+            if (*newa).multidims == 0 && get_element_type(exprType(newe)) != 0 as libc::c_int as Oid
             {
                 (*newa).multidims = true;
             }
@@ -3304,11 +3142,9 @@ unsafe extern "C" fn transformArrayExpr(
         };
         init
     };
-    while if !(element__state_0.l).is_null()
-        && element__state_0.i < (*element__state_0.l).length
-    {
-        element = &mut *((*element__state_0.l).elements)
-            .offset(element__state_0.i as isize) as *mut ListCell;
+    while if !(element__state_0.l).is_null() && element__state_0.i < (*element__state_0.l).length {
+        element = &mut *((*element__state_0.l).elements).offset(element__state_0.i as isize)
+            as *mut ListCell;
         true as libc::c_int
     } else {
         element = 0 as *mut ListCell;
@@ -3366,13 +3202,7 @@ unsafe extern "C" fn transformRowExpr(
         (*_result).type_0 = T_RowExpr;
         _result
     }) as *mut RowExpr;
-    (*newr)
-        .args = transformExpressionList(
-        pstate,
-        (*r).args,
-        (*pstate).p_expr_kind,
-        allowDefault,
-    );
+    (*newr).args = transformExpressionList(pstate, (*r).args, (*pstate).p_expr_kind, allowDefault);
     (*newr).row_format = COERCE_IMPLICIT_CAST;
     (*newr).colnames = 0 as *mut libc::c_void as *mut List;
     fnum = 1 as libc::c_int;
@@ -3383,8 +3213,7 @@ unsafe extern "C" fn transformRowExpr(
             b"f%d\0" as *const u8 as *const libc::c_char,
             fnum,
         );
-        (*newr)
-            .colnames = lappend(
+        (*newr).colnames = lappend(
             (*newr).colnames,
             makeString(pstrdup(fname.as_mut_ptr())) as *mut libc::c_void,
         );
@@ -3415,8 +3244,7 @@ unsafe extern "C" fn transformCoalesceExpr(
         init
     };
     while if !(args__state.l).is_null() && args__state.i < (*args__state.l).length {
-        args = &mut *((*args__state.l).elements).offset(args__state.i as isize)
-            as *mut ListCell;
+        args = &mut *((*args__state.l).elements).offset(args__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         args = 0 as *mut ListCell;
@@ -3430,8 +3258,7 @@ unsafe extern "C" fn transformCoalesceExpr(
         args__state.i += 1;
         args__state.i;
     }
-    (*newc)
-        .coalescetype = select_common_type(
+    (*newc).coalescetype = select_common_type(
         pstate,
         newargs,
         b"COALESCE\0" as *const u8 as *const libc::c_char,
@@ -3444,10 +3271,9 @@ unsafe extern "C" fn transformCoalesceExpr(
         };
         init
     };
-    while if !(args__state_0.l).is_null() && args__state_0.i < (*args__state_0.l).length
-    {
-        args = &mut *((*args__state_0.l).elements).offset(args__state_0.i as isize)
-            as *mut ListCell;
+    while if !(args__state_0.l).is_null() && args__state_0.i < (*args__state_0.l).length {
+        args =
+            &mut *((*args__state_0.l).elements).offset(args__state_0.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         args = 0 as *mut ListCell;
@@ -3488,13 +3314,12 @@ unsafe extern "C" fn transformMinMaxExpr(
     }) as *mut MinMaxExpr;
     let mut newargs: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut newcoercedargs: *mut List = 0 as *mut libc::c_void as *mut List;
-    let mut funcname: *const libc::c_char = if (*m).op as libc::c_uint
-        == IS_GREATEST as libc::c_int as libc::c_uint
-    {
-        b"GREATEST\0" as *const u8 as *const libc::c_char
-    } else {
-        b"LEAST\0" as *const u8 as *const libc::c_char
-    };
+    let mut funcname: *const libc::c_char =
+        if (*m).op as libc::c_uint == IS_GREATEST as libc::c_int as libc::c_uint {
+            b"GREATEST\0" as *const u8 as *const libc::c_char
+        } else {
+            b"LEAST\0" as *const u8 as *const libc::c_char
+        };
     let mut args: *mut ListCell = 0 as *mut ListCell;
     (*newm).op = (*m).op;
     let mut args__state: ForEachState = {
@@ -3505,8 +3330,7 @@ unsafe extern "C" fn transformMinMaxExpr(
         init
     };
     while if !(args__state.l).is_null() && args__state.i < (*args__state.l).length {
-        args = &mut *((*args__state.l).elements).offset(args__state.i as isize)
-            as *mut ListCell;
+        args = &mut *((*args__state.l).elements).offset(args__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         args = 0 as *mut ListCell;
@@ -3520,8 +3344,7 @@ unsafe extern "C" fn transformMinMaxExpr(
         args__state.i += 1;
         args__state.i;
     }
-    (*newm)
-        .minmaxtype = select_common_type(pstate, newargs, funcname, 0 as *mut *mut Node);
+    (*newm).minmaxtype = select_common_type(pstate, newargs, funcname, 0 as *mut *mut Node);
     let mut args__state_0: ForEachState = {
         let mut init = ForEachState {
             l: newargs,
@@ -3529,10 +3352,9 @@ unsafe extern "C" fn transformMinMaxExpr(
         };
         init
     };
-    while if !(args__state_0.l).is_null() && args__state_0.i < (*args__state_0.l).length
-    {
-        args = &mut *((*args__state_0.l).elements).offset(args__state_0.i as isize)
-            as *mut ListCell;
+    while if !(args__state_0.l).is_null() && args__state_0.i < (*args__state_0.l).length {
+        args =
+            &mut *((*args__state_0.l).elements).offset(args__state_0.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         args = 0 as *mut ListCell;
@@ -3556,32 +3378,16 @@ unsafe extern "C" fn transformSQLValueFunction(
 ) -> *mut Node {
     match (*svf).op as libc::c_uint {
         2 => {
-            (*svf)
-                .typmod = anytime_typmod_check(
-                true,
-                (*svf).typmod,
-            );
+            (*svf).typmod = anytime_typmod_check(true, (*svf).typmod);
         }
         4 => {
-            (*svf)
-                .typmod = anytimestamp_typmod_check(
-                true,
-                (*svf).typmod,
-            );
+            (*svf).typmod = anytimestamp_typmod_check(true, (*svf).typmod);
         }
         6 => {
-            (*svf)
-                .typmod = anytime_typmod_check(
-                false,
-                (*svf).typmod,
-            );
+            (*svf).typmod = anytime_typmod_check(false, (*svf).typmod);
         }
         8 => {
-            (*svf)
-                .typmod = anytimestamp_typmod_check(
-                false,
-                (*svf).typmod,
-            );
+            (*svf).typmod = anytimestamp_typmod_check(false, (*svf).typmod);
         }
         0 | 1 | 3 | 5 | 7 | 9 | 10 | 11 | 12 | 13 | 14 | _ => {}
     }
@@ -3601,12 +3407,7 @@ unsafe extern "C" fn transformXmlExpr(
     }) as *mut XmlExpr;
     (*newx).op = (*x).op;
     if !((*x).name).is_null() {
-        (*newx)
-            .name = map_sql_identifier_to_xml_name(
-            (*x).name,
-            false,
-            false,
-        );
+        (*newx).name = map_sql_identifier_to_xml_name((*x).name, false, false);
     } else {
         (*newx).name = 0 as *mut libc::c_char;
     }
@@ -3623,8 +3424,7 @@ unsafe extern "C" fn transformXmlExpr(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -3636,19 +3436,11 @@ unsafe extern "C" fn transformXmlExpr(
         let mut argname: *mut libc::c_char = 0 as *mut libc::c_char;
         expr = transformExprRecurse(pstate, (*r).val);
         if !((*r).name).is_null() {
-            argname = map_sql_identifier_to_xml_name(
-                (*r).name,
-                false,
-                false,
-            );
+            argname = map_sql_identifier_to_xml_name((*r).name, false, false);
         } else if (*((*r).val as *const Node)).type_0 as libc::c_uint
             == T_ColumnRef as libc::c_int as libc::c_uint
         {
-            argname = map_sql_identifier_to_xml_name(
-                FigureColname((*r).val),
-                true,
-                false,
-            );
+            argname = map_sql_identifier_to_xml_name(FigureColname((*r).val), true, false);
         } else {
             let elevel_: libc::c_int = 21 as libc::c_int;
             let mut __error: libc::c_int = 0;
@@ -3667,8 +3459,8 @@ unsafe extern "C" fn transformXmlExpr(
                 init
             };
             while if !(lc2__state.l).is_null() && lc2__state.i < (*lc2__state.l).length {
-                lc2 = &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize)
-                    as *mut ListCell;
+                lc2 =
+                    &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize) as *mut ListCell;
                 true as libc::c_int
             } else {
                 lc2 = 0 as *mut ListCell;
@@ -3689,11 +3481,7 @@ unsafe extern "C" fn transformXmlExpr(
             }
         }
         (*newx).named_args = lappend((*newx).named_args, expr as *mut libc::c_void);
-        (*newx)
-            .arg_names = lappend(
-            (*newx).arg_names,
-            makeString(argname) as *mut libc::c_void,
-        );
+        (*newx).arg_names = lappend((*newx).arg_names, makeString(argname) as *mut libc::c_void);
         lc__state.i += 1;
         lc__state.i;
     }
@@ -3707,8 +3495,7 @@ unsafe extern "C" fn transformXmlExpr(
         init
     };
     while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
-        lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -3796,8 +3583,7 @@ unsafe extern "C" fn transformBooleanTest(
             let mut __error: libc::c_int = 0;
             if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                 errmsg_internal(
-                    b"unrecognized booltesttype: %d\0" as *const u8
-                        as *const libc::c_char,
+                    b"unrecognized booltesttype: %d\0" as *const u8 as *const libc::c_char,
                     (*b).booltesttype as libc::c_int,
                 );
                 errfinish(
@@ -3977,9 +3763,7 @@ unsafe extern "C" fn make_nulltest_from_distinct(
         _result
     }) as *mut NullTest;
     (*nt).arg = transformExprRecurse(pstate, arg) as *mut Expr;
-    if (*distincta).kind as libc::c_uint
-        == AEXPR_NOT_DISTINCT as libc::c_int as libc::c_uint
-    {
+    if (*distincta).kind as libc::c_uint == AEXPR_NOT_DISTINCT as libc::c_int as libc::c_uint {
         (*nt).nulltesttype = IS_NULL;
     } else {
         (*nt).nulltesttype = IS_NOT_NULL;
@@ -3989,9 +3773,7 @@ unsafe extern "C" fn make_nulltest_from_distinct(
     return nt as *mut Node;
 }
 #[no_mangle]
-pub unsafe extern "C" fn ParseExprKindName(
-    mut exprKind: ParseExprKind,
-) -> *const libc::c_char {
+pub unsafe extern "C" fn ParseExprKindName(mut exprKind: ParseExprKind) -> *const libc::c_char {
     match exprKind as libc::c_uint {
         0 => return b"invalid expression context\0" as *const u8 as *const libc::c_char,
         1 => return b"extension expression\0" as *const u8 as *const libc::c_char,

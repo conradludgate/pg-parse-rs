@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type AttrMissing;
@@ -200,7 +208,7 @@ pub type NameData = nameData;
 #[repr(C)]
 pub struct ErrorContextCallback {
     pub previous: *mut ErrorContextCallback,
-    pub callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+    pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
 pub type NodeTag = libc::c_uint;
@@ -648,8 +656,8 @@ pub struct ItemPointerData_Inner {
     pub ip_posid: OffsetNumber,
 }
 #[allow(dead_code, non_upper_case_globals)]
-const ItemPointerData_PADDING: usize = ::core::mem::size_of::<ItemPointerData>()
-    - ::core::mem::size_of::<ItemPointerData_Inner>();
+const ItemPointerData_PADDING: usize =
+    ::core::mem::size_of::<ItemPointerData>() - ::core::mem::size_of::<ItemPointerData_Inner>();
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HeapTupleHeaderData {
@@ -1375,24 +1383,14 @@ pub struct FormData_pg_type {
 pub type Form_pg_type = *mut FormData_pg_type;
 pub type StringInfo = *mut StringInfoData;
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -1588,26 +1586,24 @@ unsafe extern "C" fn list_head(mut l: *const List) -> *mut ListCell {
 }
 #[inline]
 unsafe extern "C" fn list_length(mut l: *const List) -> libc::c_int {
-    return if !l.is_null() { (*l).length } else { 0 as libc::c_int };
+    return if !l.is_null() {
+        (*l).length
+    } else {
+        0 as libc::c_int
+    };
 }
 #[inline]
-unsafe extern "C" fn list_nth_cell(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut ListCell {
+unsafe extern "C" fn list_nth_cell(mut list: *const List, mut n: libc::c_int) -> *mut ListCell {
     return &mut *((*list).elements).offset(n as isize) as *mut ListCell;
 }
 #[inline]
 unsafe extern "C" fn lnext(mut l: *const List, mut c: *const ListCell) -> *mut ListCell {
     c = c.offset(1);
     c;
-    if c
-        < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell
-            as *const ListCell
-    {
-        return c as *mut ListCell
+    if c < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell as *const ListCell {
+        return c as *mut ListCell;
     } else {
-        return 0 as *mut ListCell
+        return 0 as *mut ListCell;
     };
 }
 #[no_mangle]
@@ -1667,8 +1663,7 @@ pub unsafe extern "C" fn make_fn_arguments(
         false as libc::c_int
     } != 0
     {
-        if *actual_arg_types.offset(i as isize) != *declared_arg_types.offset(i as isize)
-        {
+        if *actual_arg_types.offset(i as isize) != *declared_arg_types.offset(i as isize) {
             let mut node: *mut Node = (*current_fargs).ptr_value as *mut Node;
             if (*(node as *const Node)).type_0 as libc::c_uint
                 == T_NamedArgExpr as libc::c_int as libc::c_uint
@@ -1720,9 +1715,9 @@ unsafe extern "C" fn FuncNameAsType(mut funcname: *mut List) -> Oid {
     }
     if (*(((*typtup).t_data as *mut libc::c_char)
         .offset((*(*typtup).t_data).t_hoff as libc::c_int as isize) as Form_pg_type))
-        .typisdefined as libc::c_int != 0
-        && (typeTypeRelid(typtup) != 0 as libc::c_int as Oid) as libc::c_int as bool
-            == 0
+        .typisdefined as libc::c_int
+        != 0
+        && (typeTypeRelid(typtup) != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
     {
         result = typeTypeId(typtup);
     } else {
@@ -1758,10 +1753,7 @@ pub unsafe extern "C" fn funcname_signature_string(
     i = 0 as libc::c_int;
     while i < nargs {
         if i != 0 {
-            appendStringInfoString(
-                &mut argbuf,
-                b", \0" as *const u8 as *const libc::c_char,
-            );
+            appendStringInfoString(&mut argbuf, b", \0" as *const u8 as *const libc::c_char);
         }
         if i >= numposargs {
             appendStringInfo(
@@ -1771,10 +1763,7 @@ pub unsafe extern "C" fn funcname_signature_string(
             );
             lc = lnext(argnames, lc);
         }
-        appendStringInfoString(
-            &mut argbuf,
-            format_type_be(*argtypes.offset(i as isize)),
-        );
+        appendStringInfoString(&mut argbuf, format_type_be(*argtypes.offset(i as isize)));
         i += 1;
         i;
     }
@@ -1788,12 +1777,7 @@ pub unsafe extern "C" fn func_signature_string(
     mut argnames: *mut List,
     mut argtypes: *const Oid,
 ) -> *const libc::c_char {
-    return funcname_signature_string(
-        NameListToString(funcname),
-        nargs,
-        argnames,
-        argtypes,
-    );
+    return funcname_signature_string(NameListToString(funcname), nargs, argnames, argtypes);
 }
 unsafe extern "C" fn LookupFuncNameInternal(
     mut funcname: *mut List,
@@ -1820,7 +1804,7 @@ unsafe extern "C" fn LookupFuncNameInternal(
             }
             return (*clist).oid;
         } else {
-            return 0 as libc::c_int as Oid
+            return 0 as libc::c_int as Oid;
         }
     }
     while !clist.is_null() {
@@ -1847,13 +1831,7 @@ pub unsafe extern "C" fn LookupFuncName(
 ) -> Oid {
     let mut funcoid: Oid = 0;
     let mut lookupError: FuncLookupError = FUNCLOOKUP_NOSUCHFUNC;
-    funcoid = LookupFuncNameInternal(
-        funcname,
-        nargs,
-        argtypes,
-        missing_ok,
-        &mut lookupError,
-    );
+    funcoid = LookupFuncNameInternal(funcname, nargs, argtypes, missing_ok, &mut lookupError);
     if (funcoid != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
         return funcoid;
     }
@@ -1900,8 +1878,8 @@ pub unsafe extern "C" fn check_srf_call_placement(
     match (*pstate).p_expr_kind as libc::c_uint {
         1 => {}
         2 | 3 => {
-            err = b"set-returning functions are not allowed in JOIN conditions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in JOIN conditions\0" as *const u8
+                as *const libc::c_char;
         }
         4 => {
             errkind = true;
@@ -1919,8 +1897,8 @@ pub unsafe extern "C" fn check_srf_call_placement(
             errkind = true;
         }
         35 => {
-            err = b"set-returning functions are not allowed in policy expressions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in policy expressions\0" as *const u8
+                as *const libc::c_char;
         }
         7 => {
             errkind = true;
@@ -1932,8 +1910,8 @@ pub unsafe extern "C" fn check_srf_call_placement(
             (*pstate).p_hasTargetSRFs = true;
         }
         11 | 12 | 13 => {
-            err = b"set-returning functions are not allowed in window definitions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in window definitions\0" as *const u8
+                as *const libc::c_char;
         }
         14 | 15 => {
             (*pstate).p_hasTargetSRFs = true;
@@ -1960,44 +1938,44 @@ pub unsafe extern "C" fn check_srf_call_placement(
             (*pstate).p_hasTargetSRFs = true;
         }
         26 | 27 => {
-            err = b"set-returning functions are not allowed in check constraints\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in check constraints\0" as *const u8
+                as *const libc::c_char;
         }
         28 | 29 => {
-            err = b"set-returning functions are not allowed in DEFAULT expressions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in DEFAULT expressions\0" as *const u8
+                as *const libc::c_char;
         }
         30 => {
-            err = b"set-returning functions are not allowed in index expressions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in index expressions\0" as *const u8
+                as *const libc::c_char;
         }
         31 => {
-            err = b"set-returning functions are not allowed in index predicates\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in index predicates\0" as *const u8
+                as *const libc::c_char;
         }
         32 => {
-            err = b"set-returning functions are not allowed in transform expressions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in transform expressions\0" as *const u8
+                as *const libc::c_char;
         }
         33 => {
-            err = b"set-returning functions are not allowed in EXECUTE parameters\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in EXECUTE parameters\0" as *const u8
+                as *const libc::c_char;
         }
         34 => {
             err = b"set-returning functions are not allowed in trigger WHEN conditions\0"
                 as *const u8 as *const libc::c_char;
         }
         36 => {
-            err = b"set-returning functions are not allowed in partition bound\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in partition bound\0" as *const u8
+                as *const libc::c_char;
         }
         37 => {
             err = b"set-returning functions are not allowed in partition key expressions\0"
                 as *const u8 as *const libc::c_char;
         }
         38 => {
-            err = b"set-returning functions are not allowed in CALL arguments\0"
-                as *const u8 as *const libc::c_char;
+            err = b"set-returning functions are not allowed in CALL arguments\0" as *const u8
+                as *const libc::c_char;
         }
         39 => {
             err = b"set-returning functions are not allowed in COPY FROM WHERE conditions\0"

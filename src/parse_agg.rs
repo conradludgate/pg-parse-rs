@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type RelationData;
@@ -611,9 +619,8 @@ pub struct ForBothState {
     pub l2: *const List,
     pub i: libc::c_int,
 }
-pub type list_sort_comparator = Option::<
-    unsafe extern "C" fn(*const ListCell, *const ListCell) -> libc::c_int,
->;
+pub type list_sort_comparator =
+    Option<unsafe extern "C" fn(*const ListCell, *const ListCell) -> libc::c_int>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Alias {
@@ -1017,24 +1024,14 @@ pub struct CommonTableExpr {
 }
 pub type Relation = *mut RelationData;
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -1123,10 +1120,7 @@ pub struct check_ungrouped_columns_context {
     pub in_agg_direct_args: bool,
 }
 #[inline]
-unsafe extern "C" fn for_each_from_setup(
-    mut lst: *const List,
-    mut N: libc::c_int,
-) -> ForEachState {
+unsafe extern "C" fn for_each_from_setup(mut lst: *const List, mut N: libc::c_int) -> ForEachState {
     let mut r: ForEachState = {
         let mut init = ForEachState { l: lst, i: N };
         init
@@ -1134,22 +1128,20 @@ unsafe extern "C" fn for_each_from_setup(
     return r;
 }
 #[inline]
-unsafe extern "C" fn list_nth(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut libc::c_void {
+unsafe extern "C" fn list_nth(mut list: *const List, mut n: libc::c_int) -> *mut libc::c_void {
     return (*list_nth_cell(list, n)).ptr_value;
 }
 #[inline]
-unsafe extern "C" fn list_nth_cell(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut ListCell {
+unsafe extern "C" fn list_nth_cell(mut list: *const List, mut n: libc::c_int) -> *mut ListCell {
     return &mut *((*list).elements).offset(n as isize) as *mut ListCell;
 }
 #[inline]
 unsafe extern "C" fn list_length(mut l: *const List) -> libc::c_int {
-    return if !l.is_null() { (*l).length } else { 0 as libc::c_int };
+    return if !l.is_null() {
+        (*l).length
+    } else {
+        0 as libc::c_int
+    };
 }
 #[no_mangle]
 pub unsafe extern "C" fn transformAggregateCall(
@@ -1174,8 +1166,7 @@ pub unsafe extern "C" fn transformAggregateCall(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -1203,19 +1194,13 @@ pub unsafe extern "C" fn transformAggregateCall(
             init
         };
         loop {
-            lc = (if !(lc__state_0.l1).is_null()
-                && lc__state_0.i < (*lc__state_0.l1).length
-            {
-                &mut *((*lc__state_0.l1).elements).offset(lc__state_0.i as isize)
-                    as *mut ListCell
+            lc = (if !(lc__state_0.l1).is_null() && lc__state_0.i < (*lc__state_0.l1).length {
+                &mut *((*lc__state_0.l1).elements).offset(lc__state_0.i as isize) as *mut ListCell
             } else {
                 0 as *mut ListCell
             });
-            lc2 = (if !(lc__state_0.l2).is_null()
-                && lc__state_0.i < (*lc__state_0.l2).length
-            {
-                &mut *((*lc__state_0.l2).elements).offset(lc__state_0.i as isize)
-                    as *mut ListCell
+            lc2 = (if !(lc__state_0.l2).is_null() && lc__state_0.i < (*lc__state_0.l2).length {
+                &mut *((*lc__state_0.l2).elements).offset(lc__state_0.i as isize) as *mut ListCell
             } else {
                 0 as *mut ListCell
             });
@@ -1227,12 +1212,7 @@ pub unsafe extern "C" fn transformAggregateCall(
             let mut tle: *mut TargetEntry = 0 as *mut TargetEntry;
             let fresh0 = attno;
             attno = attno + 1;
-            tle = makeTargetEntry(
-                arg_0,
-                fresh0,
-                0 as *mut libc::c_char,
-                false,
-            );
+            tle = makeTargetEntry(arg_0, fresh0, 0 as *mut libc::c_char, false);
             tlist = lappend(tlist, tle as *mut libc::c_void);
             torder = addTargetToSortList(pstate, tle, torder, tlist, sortby);
             lc__state_0.i += 1;
@@ -1248,8 +1228,7 @@ pub unsafe extern "C" fn transformAggregateCall(
             init
         };
         while if !(lc__state_1.l).is_null() && lc__state_1.i < (*lc__state_1.l).length {
-            lc = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize)
-                as *mut ListCell;
+            lc = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             lc = 0 as *mut ListCell;
@@ -1260,32 +1239,16 @@ pub unsafe extern "C" fn transformAggregateCall(
             let mut tle_0: *mut TargetEntry = 0 as *mut TargetEntry;
             let fresh1 = attno;
             attno = attno + 1;
-            tle_0 = makeTargetEntry(
-                arg_1,
-                fresh1,
-                0 as *mut libc::c_char,
-                false,
-            );
+            tle_0 = makeTargetEntry(arg_1, fresh1, 0 as *mut libc::c_char, false);
             tlist = lappend(tlist, tle_0 as *mut libc::c_void);
             lc__state_1.i += 1;
             lc__state_1.i;
         }
         save_next_resno = (*pstate).p_next_resno;
         (*pstate).p_next_resno = attno as libc::c_int;
-        torder = transformSortClause(
-            pstate,
-            aggorder,
-            &mut tlist,
-            EXPR_KIND_ORDER_BY,
-            true,
-        );
+        torder = transformSortClause(pstate, aggorder, &mut tlist, EXPR_KIND_ORDER_BY, true);
         if agg_distinct != 0 {
-            tdistinct = transformDistinctClause(
-                pstate,
-                &mut tlist,
-                torder,
-                true,
-            );
+            tdistinct = transformDistinctClause(pstate, &mut tlist, torder, true);
             let mut lc__state_2: ForEachState = {
                 let mut init = ForEachState {
                     l: tdistinct,
@@ -1293,9 +1256,7 @@ pub unsafe extern "C" fn transformAggregateCall(
                 };
                 init
             };
-            while if !(lc__state_2.l).is_null()
-                && lc__state_2.i < (*lc__state_2.l).length
-            {
+            while if !(lc__state_2.l).is_null() && lc__state_2.i < (*lc__state_2.l).length {
                 lc = &mut *((*lc__state_2.l).elements).offset(lc__state_2.i as isize)
                     as *mut ListCell;
                 true as libc::c_int
@@ -1304,11 +1265,8 @@ pub unsafe extern "C" fn transformAggregateCall(
                 false as libc::c_int
             } != 0
             {
-                let mut sortcl: *mut SortGroupClause = (*lc).ptr_value
-                    as *mut SortGroupClause;
-                if ((*sortcl).sortop != 0 as libc::c_int as Oid) as libc::c_int as bool
-                    == 0
-                {
+                let mut sortcl: *mut SortGroupClause = (*lc).ptr_value as *mut SortGroupClause;
+                if ((*sortcl).sortop != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
                     let mut expr: *mut Node = get_sortgroupclause_expr(sortcl, tlist);
                     let elevel_: libc::c_int = 21 as libc::c_int;
                     let mut __error: libc::c_int = 0;
@@ -1355,8 +1313,7 @@ pub unsafe extern "C" fn transformGroupingFunc(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -1364,11 +1321,7 @@ pub unsafe extern "C" fn transformGroupingFunc(
     } != 0
     {
         let mut current_result: *mut Node = 0 as *mut Node;
-        current_result = transformExpr(
-            pstate,
-            (*lc).ptr_value as *mut Node,
-            (*pstate).p_expr_kind,
-        );
+        current_result = transformExpr(pstate, (*lc).ptr_value as *mut Node, (*pstate).p_expr_kind);
         result_list = lappend(result_list, current_result as *mut libc::c_void);
         lc__state.i += 1;
         lc__state.i;
@@ -1391,7 +1344,8 @@ unsafe extern "C" fn check_agglevels_and_constraints(
     let mut err: *const libc::c_char = 0 as *const libc::c_char;
     let mut errkind: bool = false;
     let mut isAgg: bool = ((*(expr as *const Node)).type_0 as libc::c_uint
-        == T_Aggref as libc::c_int as libc::c_uint) as libc::c_int as bool;
+        == T_Aggref as libc::c_int as libc::c_uint) as libc::c_int
+        as bool;
     if isAgg != 0 {
         let mut agg: *mut Aggref = expr as *mut Aggref;
         directargs = (*agg).aggdirectargs;
@@ -1422,29 +1376,31 @@ unsafe extern "C" fn check_agglevels_and_constraints(
         1 => {}
         2 | 3 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in JOIN conditions\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in JOIN conditions\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in JOIN conditions\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in JOIN conditions\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         4 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in FROM clause of their own query level\0"
-                    as *const u8 as *const libc::c_char;
+                err =
+                    b"aggregate functions are not allowed in FROM clause of their own query level\0"
+                        as *const u8 as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in FROM clause of their own query level\0"
-                    as *const u8 as *const libc::c_char;
+                err =
+                    b"grouping operations are not allowed in FROM clause of their own query level\0"
+                        as *const u8 as *const libc::c_char;
             }
         }
         5 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in functions in FROM\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in functions in FROM\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in functions in FROM\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in functions in FROM\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         6 => {
@@ -1452,11 +1408,11 @@ unsafe extern "C" fn check_agglevels_and_constraints(
         }
         35 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in policy expressions\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in policy expressions\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in policy expressions\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in policy expressions\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         7 => {}
@@ -1467,29 +1423,29 @@ unsafe extern "C" fn check_agglevels_and_constraints(
         10 => {}
         11 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in window RANGE\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in window RANGE\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in window RANGE\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in window RANGE\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         12 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in window ROWS\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in window ROWS\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in window ROWS\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in window ROWS\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         13 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in window GROUPS\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in window GROUPS\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in window GROUPS\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in window GROUPS\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         14 => {}
@@ -1512,56 +1468,56 @@ unsafe extern "C" fn check_agglevels_and_constraints(
         }
         26 | 27 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in check constraints\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in check constraints\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in check constraints\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in check constraints\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         28 | 29 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in DEFAULT expressions\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in DEFAULT expressions\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in DEFAULT expressions\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in DEFAULT expressions\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         30 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in index expressions\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in index expressions\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in index expressions\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in index expressions\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         31 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in index predicates\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in index predicates\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in index predicates\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in index predicates\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         32 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in transform expressions\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in transform expressions\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in transform expressions\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in transform expressions\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         33 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in EXECUTE parameters\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in EXECUTE parameters\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in EXECUTE parameters\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in EXECUTE parameters\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         34 => {
@@ -1575,11 +1531,11 @@ unsafe extern "C" fn check_agglevels_and_constraints(
         }
         36 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in partition bound\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in partition bound\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in partition bound\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in partition bound\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         37 => {
@@ -1602,11 +1558,11 @@ unsafe extern "C" fn check_agglevels_and_constraints(
         }
         38 => {
             if isAgg != 0 {
-                err = b"aggregate functions are not allowed in CALL arguments\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"aggregate functions are not allowed in CALL arguments\0" as *const u8
+                    as *const libc::c_char;
             } else {
-                err = b"grouping operations are not allowed in CALL arguments\0"
-                    as *const u8 as *const libc::c_char;
+                err = b"grouping operations are not allowed in CALL arguments\0" as *const u8
+                    as *const libc::c_char;
             }
         }
         39 => {
@@ -1632,11 +1588,11 @@ unsafe extern "C" fn check_agglevels_and_constraints(
     }
     if errkind != 0 {
         if isAgg != 0 {
-            err = b"aggregate functions are not allowed in %s\0" as *const u8
-                as *const libc::c_char;
+            err =
+                b"aggregate functions are not allowed in %s\0" as *const u8 as *const libc::c_char;
         } else {
-            err = b"grouping operations are not allowed in %s\0" as *const u8
-                as *const libc::c_char;
+            err =
+                b"grouping operations are not allowed in %s\0" as *const u8 as *const libc::c_char;
         }
         let elevel__0: libc::c_int = 21 as libc::c_int;
         let mut __error_0: libc::c_int = 0;
@@ -1665,43 +1621,23 @@ unsafe extern "C" fn check_agg_arguments(
     expression_tree_walker(
         args as *mut Node,
         ::core::mem::transmute::<
-            Option::<
-                unsafe extern "C" fn(
-                    *mut Node,
-                    *mut check_agg_arguments_context,
-                ) -> bool,
-            >,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                check_agg_arguments_walker
-                    as unsafe extern "C" fn(
-                        *mut Node,
-                        *mut check_agg_arguments_context,
-                    ) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut check_agg_arguments_context) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            check_agg_arguments_walker
+                as unsafe extern "C" fn(*mut Node, *mut check_agg_arguments_context) -> bool,
+        )),
         &mut context as *mut check_agg_arguments_context as *mut libc::c_void,
     );
     expression_tree_walker(
         filter as *mut Node,
         ::core::mem::transmute::<
-            Option::<
-                unsafe extern "C" fn(
-                    *mut Node,
-                    *mut check_agg_arguments_context,
-                ) -> bool,
-            >,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                check_agg_arguments_walker
-                    as unsafe extern "C" fn(
-                        *mut Node,
-                        *mut check_agg_arguments_context,
-                    ) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut check_agg_arguments_context) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            check_agg_arguments_walker
+                as unsafe extern "C" fn(*mut Node, *mut check_agg_arguments_context) -> bool,
+        )),
         &mut context as *mut check_agg_arguments_context as *mut libc::c_void,
     );
     if context.min_varlevel < 0 as libc::c_int {
@@ -1737,22 +1673,12 @@ unsafe extern "C" fn check_agg_arguments(
         expression_tree_walker(
             directargs as *mut Node,
             ::core::mem::transmute::<
-                Option::<
-                    unsafe extern "C" fn(
-                        *mut Node,
-                        *mut check_agg_arguments_context,
-                    ) -> bool,
-                >,
-                Option::<unsafe extern "C" fn() -> bool>,
-            >(
-                Some(
-                    check_agg_arguments_walker
-                        as unsafe extern "C" fn(
-                            *mut Node,
-                            *mut check_agg_arguments_context,
-                        ) -> bool,
-                ),
-            ),
+                Option<unsafe extern "C" fn(*mut Node, *mut check_agg_arguments_context) -> bool>,
+                Option<unsafe extern "C" fn() -> bool>,
+            >(Some(
+                check_agg_arguments_walker
+                    as unsafe extern "C" fn(*mut Node, *mut check_agg_arguments_context) -> bool,
+            )),
             &mut context as *mut check_agg_arguments_context as *mut libc::c_void,
         );
         if context.min_varlevel >= 0 as libc::c_int && context.min_varlevel < agglevel {
@@ -1779,31 +1705,21 @@ unsafe extern "C" fn check_agg_arguments_walker(
     if node.is_null() {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Var as libc::c_int as libc::c_uint
-    {
-        let mut varlevelsup: libc::c_int = (*(node as *mut Var)).varlevelsup
-            as libc::c_int;
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Var as libc::c_int as libc::c_uint {
+        let mut varlevelsup: libc::c_int = (*(node as *mut Var)).varlevelsup as libc::c_int;
         varlevelsup -= (*context).sublevels_up;
         if varlevelsup >= 0 as libc::c_int {
-            if (*context).min_varlevel < 0 as libc::c_int
-                || (*context).min_varlevel > varlevelsup
-            {
+            if (*context).min_varlevel < 0 as libc::c_int || (*context).min_varlevel > varlevelsup {
                 (*context).min_varlevel = varlevelsup;
             }
         }
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Aggref as libc::c_int as libc::c_uint
-    {
-        let mut agglevelsup: libc::c_int = (*(node as *mut Aggref)).agglevelsup
-            as libc::c_int;
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Aggref as libc::c_int as libc::c_uint {
+        let mut agglevelsup: libc::c_int = (*(node as *mut Aggref)).agglevelsup as libc::c_int;
         agglevelsup -= (*context).sublevels_up;
         if agglevelsup >= 0 as libc::c_int {
-            if (*context).min_agglevel < 0 as libc::c_int
-                || (*context).min_agglevel > agglevelsup
-            {
+            if (*context).min_agglevel < 0 as libc::c_int || (*context).min_agglevel > agglevelsup {
                 (*context).min_agglevel = agglevelsup;
             }
         }
@@ -1812,12 +1728,11 @@ unsafe extern "C" fn check_agg_arguments_walker(
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_GroupingFunc as libc::c_int as libc::c_uint
     {
-        let mut agglevelsup_0: libc::c_int = (*(node as *mut GroupingFunc)).agglevelsup
-            as libc::c_int;
+        let mut agglevelsup_0: libc::c_int =
+            (*(node as *mut GroupingFunc)).agglevelsup as libc::c_int;
         agglevelsup_0 -= (*context).sublevels_up;
         if agglevelsup_0 >= 0 as libc::c_int {
-            if (*context).min_agglevel < 0 as libc::c_int
-                || (*context).min_agglevel > agglevelsup_0
+            if (*context).min_agglevel < 0 as libc::c_int || (*context).min_agglevel > agglevelsup_0
             {
                 (*context).min_agglevel = agglevelsup_0;
             }
@@ -1847,31 +1762,19 @@ unsafe extern "C" fn check_agg_arguments_walker(
             }
         }
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Query as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Query as libc::c_int as libc::c_uint {
         let mut result: bool = false;
         (*context).sublevels_up += 1;
         (*context).sublevels_up;
         result = query_tree_walker(
             node as *mut Query,
             ::core::mem::transmute::<
-                Option::<
-                    unsafe extern "C" fn(
-                        *mut Node,
-                        *mut check_agg_arguments_context,
-                    ) -> bool,
-                >,
-                Option::<unsafe extern "C" fn() -> bool>,
-            >(
-                Some(
-                    check_agg_arguments_walker
-                        as unsafe extern "C" fn(
-                            *mut Node,
-                            *mut check_agg_arguments_context,
-                        ) -> bool,
-                ),
-            ),
+                Option<unsafe extern "C" fn(*mut Node, *mut check_agg_arguments_context) -> bool>,
+                Option<unsafe extern "C" fn() -> bool>,
+            >(Some(
+                check_agg_arguments_walker
+                    as unsafe extern "C" fn(*mut Node, *mut check_agg_arguments_context) -> bool,
+            )),
             context as *mut libc::c_void,
             0 as libc::c_int,
         );
@@ -1882,22 +1785,12 @@ unsafe extern "C" fn check_agg_arguments_walker(
     return expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<
-                unsafe extern "C" fn(
-                    *mut Node,
-                    *mut check_agg_arguments_context,
-                ) -> bool,
-            >,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                check_agg_arguments_walker
-                    as unsafe extern "C" fn(
-                        *mut Node,
-                        *mut check_agg_arguments_context,
-                    ) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut check_agg_arguments_context) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            check_agg_arguments_walker
+                as unsafe extern "C" fn(*mut Node, *mut check_agg_arguments_context) -> bool,
+        )),
         context as *mut libc::c_void,
     );
 }
@@ -1937,8 +1830,8 @@ pub unsafe extern "C" fn transformWindowFuncCall(
             errkind = true;
         }
         35 => {
-            err = b"window functions are not allowed in policy expressions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"window functions are not allowed in policy expressions\0" as *const u8
+                as *const libc::c_char;
         }
         7 => {
             errkind = true;
@@ -1947,8 +1840,8 @@ pub unsafe extern "C" fn transformWindowFuncCall(
             errkind = true;
         }
         9 | 10 | 11 | 12 | 13 => {
-            err = b"window functions are not allowed in window definitions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"window functions are not allowed in window definitions\0" as *const u8
+                as *const libc::c_char;
         }
         14 => {}
         15 | 16 | 17 => {
@@ -1973,8 +1866,8 @@ pub unsafe extern "C" fn transformWindowFuncCall(
                 as *const libc::c_char;
         }
         28 | 29 => {
-            err = b"window functions are not allowed in DEFAULT expressions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"window functions are not allowed in DEFAULT expressions\0" as *const u8
+                as *const libc::c_char;
         }
         30 => {
             err = b"window functions are not allowed in index expressions\0" as *const u8
@@ -1985,32 +1878,32 @@ pub unsafe extern "C" fn transformWindowFuncCall(
                 as *const libc::c_char;
         }
         32 => {
-            err = b"window functions are not allowed in transform expressions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"window functions are not allowed in transform expressions\0" as *const u8
+                as *const libc::c_char;
         }
         33 => {
-            err = b"window functions are not allowed in EXECUTE parameters\0"
-                as *const u8 as *const libc::c_char;
+            err = b"window functions are not allowed in EXECUTE parameters\0" as *const u8
+                as *const libc::c_char;
         }
         34 => {
-            err = b"window functions are not allowed in trigger WHEN conditions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"window functions are not allowed in trigger WHEN conditions\0" as *const u8
+                as *const libc::c_char;
         }
         36 => {
             err = b"window functions are not allowed in partition bound\0" as *const u8
                 as *const libc::c_char;
         }
         37 => {
-            err = b"window functions are not allowed in partition key expressions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"window functions are not allowed in partition key expressions\0" as *const u8
+                as *const libc::c_char;
         }
         38 => {
             err = b"window functions are not allowed in CALL arguments\0" as *const u8
                 as *const libc::c_char;
         }
         39 => {
-            err = b"window functions are not allowed in COPY FROM WHERE conditions\0"
-                as *const u8 as *const libc::c_char;
+            err = b"window functions are not allowed in COPY FROM WHERE conditions\0" as *const u8
+                as *const libc::c_char;
         }
         40 => {
             err = b"window functions are not allowed in column generation expressions\0"
@@ -2046,8 +1939,7 @@ pub unsafe extern "C" fn transformWindowFuncCall(
             init
         };
         while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-            lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-                as *mut ListCell;
+            lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             lc = 0 as *mut ListCell;
@@ -2086,8 +1978,8 @@ pub unsafe extern "C" fn transformWindowFuncCall(
             init
         };
         while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
-            lc_0 = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
-                as *mut ListCell;
+            lc_0 =
+                &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             lc_0 = 0 as *mut ListCell;
@@ -2097,7 +1989,8 @@ pub unsafe extern "C" fn transformWindowFuncCall(
             let mut refwin_0: *mut WindowDef = (*lc_0).ptr_value as *mut WindowDef;
             winref_0 = winref_0.wrapping_add(1);
             winref_0;
-            if !((*refwin_0).refname).is_null() && !((*windef).refname).is_null()
+            if !((*refwin_0).refname).is_null()
+                && !((*windef).refname).is_null()
                 && strcmp((*refwin_0).refname, (*windef).refname) == 0 as libc::c_int
             {
                 current_block_58 = 8716029205547827362;
@@ -2111,20 +2004,24 @@ pub unsafe extern "C" fn transformWindowFuncCall(
                     if equal(
                         (*refwin_0).partitionClause as *const libc::c_void,
                         (*windef).partitionClause as *const libc::c_void,
-                    ) as libc::c_int != 0
+                    ) as libc::c_int
+                        != 0
                         && equal(
                             (*refwin_0).orderClause as *const libc::c_void,
                             (*windef).orderClause as *const libc::c_void,
-                        ) as libc::c_int != 0
+                        ) as libc::c_int
+                            != 0
                         && (*refwin_0).frameOptions == (*windef).frameOptions
                         && equal(
                             (*refwin_0).startOffset as *const libc::c_void,
                             (*windef).startOffset as *const libc::c_void,
-                        ) as libc::c_int != 0
+                        ) as libc::c_int
+                            != 0
                         && equal(
                             (*refwin_0).endOffset as *const libc::c_void,
                             (*windef).endOffset as *const libc::c_void,
-                        ) as libc::c_int != 0
+                        ) as libc::c_int
+                            != 0
                     {
                         (*wfunc).winref = winref_0;
                         break;
@@ -2136,21 +2033,14 @@ pub unsafe extern "C" fn transformWindowFuncCall(
             lc__state_0.i;
         }
         if lc_0.is_null() {
-            (*pstate)
-                .p_windowdefs = lappend(
-                (*pstate).p_windowdefs,
-                windef as *mut libc::c_void,
-            );
+            (*pstate).p_windowdefs = lappend((*pstate).p_windowdefs, windef as *mut libc::c_void);
             (*wfunc).winref = list_length((*pstate).p_windowdefs) as Index;
         }
     }
     (*pstate).p_hasWindowFuncs = true;
 }
 #[no_mangle]
-pub unsafe extern "C" fn parseCheckAggregates(
-    mut pstate: *mut ParseState,
-    mut qry: *mut Query,
-) {
+pub unsafe extern "C" fn parseCheckAggregates(mut pstate: *mut ParseState, mut qry: *mut Query) {
     let mut gset_common: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut groupClauses: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut groupClauseCommonVars: *mut List = 0 as *mut libc::c_void as *mut List;
@@ -2161,10 +2051,7 @@ pub unsafe extern "C" fn parseCheckAggregates(
     let mut hasSelfRefRTEs: bool = false;
     let mut clause: *mut Node = 0 as *mut Node;
     if !((*qry).groupingSets).is_null() {
-        let mut gsets: *mut List = expand_grouping_sets(
-            (*qry).groupingSets,
-            4096 as libc::c_int,
-        );
+        let mut gsets: *mut List = expand_grouping_sets((*qry).groupingSets, 4096 as libc::c_int);
         if gsets.is_null() {
             let elevel_: libc::c_int = 21 as libc::c_int;
             let mut __error: libc::c_int = 0;
@@ -2174,23 +2061,16 @@ pub unsafe extern "C" fn parseCheckAggregates(
         }
         gset_common = (*list_nth_cell(gsets, 0 as libc::c_int)).ptr_value as *mut List;
         if !gset_common.is_null() {
-            let mut l__state: ForEachState = for_each_from_setup(
-                gsets,
-                1 as libc::c_int,
-            );
+            let mut l__state: ForEachState = for_each_from_setup(gsets, 1 as libc::c_int);
             while if !(l__state.l).is_null() && l__state.i < (*l__state.l).length {
-                l = &mut *((*l__state.l).elements).offset(l__state.i as isize)
-                    as *mut ListCell;
+                l = &mut *((*l__state.l).elements).offset(l__state.i as isize) as *mut ListCell;
                 true as libc::c_int
             } else {
                 l = 0 as *mut ListCell;
                 false as libc::c_int
             } != 0
             {
-                gset_common = list_intersection_int(
-                    gset_common,
-                    (*l).ptr_value as *const List,
-                );
+                gset_common = list_intersection_int(gset_common, (*l).ptr_value as *const List);
                 if gset_common.is_null() {
                     break;
                 }
@@ -2212,8 +2092,7 @@ pub unsafe extern "C" fn parseCheckAggregates(
         init
     };
     while if !(l__state_0.l).is_null() && l__state_0.i < (*l__state_0.l).length {
-        l = &mut *((*l__state_0.l).elements).offset(l__state_0.i as isize)
-            as *mut ListCell;
+        l = &mut *((*l__state_0.l).elements).offset(l__state_0.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         l = 0 as *mut ListCell;
@@ -2223,8 +2102,7 @@ pub unsafe extern "C" fn parseCheckAggregates(
         let mut rte: *mut RangeTblEntry = (*l).ptr_value as *mut RangeTblEntry;
         if (*rte).rtekind as libc::c_uint == RTE_JOIN as libc::c_int as libc::c_uint {
             hasJoinRTEs = true;
-        } else if (*rte).rtekind as libc::c_uint
-            == RTE_CTE as libc::c_int as libc::c_uint
+        } else if (*rte).rtekind as libc::c_uint == RTE_CTE as libc::c_int as libc::c_uint
             && (*rte).self_reference as libc::c_int != 0
         {
             hasSelfRefRTEs = true;
@@ -2240,8 +2118,7 @@ pub unsafe extern "C" fn parseCheckAggregates(
         init
     };
     while if !(l__state_1.l).is_null() && l__state_1.i < (*l__state_1.l).length {
-        l = &mut *((*l__state_1.l).elements).offset(l__state_1.i as isize)
-            as *mut ListCell;
+        l = &mut *((*l__state_1.l).elements).offset(l__state_1.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         l = 0 as *mut ListCell;
@@ -2258,8 +2135,7 @@ pub unsafe extern "C" fn parseCheckAggregates(
         l__state_1.i;
     }
     if hasJoinRTEs != 0 {
-        groupClauses = flatten_join_alias_vars(qry, groupClauses as *mut Node)
-            as *mut List;
+        groupClauses = flatten_join_alias_vars(qry, groupClauses as *mut Node) as *mut List;
     }
     have_non_var_grouping = false;
     let mut l__state_2: ForEachState = {
@@ -2270,8 +2146,7 @@ pub unsafe extern "C" fn parseCheckAggregates(
         init
     };
     while if !(l__state_2.l).is_null() && l__state_2.i < (*l__state_2.l).length {
-        l = &mut *((*l__state_2.l).elements).offset(l__state_2.i as isize)
-            as *mut ListCell;
+        l = &mut *((*l__state_2.l).elements).offset(l__state_2.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         l = 0 as *mut ListCell;
@@ -2284,13 +2159,11 @@ pub unsafe extern "C" fn parseCheckAggregates(
         {
             have_non_var_grouping = true;
         } else if ((*qry).groupingSets).is_null()
-            || list_member_int(gset_common, (*tle).ressortgroupref as libc::c_int)
-                as libc::c_int != 0
+            || list_member_int(gset_common, (*tle).ressortgroupref as libc::c_int) as libc::c_int
+                != 0
         {
-            groupClauseCommonVars = lappend(
-                groupClauseCommonVars,
-                (*tle).expr as *mut libc::c_void,
-            );
+            groupClauseCommonVars =
+                lappend(groupClauseCommonVars, (*tle).expr as *mut libc::c_void);
         }
         l__state_2.i += 1;
         l__state_2.i;
@@ -2384,24 +2257,17 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
     if node.is_null() {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Const as libc::c_int as libc::c_uint
-        || (*(node as *const Node)).type_0 as libc::c_uint
-            == T_Param as libc::c_int as libc::c_uint
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Const as libc::c_int as libc::c_uint
+        || (*(node as *const Node)).type_0 as libc::c_uint == T_Param as libc::c_int as libc::c_uint
     {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Aggref as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Aggref as libc::c_int as libc::c_uint {
         let mut agg: *mut Aggref = node as *mut Aggref;
         if (*agg).agglevelsup as libc::c_int == (*context).sublevels_up {
             let mut result: bool = false;
             (*context).in_agg_direct_args = true;
-            result = check_ungrouped_columns_walker(
-                (*agg).aggdirectargs as *mut Node,
-                context,
-            );
+            result = check_ungrouped_columns_walker((*agg).aggdirectargs as *mut Node, context);
             (*context).in_agg_direct_args = false;
             return result;
         }
@@ -2428,8 +2294,7 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
             init
         };
         while if !(gl__state.l).is_null() && gl__state.i < (*gl__state.l).length {
-            gl = &mut *((*gl__state.l).elements).offset(gl__state.i as isize)
-                as *mut ListCell;
+            gl = &mut *((*gl__state.l).elements).offset(gl__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             gl = 0 as *mut ListCell;
@@ -2437,8 +2302,10 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
         } != 0
         {
             let mut tle: *mut TargetEntry = (*gl).ptr_value as *mut TargetEntry;
-            if equal(node as *const libc::c_void, (*tle).expr as *const libc::c_void)
-                != 0
+            if equal(
+                node as *const libc::c_void,
+                (*tle).expr as *const libc::c_void,
+            ) != 0
             {
                 return false;
             }
@@ -2446,18 +2313,14 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
             gl__state.i;
         }
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Var as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Var as libc::c_int as libc::c_uint {
         let mut var: *mut Var = node as *mut Var;
         let mut rte: *mut RangeTblEntry = 0 as *mut RangeTblEntry;
         let mut attname: *mut libc::c_char = 0 as *mut libc::c_char;
         if (*var).varlevelsup != (*context).sublevels_up as Index {
             return false;
         }
-        if (*context).have_non_var_grouping == 0
-            || (*context).sublevels_up != 0 as libc::c_int
-        {
+        if (*context).have_non_var_grouping == 0 || (*context).sublevels_up != 0 as libc::c_int {
             let mut gl__state_0: ForEachState = {
                 let mut init = ForEachState {
                     l: (*context).groupClauses,
@@ -2465,9 +2328,7 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
                 };
                 init
             };
-            while if !(gl__state_0.l).is_null()
-                && gl__state_0.i < (*gl__state_0.l).length
-            {
+            while if !(gl__state_0.l).is_null() && gl__state_0.i < (*gl__state_0.l).length {
                 gl = &mut *((*gl__state_0.l).elements).offset(gl__state_0.i as isize)
                     as *mut ListCell;
                 true as libc::c_int
@@ -2476,8 +2337,7 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
                 false as libc::c_int
             } != 0
             {
-                let mut gvar: *mut Var = (*((*gl).ptr_value as *mut TargetEntry)).expr
-                    as *mut Var;
+                let mut gvar: *mut Var = (*((*gl).ptr_value as *mut TargetEntry)).expr as *mut Var;
                 if (*(gvar as *const Node)).type_0 as libc::c_uint
                     == T_Var as libc::c_int as libc::c_uint
                     && (*gvar).varno == (*var).varno
@@ -2490,17 +2350,14 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
                 gl__state_0.i;
             }
         }
-        if list_member_int(*(*context).func_grouped_rels, (*var).varno as libc::c_int)
-            != 0
-        {
+        if list_member_int(*(*context).func_grouped_rels, (*var).varno as libc::c_int) != 0 {
             return false;
         }
         rte = list_nth(
             (*(*context).pstate).p_rtable,
             ((*var).varno).wrapping_sub(1 as libc::c_int as Index) as libc::c_int,
         ) as *mut RangeTblEntry;
-        if (*rte).rtekind as libc::c_uint == RTE_RELATION as libc::c_int as libc::c_uint
-        {
+        if (*rte).rtekind as libc::c_uint == RTE_RELATION as libc::c_int as libc::c_uint {
             if check_functional_grouping(
                 (*rte).relid,
                 (*var).varno,
@@ -2509,11 +2366,8 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
                 &mut (*(*context).qry).constraintDeps,
             ) != 0
             {
-                *(*context)
-                    .func_grouped_rels = lappend_int(
-                    *(*context).func_grouped_rels,
-                    (*var).varno as libc::c_int,
-                );
+                *(*context).func_grouped_rels =
+                    lappend_int(*(*context).func_grouped_rels, (*var).varno as libc::c_int);
                 return false;
             }
         }
@@ -2532,31 +2386,24 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
             }
         }
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Query as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Query as libc::c_int as libc::c_uint {
         let mut result_0: bool = false;
         (*context).sublevels_up += 1;
         (*context).sublevels_up;
         result_0 = query_tree_walker(
             node as *mut Query,
             ::core::mem::transmute::<
-                Option::<
-                    unsafe extern "C" fn(
+                Option<
+                    unsafe extern "C" fn(*mut Node, *mut check_ungrouped_columns_context) -> bool,
+                >,
+                Option<unsafe extern "C" fn() -> bool>,
+            >(Some(
+                check_ungrouped_columns_walker
+                    as unsafe extern "C" fn(
                         *mut Node,
                         *mut check_ungrouped_columns_context,
                     ) -> bool,
-                >,
-                Option::<unsafe extern "C" fn() -> bool>,
-            >(
-                Some(
-                    check_ungrouped_columns_walker
-                        as unsafe extern "C" fn(
-                            *mut Node,
-                            *mut check_ungrouped_columns_context,
-                        ) -> bool,
-                ),
-            ),
+            )),
             context as *mut libc::c_void,
             0 as libc::c_int,
         );
@@ -2567,22 +2414,12 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
     return expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<
-                unsafe extern "C" fn(
-                    *mut Node,
-                    *mut check_ungrouped_columns_context,
-                ) -> bool,
-            >,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                check_ungrouped_columns_walker
-                    as unsafe extern "C" fn(
-                        *mut Node,
-                        *mut check_ungrouped_columns_context,
-                    ) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut check_ungrouped_columns_context) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            check_ungrouped_columns_walker
+                as unsafe extern "C" fn(*mut Node, *mut check_ungrouped_columns_context) -> bool,
+        )),
         context as *mut libc::c_void,
     );
 }
@@ -2624,24 +2461,17 @@ unsafe extern "C" fn finalize_grouping_exprs_walker(
     if node.is_null() {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Const as libc::c_int as libc::c_uint
-        || (*(node as *const Node)).type_0 as libc::c_uint
-            == T_Param as libc::c_int as libc::c_uint
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Const as libc::c_int as libc::c_uint
+        || (*(node as *const Node)).type_0 as libc::c_uint == T_Param as libc::c_int as libc::c_uint
     {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Aggref as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Aggref as libc::c_int as libc::c_uint {
         let mut agg: *mut Aggref = node as *mut Aggref;
         if (*agg).agglevelsup as libc::c_int == (*context).sublevels_up {
             let mut result: bool = false;
             (*context).in_agg_direct_args = true;
-            result = finalize_grouping_exprs_walker(
-                (*agg).aggdirectargs as *mut Node,
-                context,
-            );
+            result = finalize_grouping_exprs_walker((*agg).aggdirectargs as *mut Node, context);
             (*context).in_agg_direct_args = false;
             return result;
         }
@@ -2664,8 +2494,7 @@ unsafe extern "C" fn finalize_grouping_exprs_walker(
                 init
             };
             while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-                lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-                    as *mut ListCell;
+                lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
                 true as libc::c_int
             } else {
                 lc = 0 as *mut ListCell;
@@ -2689,25 +2518,21 @@ unsafe extern "C" fn finalize_grouping_exprs_walker(
                             };
                             init
                         };
-                        while if !(gl__state.l).is_null()
-                            && gl__state.i < (*gl__state.l).length
-                        {
-                            gl = &mut *((*gl__state.l).elements)
-                                .offset(gl__state.i as isize) as *mut ListCell;
+                        while if !(gl__state.l).is_null() && gl__state.i < (*gl__state.l).length {
+                            gl = &mut *((*gl__state.l).elements).offset(gl__state.i as isize)
+                                as *mut ListCell;
                             true as libc::c_int
                         } else {
                             gl = 0 as *mut ListCell;
                             false as libc::c_int
                         } != 0
                         {
-                            let mut tle: *mut TargetEntry = (*gl).ptr_value
-                                as *mut TargetEntry;
+                            let mut tle: *mut TargetEntry = (*gl).ptr_value as *mut TargetEntry;
                             let mut gvar: *mut Var = (*tle).expr as *mut Var;
                             if (*(gvar as *const Node)).type_0 as libc::c_uint
                                 == T_Var as libc::c_int as libc::c_uint
                                 && (*gvar).varno == (*var).varno
-                                && (*gvar).varattno as libc::c_int
-                                    == (*var).varattno as libc::c_int
+                                && (*gvar).varattno as libc::c_int == (*var).varattno as libc::c_int
                                 && (*gvar).varlevelsup == 0 as libc::c_int as Index
                             {
                                 ref_0 = (*tle).ressortgroupref;
@@ -2728,19 +2553,16 @@ unsafe extern "C" fn finalize_grouping_exprs_walker(
                         };
                         init
                     };
-                    while if !(gl__state_0.l).is_null()
-                        && gl__state_0.i < (*gl__state_0.l).length
-                    {
-                        gl = &mut *((*gl__state_0.l).elements)
-                            .offset(gl__state_0.i as isize) as *mut ListCell;
+                    while if !(gl__state_0.l).is_null() && gl__state_0.i < (*gl__state_0.l).length {
+                        gl = &mut *((*gl__state_0.l).elements).offset(gl__state_0.i as isize)
+                            as *mut ListCell;
                         true as libc::c_int
                     } else {
                         gl = 0 as *mut ListCell;
                         false as libc::c_int
                     } != 0
                     {
-                        let mut tle_0: *mut TargetEntry = (*gl).ptr_value
-                            as *mut TargetEntry;
+                        let mut tle_0: *mut TargetEntry = (*gl).ptr_value as *mut TargetEntry;
                         if equal(
                             expr as *const libc::c_void,
                             (*tle_0).expr as *const libc::c_void,
@@ -2771,31 +2593,24 @@ unsafe extern "C" fn finalize_grouping_exprs_walker(
             return false;
         }
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Query as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Query as libc::c_int as libc::c_uint {
         let mut result_0: bool = false;
         (*context).sublevels_up += 1;
         (*context).sublevels_up;
         result_0 = query_tree_walker(
             node as *mut Query,
             ::core::mem::transmute::<
-                Option::<
-                    unsafe extern "C" fn(
+                Option<
+                    unsafe extern "C" fn(*mut Node, *mut check_ungrouped_columns_context) -> bool,
+                >,
+                Option<unsafe extern "C" fn() -> bool>,
+            >(Some(
+                finalize_grouping_exprs_walker
+                    as unsafe extern "C" fn(
                         *mut Node,
                         *mut check_ungrouped_columns_context,
                     ) -> bool,
-                >,
-                Option::<unsafe extern "C" fn() -> bool>,
-            >(
-                Some(
-                    finalize_grouping_exprs_walker
-                        as unsafe extern "C" fn(
-                            *mut Node,
-                            *mut check_ungrouped_columns_context,
-                        ) -> bool,
-                ),
-            ),
+            )),
             context as *mut libc::c_void,
             0 as libc::c_int,
         );
@@ -2806,22 +2621,12 @@ unsafe extern "C" fn finalize_grouping_exprs_walker(
     return expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<
-                unsafe extern "C" fn(
-                    *mut Node,
-                    *mut check_ungrouped_columns_context,
-                ) -> bool,
-            >,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                finalize_grouping_exprs_walker
-                    as unsafe extern "C" fn(
-                        *mut Node,
-                        *mut check_ungrouped_columns_context,
-                    ) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut check_ungrouped_columns_context) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            finalize_grouping_exprs_walker
+                as unsafe extern "C" fn(*mut Node, *mut check_ungrouped_columns_context) -> bool,
+        )),
         context as *mut libc::c_void,
     );
 }
@@ -2858,8 +2663,7 @@ unsafe extern "C" fn expand_groupingset_node(mut gs: *mut GroupingSet) -> *mut L
                     };
                     init
                 };
-                while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length
-                {
+                while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
                     lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
                         as *mut ListCell;
                     true as libc::c_int
@@ -2868,8 +2672,7 @@ unsafe extern "C" fn expand_groupingset_node(mut gs: *mut GroupingSet) -> *mut L
                     false as libc::c_int
                 } != 0
                 {
-                    let mut gs_current: *mut GroupingSet = (*lc).ptr_value
-                        as *mut GroupingSet;
+                    let mut gs_current: *mut GroupingSet = (*lc).ptr_value as *mut GroupingSet;
                     current_result = list_concat(current_result, (*gs_current).content);
                     i -= 1;
                     if i == 0 as libc::c_int {
@@ -2895,8 +2698,7 @@ unsafe extern "C" fn expand_groupingset_node(mut gs: *mut GroupingSet) -> *mut L
             num_sets = (1 as libc::c_uint) << number_bits;
             i_0 = 0 as libc::c_int as u32;
             while i_0 < num_sets {
-                let mut current_result_0: *mut List = 0 as *mut libc::c_void
-                    as *mut List;
+                let mut current_result_0: *mut List = 0 as *mut libc::c_void as *mut List;
                 let mut lc_0: *mut ListCell = 0 as *mut ListCell;
                 let mut mask: u32 = 1 as libc::c_uint;
                 let mut lc__state_0: ForEachState = {
@@ -2906,24 +2708,18 @@ unsafe extern "C" fn expand_groupingset_node(mut gs: *mut GroupingSet) -> *mut L
                     };
                     init
                 };
-                while if !(lc__state_0.l).is_null()
-                    && lc__state_0.i < (*lc__state_0.l).length
-                {
-                    lc_0 = &mut *((*lc__state_0.l).elements)
-                        .offset(lc__state_0.i as isize) as *mut ListCell;
+                while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
+                    lc_0 = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
+                        as *mut ListCell;
                     true as libc::c_int
                 } else {
                     lc_0 = 0 as *mut ListCell;
                     false as libc::c_int
                 } != 0
                 {
-                    let mut gs_current_0: *mut GroupingSet = (*lc_0).ptr_value
-                        as *mut GroupingSet;
+                    let mut gs_current_0: *mut GroupingSet = (*lc_0).ptr_value as *mut GroupingSet;
                     if mask & i_0 != 0 {
-                        current_result_0 = list_concat(
-                            current_result_0,
-                            (*gs_current_0).content,
-                        );
+                        current_result_0 = list_concat(current_result_0, (*gs_current_0).content);
                     }
                     mask <<= 1 as libc::c_int;
                     lc__state_0.i += 1;
@@ -2943,9 +2739,7 @@ unsafe extern "C" fn expand_groupingset_node(mut gs: *mut GroupingSet) -> *mut L
                 };
                 init
             };
-            while if !(lc__state_1.l).is_null()
-                && lc__state_1.i < (*lc__state_1.l).length
-            {
+            while if !(lc__state_1.l).is_null() && lc__state_1.i < (*lc__state_1.l).length {
                 lc_1 = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize)
                     as *mut ListCell;
                 true as libc::c_int
@@ -2954,9 +2748,8 @@ unsafe extern "C" fn expand_groupingset_node(mut gs: *mut GroupingSet) -> *mut L
                 false as libc::c_int
             } != 0
             {
-                let mut current_result_1: *mut List = expand_groupingset_node(
-                    (*lc_1).ptr_value as *mut GroupingSet,
-                );
+                let mut current_result_1: *mut List =
+                    expand_groupingset_node((*lc_1).ptr_value as *mut GroupingSet);
                 result = list_concat(result, current_result_1);
                 lc__state_1.i += 1;
                 lc__state_1.i;
@@ -3000,8 +2793,7 @@ pub unsafe extern "C" fn expand_grouping_sets(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -3021,15 +2813,13 @@ pub unsafe extern "C" fn expand_grouping_sets(
     }
     let mut lc__state_0: ForEachState = {
         let mut init = ForEachState {
-            l: (*list_nth_cell(expanded_groups, 0 as libc::c_int)).ptr_value
-                as *mut List,
+            l: (*list_nth_cell(expanded_groups, 0 as libc::c_int)).ptr_value as *mut List,
             i: 0 as libc::c_int,
         };
         init
     };
     while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
-        lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -3046,13 +2836,9 @@ pub unsafe extern "C" fn expand_grouping_sets(
         lc__state_0.i += 1;
         lc__state_0.i;
     }
-    let mut lc__state_1: ForEachState = for_each_from_setup(
-        expanded_groups,
-        1 as libc::c_int,
-    );
+    let mut lc__state_1: ForEachState = for_each_from_setup(expanded_groups, 1 as libc::c_int);
     while if !(lc__state_1.l).is_null() && lc__state_1.i < (*lc__state_1.l).length {
-        lc = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -3070,8 +2856,7 @@ pub unsafe extern "C" fn expand_grouping_sets(
             init
         };
         while if !(lc2__state.l).is_null() && lc2__state.i < (*lc2__state.l).length {
-            lc2 = &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize)
-                as *mut ListCell;
+            lc2 = &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             lc2 = 0 as *mut ListCell;
@@ -3088,8 +2873,8 @@ pub unsafe extern "C" fn expand_grouping_sets(
                 init
             };
             while if !(lc3__state.l).is_null() && lc3__state.i < (*lc3__state.l).length {
-                lc3 = &mut *((*lc3__state.l).elements).offset(lc3__state.i as isize)
-                    as *mut ListCell;
+                lc3 =
+                    &mut *((*lc3__state.l).elements).offset(lc3__state.i as isize) as *mut ListCell;
                 true as libc::c_int
             } else {
                 lc3 = 0 as *mut ListCell;
@@ -3134,8 +2919,7 @@ pub unsafe extern "C" fn get_aggregate_argtypes(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -3191,8 +2975,7 @@ pub unsafe extern "C" fn build_aggregate_transfn_expr(
     args = list_make1_impl(
         T_List,
         ListCell {
-            ptr_value: make_agg_arg(agg_state_type, agg_input_collation)
-                as *mut libc::c_void,
+            ptr_value: make_agg_arg(agg_state_type, agg_input_collation) as *mut libc::c_void,
         },
     );
     i = agg_num_direct_inputs;
@@ -3295,8 +3078,7 @@ pub unsafe extern "C" fn build_aggregate_finalfn_expr(
     args = list_make1_impl(
         T_List,
         ListCell {
-            ptr_value: make_agg_arg(agg_state_type, agg_input_collation)
-                as *mut libc::c_void,
+            ptr_value: make_agg_arg(agg_state_type, agg_input_collation) as *mut libc::c_void,
         },
     );
     i = 0 as libc::c_int;

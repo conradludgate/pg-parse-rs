@@ -1,6 +1,7 @@
+#![feature(extern_types, linkage)]
+
 pub type Oid = u32;
 
-#![feature(extern_types, linkage)]
 extern "C" {
     pub type MemoryContextData;
     pub type AttrMissing;
@@ -29,11 +30,7 @@ extern "C" {
     fn abort() -> !;
     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
-    fn errfinish(
-        filename: *const libc::c_char,
-        lineno: libc::c_int,
-        funcname: *const libc::c_char,
-    );
+    fn errfinish(filename: *const libc::c_char, lineno: libc::c_int, funcname: *const libc::c_char);
     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
     fn palloc(size: usize) -> *mut libc::c_void;
     fn palloc0(size: usize) -> *mut libc::c_void;
@@ -84,11 +81,7 @@ extern "C" {
         varcollid: Oid,
         varlevelsup: Index,
     ) -> *mut Var;
-    fn makeBoolExpr(
-        boolop: BoolExprType,
-        args: *mut List,
-        location: libc::c_int,
-    ) -> *mut Expr;
+    fn makeBoolExpr(boolop: BoolExprType, args: *mut List, location: libc::c_int) -> *mut Expr;
     fn makeRelabelType(
         arg: *mut Expr,
         rtype: Oid,
@@ -117,10 +110,8 @@ extern "C" {
         sgClause: *mut SortGroupClause,
         targetList: *mut List,
     ) -> *mut TargetEntry;
-    fn get_sortgroupclause_expr(
-        sgClause: *mut SortGroupClause,
-        targetList: *mut List,
-    ) -> *mut Node;
+    fn get_sortgroupclause_expr(sgClause: *mut SortGroupClause, targetList: *mut List)
+        -> *mut Node;
     fn contain_vars_of_level(node: *mut Node, levelsup: libc::c_int) -> bool;
     fn parse_sub_analyze(
         parseTree: *mut Node,
@@ -169,11 +160,7 @@ extern "C" {
         context: *const libc::c_char,
         which_expr: *mut *mut Node,
     ) -> Oid;
-    fn select_common_typmod(
-        pstate: *mut ParseState,
-        exprs: *mut List,
-        common_type: Oid,
-    ) -> i32;
+    fn select_common_typmod(pstate: *mut ParseState, exprs: *mut List, common_type: Oid) -> i32;
     fn assign_list_collations(pstate: *mut ParseState, exprs: *mut List);
     fn assign_expr_collations(pstate: *mut ParseState, expr: *mut Node);
     fn transformExpr(
@@ -203,10 +190,7 @@ extern "C" {
         refname: *const libc::c_char,
         ctelevelsup: *mut Index,
     ) -> *mut CommonTableExpr;
-    fn scanNameSpaceForENR(
-        pstate: *mut ParseState,
-        refname: *const libc::c_char,
-    ) -> bool;
+    fn scanNameSpaceForENR(pstate: *mut ParseState, refname: *const libc::c_char) -> bool;
     fn checkNameSpaceConflicts(
         pstate: *mut ParseState,
         namespace1: *mut List,
@@ -309,11 +293,8 @@ extern "C" {
         typeid_p: *mut Oid,
         typmod_p: *mut i32,
     );
-    fn LookupCollation(
-        pstate: *mut ParseState,
-        collnames: *mut List,
-        location: libc::c_int,
-    ) -> Oid;
+    fn LookupCollation(pstate: *mut ParseState, collnames: *mut List, location: libc::c_int)
+        -> Oid;
     fn SystemFuncName(name: *mut libc::c_char) -> *mut List;
     fn contain_aggs_of_level(node: *mut Node, levelsup: libc::c_int) -> bool;
     fn contain_windowfuncs(node: *mut Node) -> bool;

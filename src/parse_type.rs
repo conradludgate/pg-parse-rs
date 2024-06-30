@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type RelationData;
@@ -95,7 +103,7 @@ pub type NameData = nameData;
 #[repr(C)]
 pub struct ErrorContextCallback {
     pub previous: *mut ErrorContextCallback,
-    pub callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+    pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
 pub type Datum = usize;
@@ -116,8 +124,8 @@ pub struct ItemPointerData_Inner {
     pub ip_posid: OffsetNumber,
 }
 #[allow(dead_code, non_upper_case_globals)]
-const ItemPointerData_PADDING: usize = ::core::mem::size_of::<ItemPointerData>()
-    - ::core::mem::size_of::<ItemPointerData_Inner>();
+const ItemPointerData_PADDING: usize =
+    ::core::mem::size_of::<ItemPointerData>() - ::core::mem::size_of::<ItemPointerData_Inner>();
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HeapTupleHeaderData {
@@ -742,9 +750,8 @@ pub type RVROption = libc::c_uint;
 pub const RVR_SKIP_LOCKED: RVROption = 4;
 pub const RVR_NOWAIT: RVROption = 2;
 pub const RVR_MISSING_OK: RVROption = 1;
-pub type RangeVarGetRelidCallback = Option::<
-    unsafe extern "C" fn(*const RangeVar, Oid, Oid, *mut libc::c_void) -> (),
->;
+pub type RangeVarGetRelidCallback =
+    Option<unsafe extern "C" fn(*const RangeVar, Oid, Oid, *mut libc::c_void) -> ()>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Value {
@@ -1024,24 +1031,14 @@ pub struct FormData_pg_type {
 pub type Form_pg_type = *mut FormData_pg_type;
 pub type StringInfo = *mut StringInfoData;
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -1213,13 +1210,14 @@ unsafe extern "C" fn list_head(mut l: *const List) -> *mut ListCell {
 }
 #[inline]
 unsafe extern "C" fn list_length(mut l: *const List) -> libc::c_int {
-    return if !l.is_null() { (*l).length } else { 0 as libc::c_int };
+    return if !l.is_null() {
+        (*l).length
+    } else {
+        0 as libc::c_int
+    };
 }
 #[inline]
-unsafe extern "C" fn list_nth_cell(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut ListCell {
+unsafe extern "C" fn list_nth_cell(mut list: *const List, mut n: libc::c_int) -> *mut ListCell {
     return &mut *((*list).elements).offset(n as isize) as *mut ListCell;
 }
 #[no_mangle]
@@ -1229,13 +1227,7 @@ pub unsafe extern "C" fn LookupTypeName(
     mut typmod_p: *mut i32,
     mut missing_ok: bool,
 ) -> Type {
-    return LookupTypeNameExtended(
-        pstate,
-        typeName,
-        typmod_p,
-        true,
-        missing_ok,
-    );
+    return LookupTypeNameExtended(pstate, typeName, typmod_p, true, missing_ok);
 }
 #[no_mangle]
 pub unsafe extern "C" fn LookupTypeNameExtended(
@@ -1268,59 +1260,44 @@ pub unsafe extern "C" fn LookupTypeNameExtended(
                 }
             }
             2 => {
-                (*rel)
-                    .relname = (*((*list_nth_cell((*typeName).names, 0 as libc::c_int))
-                    .ptr_value as *mut Value))
+                (*rel).relname = (*((*list_nth_cell((*typeName).names, 0 as libc::c_int)).ptr_value
+                    as *mut Value))
                     .val
                     .str_0;
-                field = (*((*list_nth_cell((*typeName).names, 1 as libc::c_int))
-                    .ptr_value as *mut Value))
+                field = (*((*list_nth_cell((*typeName).names, 1 as libc::c_int)).ptr_value
+                    as *mut Value))
                     .val
                     .str_0;
             }
             3 => {
-                (*rel)
-                    .schemaname = (*((*list_nth_cell(
-                    (*typeName).names,
-                    0 as libc::c_int,
-                ))
+                (*rel).schemaname = (*((*list_nth_cell((*typeName).names, 0 as libc::c_int))
                     .ptr_value as *mut Value))
                     .val
                     .str_0;
-                (*rel)
-                    .relname = (*((*list_nth_cell((*typeName).names, 1 as libc::c_int))
-                    .ptr_value as *mut Value))
+                (*rel).relname = (*((*list_nth_cell((*typeName).names, 1 as libc::c_int)).ptr_value
+                    as *mut Value))
                     .val
                     .str_0;
-                field = (*((*list_nth_cell((*typeName).names, 2 as libc::c_int))
-                    .ptr_value as *mut Value))
+                field = (*((*list_nth_cell((*typeName).names, 2 as libc::c_int)).ptr_value
+                    as *mut Value))
                     .val
                     .str_0;
             }
             4 => {
-                (*rel)
-                    .catalogname = (*((*list_nth_cell(
-                    (*typeName).names,
-                    0 as libc::c_int,
-                ))
+                (*rel).catalogname = (*((*list_nth_cell((*typeName).names, 0 as libc::c_int))
                     .ptr_value as *mut Value))
                     .val
                     .str_0;
-                (*rel)
-                    .schemaname = (*((*list_nth_cell(
-                    (*typeName).names,
-                    1 as libc::c_int,
-                ))
+                (*rel).schemaname = (*((*list_nth_cell((*typeName).names, 1 as libc::c_int))
                     .ptr_value as *mut Value))
                     .val
                     .str_0;
-                (*rel)
-                    .relname = (*((*list_nth_cell((*typeName).names, 2 as libc::c_int))
-                    .ptr_value as *mut Value))
+                (*rel).relname = (*((*list_nth_cell((*typeName).names, 2 as libc::c_int)).ptr_value
+                    as *mut Value))
                     .val
                     .str_0;
-                field = (*((*list_nth_cell((*typeName).names, 3 as libc::c_int))
-                    .ptr_value as *mut Value))
+                field = (*((*list_nth_cell((*typeName).names, 3 as libc::c_int)).ptr_value
+                    as *mut Value))
                     .val
                     .str_0;
             }
@@ -1360,8 +1337,7 @@ pub unsafe extern "C" fn LookupTypeNameExtended(
             let mut __error_2: libc::c_int = 0;
             if errstart(elevel__2, 0 as *const libc::c_char) != 0 {
                 errmsg(
-                    b"type reference %s converted to %s\0" as *const u8
-                        as *const libc::c_char,
+                    b"type reference %s converted to %s\0" as *const u8 as *const libc::c_char,
                     TypeNameToString(typeName),
                     format_type_be(typoid),
                 );
@@ -1391,14 +1367,9 @@ pub unsafe extern "C" fn LookupTypeNameExtended(
                     arg: 0 as *mut libc::c_void,
                 },
             };
-            setup_parser_errposition_callback(
-                &mut pcbstate,
-                pstate,
-                (*typeName).location,
-            );
+            setup_parser_errposition_callback(&mut pcbstate, pstate, (*typeName).location);
             namespaceId = LookupExplicitNamespace(schemaname, missing_ok);
-            if !((namespaceId != 0 as libc::c_int as Oid) as libc::c_int as bool != 0)
-            {
+            if !((namespaceId != 0 as libc::c_int as Oid) as libc::c_int as bool != 0) {
                 typoid = 0 as libc::c_int as Oid;
             }
             cancel_parser_errposition_callback(&mut pcbstate);
@@ -1483,7 +1454,8 @@ pub unsafe extern "C" fn typenameType(
     }
     if (*(((*tup).t_data as *mut libc::c_char)
         .offset((*(*tup).t_data).t_hoff as libc::c_int as isize) as Form_pg_type))
-        .typisdefined == 0
+        .typisdefined
+        == 0
     {
         let elevel__0: libc::c_int = 21 as libc::c_int;
         let mut __error_0: libc::c_int = 0;
@@ -1517,7 +1489,8 @@ pub unsafe extern "C" fn typenameTypeIdAndMod(
     let mut tup: Type = 0 as *mut HeapTupleData;
     tup = typenameType(pstate, typeName, typmod_p);
     *typeid_p = (*(((*tup).t_data as *mut libc::c_char)
-        .offset((*(*tup).t_data).t_hoff as libc::c_int as isize) as Form_pg_type))
+        .offset((*(*tup).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_type))
         .oid;
     ReleaseSysCache(tup);
 }
@@ -1546,7 +1519,8 @@ unsafe extern "C" fn typenameTypeMod(
     }
     if (*(((*typ).t_data as *mut libc::c_char)
         .offset((*(*typ).t_data).t_hoff as libc::c_int as isize) as Form_pg_type))
-        .typisdefined == 0
+        .typisdefined
+        == 0
     {
         let elevel_: libc::c_int = 21 as libc::c_int;
         let mut __error: libc::c_int = 0;
@@ -1555,7 +1529,8 @@ unsafe extern "C" fn typenameTypeMod(
         }
     }
     typmodin = (*(((*typ).t_data as *mut libc::c_char)
-        .offset((*(*typ).t_data).t_hoff as libc::c_int as isize) as Form_pg_type))
+        .offset((*(*typ).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_type))
         .typmodin;
     if typmodin == 0 as libc::c_int as Oid {
         let elevel__0: libc::c_int = 21 as libc::c_int;
@@ -1586,8 +1561,7 @@ unsafe extern "C" fn typenameTypeMod(
     {
         let mut tm: *mut Node = (*l).ptr_value as *mut Node;
         let mut cstr: *mut libc::c_char = 0 as *mut libc::c_char;
-        if (*(tm as *const Node)).type_0 as libc::c_uint
-            == T_A_Const as libc::c_int as libc::c_uint
+        if (*(tm as *const Node)).type_0 as libc::c_uint == T_A_Const as libc::c_int as libc::c_uint
         {
             let mut ac: *mut A_Const = tm as *mut A_Const;
             if (*(&mut (*ac).val as *mut Value as *const Node)).type_0 as libc::c_uint
@@ -1597,10 +1571,10 @@ unsafe extern "C" fn typenameTypeMod(
                     b"%ld\0" as *const u8 as *const libc::c_char,
                     (*ac).val.val.ival as libc::c_long,
                 );
-            } else if (*(&mut (*ac).val as *mut Value as *const Node)).type_0
-                as libc::c_uint == T_Float as libc::c_int as libc::c_uint
-                || (*(&mut (*ac).val as *mut Value as *const Node)).type_0
-                    as libc::c_uint == T_String as libc::c_int as libc::c_uint
+            } else if (*(&mut (*ac).val as *mut Value as *const Node)).type_0 as libc::c_uint
+                == T_Float as libc::c_int as libc::c_uint
+                || (*(&mut (*ac).val as *mut Value as *const Node)).type_0 as libc::c_uint
+                    == T_String as libc::c_int as libc::c_uint
             {
                 cstr = (*ac).val.val.str_0;
             }
@@ -1609,9 +1583,9 @@ unsafe extern "C" fn typenameTypeMod(
         {
             let mut cr: *mut ColumnRef = tm as *mut ColumnRef;
             if list_length((*cr).fields) == 1 as libc::c_int
-                && (*((*list_nth_cell((*cr).fields, 0 as libc::c_int)).ptr_value
-                    as *const Node))
-                    .type_0 as libc::c_uint == T_String as libc::c_int as libc::c_uint
+                && (*((*list_nth_cell((*cr).fields, 0 as libc::c_int)).ptr_value as *const Node))
+                    .type_0 as libc::c_uint
+                    == T_String as libc::c_int as libc::c_uint
             {
                 cstr = (*((*list_nth_cell((*cr).fields, 0 as libc::c_int)).ptr_value
                     as *mut Value))
@@ -1633,17 +1607,13 @@ unsafe extern "C" fn typenameTypeMod(
         l__state.i;
     }
     setup_parser_errposition_callback(&mut pcbstate, pstate, (*typeName).location);
-    result = OidFunctionCall1Coll(typmodin, 0 as libc::c_int as Oid, arrtypmod as Datum)
-        as i32;
+    result = OidFunctionCall1Coll(typmodin, 0 as libc::c_int as Oid, arrtypmod as Datum) as i32;
     cancel_parser_errposition_callback(&mut pcbstate);
     pfree(datums as *mut libc::c_void);
     pfree(arrtypmod as *mut libc::c_void);
     return result;
 }
-unsafe extern "C" fn appendTypeNameToBuffer(
-    mut typeName: *const TypeName,
-    mut string: StringInfo,
-) {
+unsafe extern "C" fn appendTypeNameToBuffer(mut typeName: *const TypeName, mut string: StringInfo) {
     if !((*typeName).names).is_null() {
         let mut l: *mut ListCell = 0 as *mut ListCell;
         let mut l__state: ForEachState = {
@@ -1654,8 +1624,7 @@ unsafe extern "C" fn appendTypeNameToBuffer(
             init
         };
         while if !(l__state.l).is_null() && l__state.i < (*l__state.l).length {
-            l = &mut *((*l__state.l).elements).offset(l__state.i as isize)
-                as *mut ListCell;
+            l = &mut *((*l__state.l).elements).offset(l__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             l = 0 as *mut ListCell;
@@ -1680,9 +1649,7 @@ unsafe extern "C" fn appendTypeNameToBuffer(
     }
 }
 #[no_mangle]
-pub unsafe extern "C" fn TypeNameToString(
-    mut typeName: *const TypeName,
-) -> *mut libc::c_char {
+pub unsafe extern "C" fn TypeNameToString(mut typeName: *const TypeName) -> *mut libc::c_char {
     let mut string: StringInfoData = StringInfoData {
         data: 0 as *mut libc::c_char,
         len: 0,
@@ -1694,9 +1661,7 @@ pub unsafe extern "C" fn TypeNameToString(
     return string.data;
 }
 #[no_mangle]
-pub unsafe extern "C" fn TypeNameListToString(
-    mut typenames: *mut List,
-) -> *mut libc::c_char {
+pub unsafe extern "C" fn TypeNameListToString(mut typenames: *mut List) -> *mut libc::c_char {
     let mut string: StringInfoData = StringInfoData {
         data: 0 as *mut libc::c_char,
         len: 0,
@@ -1767,9 +1732,7 @@ pub unsafe extern "C" fn GetColumnDefCollation(
     if !((*coldef).collClause).is_null() {
         location = (*(*coldef).collClause).location;
         result = LookupCollation(pstate, (*(*coldef).collClause).collname, location);
-    } else if ((*coldef).collOid != 0 as libc::c_int as Oid) as libc::c_int as bool
-        != 0
-    {
+    } else if ((*coldef).collOid != 0 as libc::c_int as Oid) as libc::c_int as bool != 0 {
         result = (*coldef).collOid;
     } else {
         result = typcollation;
@@ -1817,8 +1780,7 @@ pub unsafe extern "C" fn typeTypeId(mut tp: Type) -> Oid {
         let mut __error: libc::c_int = 0;
         if errstart(elevel_, 0 as *const libc::c_char) != 0 {
             errmsg_internal(
-                b"typeTypeId() called with NULL type struct\0" as *const u8
-                    as *const libc::c_char,
+                b"typeTypeId() called with NULL type struct\0" as *const u8 as *const libc::c_char,
             );
             errfinish(
                 b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_type.c\0"
@@ -1838,22 +1800,22 @@ pub unsafe extern "C" fn typeTypeId(mut tp: Type) -> Oid {
 #[no_mangle]
 pub unsafe extern "C" fn typeLen(mut t: Type) -> i16 {
     let mut typ: Form_pg_type = 0 as *mut FormData_pg_type;
-    typ = ((*t).t_data as *mut libc::c_char)
-        .offset((*(*t).t_data).t_hoff as libc::c_int as isize) as Form_pg_type;
+    typ = ((*t).t_data as *mut libc::c_char).offset((*(*t).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_type;
     return (*typ).typlen;
 }
 #[no_mangle]
 pub unsafe extern "C" fn typeByVal(mut t: Type) -> bool {
     let mut typ: Form_pg_type = 0 as *mut FormData_pg_type;
-    typ = ((*t).t_data as *mut libc::c_char)
-        .offset((*(*t).t_data).t_hoff as libc::c_int as isize) as Form_pg_type;
+    typ = ((*t).t_data as *mut libc::c_char).offset((*(*t).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_type;
     return (*typ).typbyval;
 }
 #[no_mangle]
 pub unsafe extern "C" fn typeTypeName(mut t: Type) -> *mut libc::c_char {
     let mut typ: Form_pg_type = 0 as *mut FormData_pg_type;
-    typ = ((*t).t_data as *mut libc::c_char)
-        .offset((*(*t).t_data).t_hoff as libc::c_int as isize) as Form_pg_type;
+    typ = ((*t).t_data as *mut libc::c_char).offset((*(*t).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_type;
     return pstrdup(((*typ).typname.data).as_mut_ptr());
 }
 #[no_mangle]
@@ -1877,7 +1839,8 @@ pub unsafe extern "C" fn stringTypeDatum(
     mut atttypmod: i32,
 ) -> Datum {
     let mut typform: Form_pg_type = ((*tp).t_data as *mut libc::c_char)
-        .offset((*(*tp).t_data).t_hoff as libc::c_int as isize) as Form_pg_type;
+        .offset((*(*tp).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_type;
     let mut typinput: Oid = (*typform).typinput;
     let mut typioparam: Oid = getTypeIOParam(tp);
     return OidInputFunctionCall(typinput, string, typioparam, atttypmod);
@@ -1922,9 +1885,7 @@ unsafe extern "C" fn pts_error_callback(mut arg: *mut libc::c_void) {
     );
 }
 #[no_mangle]
-pub unsafe extern "C" fn typeStringToTypeName(
-    mut str: *const libc::c_char,
-) -> *mut TypeName {
+pub unsafe extern "C" fn typeStringToTypeName(mut str: *const libc::c_char) -> *mut TypeName {
     let mut raw_parsetree_list: *mut List = 0 as *mut List;
     let mut typeName: *mut TypeName = 0 as *mut TypeName;
     let mut ptserrcontext: ErrorContextCallback = ErrorContextCallback {
@@ -1932,20 +1893,16 @@ pub unsafe extern "C" fn typeStringToTypeName(
         callback: None,
         arg: 0 as *mut libc::c_void,
     };
-    if !(strspn(str, b" \t\n\r\x0C\0" as *const u8 as *const libc::c_char)
-        == strlen(str))
-    {
-        ptserrcontext
-            .callback = Some(
-            pts_error_callback as unsafe extern "C" fn(*mut libc::c_void) -> (),
-        );
+    if !(strspn(str, b" \t\n\r\x0C\0" as *const u8 as *const libc::c_char) == strlen(str)) {
+        ptserrcontext.callback =
+            Some(pts_error_callback as unsafe extern "C" fn(*mut libc::c_void) -> ());
         ptserrcontext.arg = str as *mut libc::c_char as *mut libc::c_void;
         ptserrcontext.previous = error_context_stack;
         error_context_stack = &mut ptserrcontext;
         raw_parsetree_list = raw_parser(str, RAW_PARSE_TYPE_NAME);
         error_context_stack = ptserrcontext.previous;
-        typeName = (*list_nth_cell(raw_parsetree_list, 0 as libc::c_int)).ptr_value
-            as *mut TypeName;
+        typeName =
+            (*list_nth_cell(raw_parsetree_list, 0 as libc::c_int)).ptr_value as *mut TypeName;
         if !((*typeName).setof != 0) {
             return typeName;
         }
@@ -1979,7 +1936,8 @@ pub unsafe extern "C" fn parseTypeString(
         *typeid_p = 0 as libc::c_int as Oid;
     } else {
         let mut typ: Form_pg_type = ((*tup).t_data as *mut libc::c_char)
-            .offset((*(*tup).t_data).t_hoff as libc::c_int as isize) as Form_pg_type;
+            .offset((*(*tup).t_data).t_hoff as libc::c_int as isize)
+            as Form_pg_type;
         if (*typ).typisdefined == 0 {
             let elevel__0: libc::c_int = 21 as libc::c_int;
             let mut __error_0: libc::c_int = 0;

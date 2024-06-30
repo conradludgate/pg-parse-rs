@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type AttrMissing;
@@ -128,7 +136,7 @@ pub type NameData = nameData;
 #[repr(C)]
 pub struct ErrorContextCallback {
     pub previous: *mut ErrorContextCallback,
-    pub callback: Option::<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
+    pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
 pub type Datum = usize;
@@ -149,8 +157,8 @@ pub struct ItemPointerData_Inner {
     pub ip_posid: OffsetNumber,
 }
 #[allow(dead_code, non_upper_case_globals)]
-const ItemPointerData_PADDING: usize = ::core::mem::size_of::<ItemPointerData>()
-    - ::core::mem::size_of::<ItemPointerData_Inner>();
+const ItemPointerData_PADDING: usize =
+    ::core::mem::size_of::<ItemPointerData>() - ::core::mem::size_of::<ItemPointerData_Inner>();
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HeapTupleHeaderData {
@@ -1221,24 +1229,14 @@ pub struct FormData_pg_type {
 }
 pub type Form_pg_type = *mut FormData_pg_type;
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -1422,39 +1420,34 @@ unsafe extern "C" fn for_each_cell_setup(
 unsafe extern "C" fn lnext(mut l: *const List, mut c: *const ListCell) -> *mut ListCell {
     c = c.offset(1);
     c;
-    if c
-        < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell
-            as *const ListCell
-    {
-        return c as *mut ListCell
+    if c < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell as *const ListCell {
+        return c as *mut ListCell;
     } else {
-        return 0 as *mut ListCell
+        return 0 as *mut ListCell;
     };
 }
 #[inline]
-unsafe extern "C" fn list_cell_number(
-    mut l: *const List,
-    mut c: *const ListCell,
-) -> libc::c_int {
+unsafe extern "C" fn list_cell_number(mut l: *const List, mut c: *const ListCell) -> libc::c_int {
     return c.offset_from((*l).elements) as libc::c_long as libc::c_int;
 }
 #[inline]
-unsafe extern "C" fn list_nth_cell(
-    mut list: *const List,
-    mut n: libc::c_int,
-) -> *mut ListCell {
+unsafe extern "C" fn list_nth_cell(mut list: *const List, mut n: libc::c_int) -> *mut ListCell {
     return &mut *((*list).elements).offset(n as isize) as *mut ListCell;
 }
 #[inline]
 unsafe extern "C" fn list_length(mut l: *const List) -> libc::c_int {
-    return if !l.is_null() { (*l).length } else { 0 as libc::c_int };
+    return if !l.is_null() {
+        (*l).length
+    } else {
+        0 as libc::c_int
+    };
 }
 #[inline]
 unsafe extern "C" fn list_second_cell(mut l: *const List) -> *mut ListCell {
     if !l.is_null() && (*l).length >= 2 as libc::c_int {
-        return &mut *((*l).elements).offset(1 as libc::c_int as isize) as *mut ListCell
+        return &mut *((*l).elements).offset(1 as libc::c_int as isize) as *mut ListCell;
     } else {
-        return 0 as *mut ListCell
+        return 0 as *mut ListCell;
     };
 }
 #[inline]
@@ -1598,8 +1591,7 @@ unsafe extern "C" fn coerce_type_typmod(
     return node;
 }
 unsafe extern "C" fn hide_coercion_node(mut node: *mut Node) {
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_FuncExpr as libc::c_int as libc::c_uint
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_FuncExpr as libc::c_int as libc::c_uint
     {
         (*(node as *mut FuncExpr)).funcformat = COERCE_IMPLICIT_CAST;
     } else if (*(node as *const Node)).type_0 as libc::c_uint
@@ -1666,8 +1658,7 @@ unsafe extern "C" fn build_coercion_expression(
             let mut __error: libc::c_int = 0;
             if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                 errmsg_internal(
-                    b"cache lookup failed for function %u\0" as *const u8
-                        as *const libc::c_char,
+                    b"cache lookup failed for function %u\0" as *const u8 as *const libc::c_char,
                     funcId,
                 );
                 errfinish(
@@ -1682,7 +1673,8 @@ unsafe extern "C" fn build_coercion_expression(
             }
         }
         procstruct = ((*tp).t_data as *mut libc::c_char)
-            .offset((*(*tp).t_data).t_hoff as libc::c_int as isize) as Form_pg_proc;
+            .offset((*(*tp).t_data).t_hoff as libc::c_int as isize)
+            as Form_pg_proc;
         nargs = (*procstruct).pronargs as libc::c_int;
         ReleaseSysCache(tp);
     }
@@ -1712,9 +1704,7 @@ unsafe extern "C" fn build_coercion_expression(
         );
         (*fexpr).location = location;
         return fexpr as *mut Node;
-    } else if pathtype as libc::c_uint
-        == COERCION_PATH_ARRAYCOERCE as libc::c_int as libc::c_uint
-    {
+    } else if pathtype as libc::c_uint == COERCION_PATH_ARRAYCOERCE as libc::c_int as libc::c_uint {
         let mut acoerce: *mut ArrayCoerceExpr = ({
             let mut _result: *mut Node = 0 as *mut Node;
             (*_result).type_0 = T_ArrayCoerceExpr;
@@ -1771,9 +1761,7 @@ unsafe extern "C" fn build_coercion_expression(
         (*acoerce).coerceformat = cformat;
         (*acoerce).location = location;
         return acoerce as *mut Node;
-    } else if pathtype as libc::c_uint
-        == COERCION_PATH_COERCEVIAIO as libc::c_int as libc::c_uint
-    {
+    } else if pathtype as libc::c_uint == COERCION_PATH_COERCEVIAIO as libc::c_int as libc::c_uint {
         let mut iocoerce: *mut CoerceViaIO = ({
             let mut _result: *mut Node = 0 as *mut Node;
             (*_result).type_0 = T_CoerceViaIO;
@@ -1829,13 +1817,11 @@ unsafe extern "C" fn coerce_record_to_complex(
     {
         args = (*(node as *mut RowExpr)).args;
     } else if !node.is_null()
-        && (*(node as *const Node)).type_0 as libc::c_uint
-            == T_Var as libc::c_int as libc::c_uint
+        && (*(node as *const Node)).type_0 as libc::c_uint == T_Var as libc::c_int as libc::c_uint
         && (*(node as *mut Var)).varattno as libc::c_int == 0 as libc::c_int
     {
         let mut rtindex: libc::c_int = (*(node as *mut Var)).varno as libc::c_int;
-        let mut sublevels_up: libc::c_int = (*(node as *mut Var)).varlevelsup
-            as libc::c_int;
+        let mut sublevels_up: libc::c_int = (*(node as *mut Var)).varlevelsup as libc::c_int;
         let mut vlocation: libc::c_int = (*(node as *mut Var)).location;
         let mut nsitem: *mut ParseNamespaceItem = 0 as *mut ParseNamespaceItem;
         nsitem = GetNSItemByRangeTablePosn(pstate, rtindex, sublevels_up);
@@ -1857,9 +1843,8 @@ unsafe extern "C" fn coerce_record_to_complex(
         let mut expr: *mut Node = 0 as *mut Node;
         let mut cexpr: *mut Node = 0 as *mut Node;
         let mut exprtype: Oid = 0;
-        let mut attr: Form_pg_attribute = &mut *((*tupdesc).attrs)
-            .as_mut_ptr()
-            .offset(i as isize) as *mut FormData_pg_attribute;
+        let mut attr: Form_pg_attribute =
+            &mut *((*tupdesc).attrs).as_mut_ptr().offset(i as isize) as *mut FormData_pg_attribute;
         if !((*attr).attisdropped != 0) {
             if arg.is_null() {
                 let elevel__0: libc::c_int = 21 as libc::c_int;
@@ -1991,9 +1976,9 @@ pub unsafe extern "C" fn parser_coercion_errposition(
     mut input_expr: *mut Node,
 ) -> libc::c_int {
     if coerce_location >= 0 as libc::c_int {
-        return parser_errposition(pstate, coerce_location)
+        return parser_errposition(pstate, coerce_location);
     } else {
-        return parser_errposition(pstate, exprLocation(input_expr))
+        return parser_errposition(pstate, exprLocation(input_expr));
     };
 }
 #[no_mangle]
@@ -2050,8 +2035,7 @@ pub unsafe extern "C" fn select_common_typmod(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -2060,12 +2044,12 @@ pub unsafe extern "C" fn select_common_typmod(
     {
         let mut expr: *mut Node = (*lc).ptr_value as *mut Node;
         if exprType(expr) != common_type {
-            return -(1 as libc::c_int)
+            return -(1 as libc::c_int);
         } else if first != 0 {
             result = exprTypmod(expr);
             first = false;
         } else if result != exprTypmod(expr) {
-            return -(1 as libc::c_int)
+            return -(1 as libc::c_int);
         }
         lc__state.i += 1;
         lc__state.i;
@@ -2092,7 +2076,8 @@ pub unsafe extern "C" fn find_typmod_coercion_function(
     result = COERCION_PATH_FUNC;
     targetType = typeidType(typeId);
     typeForm = ((*targetType).t_data as *mut libc::c_char)
-        .offset((*(*targetType).t_data).t_hoff as libc::c_int as isize) as Form_pg_type;
+        .offset((*(*targetType).t_data).t_hoff as libc::c_int as isize)
+        as Form_pg_type;
     if IsTrueArrayType(typeForm) != 0 {
         typeId = (*typeForm).typelem;
         result = COERCION_PATH_ARRAYCOERCE;
@@ -2105,7 +2090,8 @@ pub unsafe extern "C" fn find_typmod_coercion_function(
     );
     if !(tuple as *const libc::c_void).is_null() {
         let mut castForm: Form_pg_cast = ((*tuple).t_data as *mut libc::c_char)
-            .offset((*(*tuple).t_data).t_hoff as libc::c_int as isize) as Form_pg_cast;
+            .offset((*(*tuple).t_data).t_hoff as libc::c_int as isize)
+            as Form_pg_cast;
         *funcid = (*castForm).castfunc;
         ReleaseSysCache(tuple);
     }
@@ -2116,14 +2102,11 @@ pub unsafe extern "C" fn find_typmod_coercion_function(
 }
 unsafe extern "C" fn is_complex_array(mut typid: Oid) -> bool {
     let mut elemtype: Oid = get_element_type(typid);
-    return ((elemtype != 0 as libc::c_int as Oid) as libc::c_int as bool as libc::c_int
-        != 0 && typeOrDomainTypeRelid(elemtype) != 0 as libc::c_int as Oid)
-        as libc::c_int as bool;
+    return ((elemtype != 0 as libc::c_int as Oid) as libc::c_int as bool as libc::c_int != 0
+        && typeOrDomainTypeRelid(elemtype) != 0 as libc::c_int as Oid) as libc::c_int
+        as bool;
 }
-unsafe extern "C" fn typeIsOfTypedTable(
-    mut reltypeId: Oid,
-    mut reloftypeId: Oid,
-) -> bool {
+unsafe extern "C" fn typeIsOfTypedTable(mut reltypeId: Oid, mut reloftypeId: Oid) -> bool {
     let mut relid: Oid = typeOrDomainTypeRelid(reltypeId);
     let mut result: bool = false;
     if relid != 0 {
@@ -2135,8 +2118,7 @@ unsafe extern "C" fn typeIsOfTypedTable(
             let mut __error: libc::c_int = 0;
             if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                 errmsg_internal(
-                    b"cache lookup failed for relation %u\0" as *const u8
-                        as *const libc::c_char,
+                    b"cache lookup failed for relation %u\0" as *const u8 as *const libc::c_char,
                     relid,
                 );
                 errfinish(
@@ -2151,7 +2133,8 @@ unsafe extern "C" fn typeIsOfTypedTable(
             }
         }
         reltup = ((*tp).t_data as *mut libc::c_char)
-            .offset((*(*tp).t_data).t_hoff as libc::c_int as isize) as Form_pg_class;
+            .offset((*(*tp).t_data).t_hoff as libc::c_int as isize)
+            as Form_pg_class;
         if (*reltup).reloftype == reloftypeId {
             result = true;
         }

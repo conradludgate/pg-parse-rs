@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type MemoryContextData;
@@ -1028,24 +1036,14 @@ pub struct TupleDescData {
 pub type TupleDesc = *mut TupleDescData;
 pub type Relation = *mut RelationData;
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -1169,7 +1167,7 @@ pub struct FmgrInfo {
     pub fn_expr: fmNodePtr,
 }
 pub type fmNodePtr = *mut Node;
-pub type PGFunction = Option::<unsafe extern "C" fn(FunctionCallInfo) -> Datum>;
+pub type PGFunction = Option<unsafe extern "C" fn(FunctionCallInfo) -> Datum>;
 pub type FunctionCallInfo = *mut FunctionCallInfoBaseData;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1217,26 +1215,24 @@ unsafe extern "C" fn list_head(mut l: *const List) -> *mut ListCell {
 }
 #[inline]
 unsafe extern "C" fn list_length(mut l: *const List) -> libc::c_int {
-    return if !l.is_null() { (*l).length } else { 0 as libc::c_int };
+    return if !l.is_null() {
+        (*l).length
+    } else {
+        0 as libc::c_int
+    };
 }
 #[inline]
-unsafe extern "C" fn list_cell_number(
-    mut l: *const List,
-    mut c: *const ListCell,
-) -> libc::c_int {
+unsafe extern "C" fn list_cell_number(mut l: *const List, mut c: *const ListCell) -> libc::c_int {
     return c.offset_from((*l).elements) as libc::c_long as libc::c_int;
 }
 #[inline]
 unsafe extern "C" fn lnext(mut l: *const List, mut c: *const ListCell) -> *mut ListCell {
     c = c.offset(1);
     c;
-    if c
-        < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell
-            as *const ListCell
-    {
-        return c as *mut ListCell
+    if c < &mut *((*l).elements).offset((*l).length as isize) as *mut ListCell as *const ListCell {
+        return c as *mut ListCell;
     } else {
-        return 0 as *mut ListCell
+        return 0 as *mut ListCell;
     };
 }
 #[inline]
@@ -1271,8 +1267,7 @@ pub unsafe extern "C" fn transformWithClause(
         init
     };
     while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-            as *mut ListCell;
+        lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
         true as libc::c_int
     } else {
         lc = 0 as *mut ListCell;
@@ -1281,21 +1276,18 @@ pub unsafe extern "C" fn transformWithClause(
     {
         let mut cte: *mut CommonTableExpr = (*lc).ptr_value as *mut CommonTableExpr;
         let mut rest: *mut ListCell = 0 as *mut ListCell;
-        let mut rest__state: ForEachState = for_each_cell_setup(
-            (*withClause).ctes,
-            lnext((*withClause).ctes, lc),
-        );
+        let mut rest__state: ForEachState =
+            for_each_cell_setup((*withClause).ctes, lnext((*withClause).ctes, lc));
         while if !(rest__state.l).is_null() && rest__state.i < (*rest__state.l).length {
-            rest = &mut *((*rest__state.l).elements).offset(rest__state.i as isize)
-                as *mut ListCell;
+            rest =
+                &mut *((*rest__state.l).elements).offset(rest__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             rest = 0 as *mut ListCell;
             false as libc::c_int
         } != 0
         {
-            let mut cte2: *mut CommonTableExpr = (*rest).ptr_value
-                as *mut CommonTableExpr;
+            let mut cte2: *mut CommonTableExpr = (*rest).ptr_value as *mut CommonTableExpr;
             if strcmp((*cte).ctename, (*cte2).ctename) == 0 as libc::c_int {
                 let elevel_: libc::c_int = 21 as libc::c_int;
                 let mut __error: libc::c_int = 0;
@@ -1329,8 +1321,7 @@ pub unsafe extern "C" fn transformWithClause(
         let mut i: libc::c_int = 0;
         cstate.pstate = pstate;
         cstate.numitems = list_length((*withClause).ctes);
-        cstate
-            .items = palloc0(
+        cstate.items = palloc0(
             (cstate.numitems as libc::c_ulong)
                 .wrapping_mul(::core::mem::size_of::<CteItem>() as libc::c_ulong),
         ) as *mut CteItem;
@@ -1343,8 +1334,7 @@ pub unsafe extern "C" fn transformWithClause(
             init
         };
         while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
-            lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
-                as *mut ListCell;
+            lc = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             lc = 0 as *mut ListCell;
@@ -1363,20 +1353,15 @@ pub unsafe extern "C" fn transformWithClause(
         checkWellFormedRecursion(&mut cstate);
         i = 0 as libc::c_int;
         while i < cstate.numitems {
-            let mut cte_0: *mut CommonTableExpr = (*(cstate.items).offset(i as isize))
-                .cte;
-            (*pstate)
-                .p_ctenamespace = lappend(
-                (*pstate).p_ctenamespace,
-                cte_0 as *mut libc::c_void,
-            );
+            let mut cte_0: *mut CommonTableExpr = (*(cstate.items).offset(i as isize)).cte;
+            (*pstate).p_ctenamespace =
+                lappend((*pstate).p_ctenamespace, cte_0 as *mut libc::c_void);
             i += 1;
             i;
         }
         i = 0 as libc::c_int;
         while i < cstate.numitems {
-            let mut cte_1: *mut CommonTableExpr = (*(cstate.items).offset(i as isize))
-                .cte;
+            let mut cte_1: *mut CommonTableExpr = (*(cstate.items).offset(i as isize)).cte;
             analyzeCTE(pstate, cte_1);
             i += 1;
             i;
@@ -1391,22 +1376,17 @@ pub unsafe extern "C" fn transformWithClause(
             init
         };
         while if !(lc__state_1.l).is_null() && lc__state_1.i < (*lc__state_1.l).length {
-            lc = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize)
-                as *mut ListCell;
+            lc = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             lc = 0 as *mut ListCell;
             false as libc::c_int
         } != 0
         {
-            let mut cte_2: *mut CommonTableExpr = (*lc).ptr_value
-                as *mut CommonTableExpr;
+            let mut cte_2: *mut CommonTableExpr = (*lc).ptr_value as *mut CommonTableExpr;
             analyzeCTE(pstate, cte_2);
-            (*pstate)
-                .p_ctenamespace = lappend(
-                (*pstate).p_ctenamespace,
-                cte_2 as *mut libc::c_void,
-            );
+            (*pstate).p_ctenamespace =
+                lappend((*pstate).p_ctenamespace, cte_2 as *mut libc::c_void);
             (*pstate).p_future_ctes = list_delete_first((*pstate).p_future_ctes);
             lc__state_1.i += 1;
             lc__state_1.i;
@@ -1414,28 +1394,17 @@ pub unsafe extern "C" fn transformWithClause(
     }
     return (*pstate).p_ctenamespace;
 }
-unsafe extern "C" fn analyzeCTE(
-    mut pstate: *mut ParseState,
-    mut cte: *mut CommonTableExpr,
-) {
+unsafe extern "C" fn analyzeCTE(mut pstate: *mut ParseState, mut cte: *mut CommonTableExpr) {
     let mut query: *mut Query = 0 as *mut Query;
-    query = parse_sub_analyze(
-        (*cte).ctequery,
-        pstate,
-        cte,
-        false,
-        true,
-    );
+    query = parse_sub_analyze((*cte).ctequery, pstate, cte, false, true);
     (*cte).ctequery = query as *mut Node;
-    if !((*(query as *const Node)).type_0 as libc::c_uint
-        == T_Query as libc::c_int as libc::c_uint)
+    if !((*(query as *const Node)).type_0 as libc::c_uint == T_Query as libc::c_int as libc::c_uint)
     {
         let elevel_: libc::c_int = 21 as libc::c_int;
         let mut __error: libc::c_int = 0;
         if errstart(elevel_, 0 as *const libc::c_char) != 0 {
             errmsg_internal(
-                b"unexpected non-Query statement in WITH\0" as *const u8
-                    as *const libc::c_char,
+                b"unexpected non-Query statement in WITH\0" as *const u8 as *const libc::c_char,
             );
             errfinish(
                 b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_cte.c\0"
@@ -1453,8 +1422,7 @@ unsafe extern "C" fn analyzeCTE(
         let mut __error_0: libc::c_int = 0;
         if errstart(elevel__0, 0 as *const libc::c_char) != 0 {
             errmsg_internal(
-                b"unexpected utility statement in WITH\0" as *const u8
-                    as *const libc::c_char,
+                b"unexpected utility statement in WITH\0" as *const u8 as *const libc::c_char,
             );
             errfinish(
                 b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_cte.c\0"
@@ -1512,11 +1480,9 @@ unsafe extern "C" fn analyzeCTE(
             };
             init
         };
-        while if !(lctlist__state.l).is_null()
-            && lctlist__state.i < (*lctlist__state.l).length
-        {
-            lctlist = &mut *((*lctlist__state.l).elements)
-                .offset(lctlist__state.i as isize) as *mut ListCell;
+        while if !(lctlist__state.l).is_null() && lctlist__state.i < (*lctlist__state.l).length {
+            lctlist = &mut *((*lctlist__state.l).elements).offset(lctlist__state.i as isize)
+                as *mut ListCell;
             true as libc::c_int
         } else {
             lctlist = 0 as *mut ListCell;
@@ -1576,8 +1542,7 @@ unsafe extern "C" fn analyzeCTE(
             let mut __error_5: libc::c_int = 0;
             if errstart(elevel__5, 0 as *const libc::c_char) != 0 {
                 errmsg_internal(
-                    b"wrong number of output columns in WITH\0" as *const u8
-                        as *const libc::c_char,
+                    b"wrong number of output columns in WITH\0" as *const u8 as *const libc::c_char,
                 );
                 errfinish(
                     b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_cte.c\0"
@@ -1633,8 +1598,7 @@ unsafe extern "C" fn analyzeCTE(
             init
         };
         while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-            lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-                as *mut ListCell;
+            lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             lc = 0 as *mut ListCell;
@@ -1685,8 +1649,8 @@ unsafe extern "C" fn analyzeCTE(
             init
         };
         while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
-            lc_0 = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
-                as *mut ListCell;
+            lc_0 =
+                &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize) as *mut ListCell;
             true as libc::c_int
         } else {
             lc_0 = 0 as *mut ListCell;
@@ -1723,14 +1687,12 @@ unsafe extern "C" fn analyzeCTE(
                 abort();
             }
         }
-        (*(*cte).cycle_clause)
-            .cycle_mark_value = transformExpr(
+        (*(*cte).cycle_clause).cycle_mark_value = transformExpr(
             pstate,
             (*(*cte).cycle_clause).cycle_mark_value,
             EXPR_KIND_CYCLE_MARK,
         );
-        (*(*cte).cycle_clause)
-            .cycle_mark_default = transformExpr(
+        (*(*cte).cycle_clause).cycle_mark_default = transformExpr(
             pstate,
             (*(*cte).cycle_clause).cycle_mark_default,
             EXPR_KIND_CYCLE_MARK,
@@ -1757,73 +1719,59 @@ unsafe extern "C" fn analyzeCTE(
                 abort();
             }
         }
-        (*(*cte).cycle_clause)
-            .cycle_mark_type = select_common_type(
+        (*(*cte).cycle_clause).cycle_mark_type = select_common_type(
             pstate,
             list_make2_impl(
                 T_List,
                 ListCell {
-                    ptr_value: (*(*cte).cycle_clause).cycle_mark_value
-                        as *mut libc::c_void,
+                    ptr_value: (*(*cte).cycle_clause).cycle_mark_value as *mut libc::c_void,
                 },
                 ListCell {
-                    ptr_value: (*(*cte).cycle_clause).cycle_mark_default
-                        as *mut libc::c_void,
+                    ptr_value: (*(*cte).cycle_clause).cycle_mark_default as *mut libc::c_void,
                 },
             ),
             b"CYCLE\0" as *const u8 as *const libc::c_char,
             0 as *mut *mut Node,
         );
-        (*(*cte).cycle_clause)
-            .cycle_mark_value = coerce_to_common_type(
+        (*(*cte).cycle_clause).cycle_mark_value = coerce_to_common_type(
             pstate,
             (*(*cte).cycle_clause).cycle_mark_value,
             (*(*cte).cycle_clause).cycle_mark_type,
             b"CYCLE/SET/TO\0" as *const u8 as *const libc::c_char,
         );
-        (*(*cte).cycle_clause)
-            .cycle_mark_default = coerce_to_common_type(
+        (*(*cte).cycle_clause).cycle_mark_default = coerce_to_common_type(
             pstate,
             (*(*cte).cycle_clause).cycle_mark_default,
             (*(*cte).cycle_clause).cycle_mark_type,
             b"CYCLE/SET/DEFAULT\0" as *const u8 as *const libc::c_char,
         );
-        (*(*cte).cycle_clause)
-            .cycle_mark_typmod = select_common_typmod(
+        (*(*cte).cycle_clause).cycle_mark_typmod = select_common_typmod(
             pstate,
             list_make2_impl(
                 T_List,
                 ListCell {
-                    ptr_value: (*(*cte).cycle_clause).cycle_mark_value
-                        as *mut libc::c_void,
+                    ptr_value: (*(*cte).cycle_clause).cycle_mark_value as *mut libc::c_void,
                 },
                 ListCell {
-                    ptr_value: (*(*cte).cycle_clause).cycle_mark_default
-                        as *mut libc::c_void,
+                    ptr_value: (*(*cte).cycle_clause).cycle_mark_default as *mut libc::c_void,
                 },
             ),
             (*(*cte).cycle_clause).cycle_mark_type,
         );
-        (*(*cte).cycle_clause)
-            .cycle_mark_collation = select_common_collation(
+        (*(*cte).cycle_clause).cycle_mark_collation = select_common_collation(
             pstate,
             list_make2_impl(
                 T_List,
                 ListCell {
-                    ptr_value: (*(*cte).cycle_clause).cycle_mark_value
-                        as *mut libc::c_void,
+                    ptr_value: (*(*cte).cycle_clause).cycle_mark_value as *mut libc::c_void,
                 },
                 ListCell {
-                    ptr_value: (*(*cte).cycle_clause).cycle_mark_default
-                        as *mut libc::c_void,
+                    ptr_value: (*(*cte).cycle_clause).cycle_mark_default as *mut libc::c_void,
                 },
             ),
             true,
         );
-        typentry = lookup_type_cache(
-            (*(*cte).cycle_clause).cycle_mark_type,
-            0x1 as libc::c_int,
-        );
+        typentry = lookup_type_cache((*(*cte).cycle_clause).cycle_mark_type, 0x1 as libc::c_int);
         if (*typentry).eq_opr == 0 {
             let elevel__17: libc::c_int = 21 as libc::c_int;
             let mut __error_17: libc::c_int = 0;
@@ -1886,8 +1834,7 @@ unsafe extern "C" fn makeDependencyGraphWalker(
     if node.is_null() {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_RangeVar as libc::c_int as libc::c_uint
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_RangeVar as libc::c_int as libc::c_uint
     {
         let mut rv: *mut RangeVar = node as *mut RangeVar;
         if ((*rv).schemaname).is_null() {
@@ -1901,8 +1848,7 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                 init
             };
             while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-                lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-                    as *mut ListCell;
+                lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
                 true as libc::c_int
             } else {
                 lc = 0 as *mut ListCell;
@@ -1918,9 +1864,7 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                     };
                     init
                 };
-                while if !(lc2__state.l).is_null()
-                    && lc2__state.i < (*lc2__state.l).length
-                {
+                while if !(lc2__state.l).is_null() && lc2__state.i < (*lc2__state.l).length {
                     lc2 = &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize)
                         as *mut ListCell;
                     true as libc::c_int
@@ -1929,8 +1873,7 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                     false as libc::c_int
                 } != 0
                 {
-                    let mut cte: *mut CommonTableExpr = (*lc2).ptr_value
-                        as *mut CommonTableExpr;
+                    let mut cte: *mut CommonTableExpr = (*lc2).ptr_value as *mut CommonTableExpr;
                     if strcmp((*rv).relname, (*cte).ctename) == 0 as libc::c_int {
                         return false;
                     }
@@ -1942,15 +1885,12 @@ unsafe extern "C" fn makeDependencyGraphWalker(
             }
             i = 0 as libc::c_int;
             while i < (*cstate).numitems {
-                let mut cte_0: *mut CommonTableExpr = (*((*cstate).items)
-                    .offset(i as isize))
-                    .cte;
+                let mut cte_0: *mut CommonTableExpr = (*((*cstate).items).offset(i as isize)).cte;
                 if strcmp((*rv).relname, (*cte_0).ctename) == 0 as libc::c_int {
                     let mut myindex: libc::c_int = (*cstate).curitem;
                     if i != myindex {
-                        let ref mut fresh1 = (*((*cstate).items)
-                            .offset(myindex as isize))
-                            .depends_on;
+                        let ref mut fresh1 =
+                            (*((*cstate).items).offset(myindex as isize)).depends_on;
                         *fresh1 = bms_add_member(
                             (*((*cstate).items).offset(myindex as isize)).depends_on,
                             (*((*cstate).items).offset(i as isize)).id,
@@ -1974,8 +1914,7 @@ unsafe extern "C" fn makeDependencyGraphWalker(
         let mut lc_0: *mut ListCell = 0 as *mut ListCell;
         if !((*stmt).withClause).is_null() {
             if (*(*stmt).withClause).recursive != 0 {
-                (*cstate)
-                    .innerwiths = lcons(
+                (*cstate).innerwiths = lcons(
                     (*(*stmt).withClause).ctes as *mut libc::c_void,
                     (*cstate).innerwiths,
                 );
@@ -1986,19 +1925,16 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                     };
                     init
                 };
-                while if !(lc__state_0.l).is_null()
-                    && lc__state_0.i < (*lc__state_0.l).length
-                {
-                    lc_0 = &mut *((*lc__state_0.l).elements)
-                        .offset(lc__state_0.i as isize) as *mut ListCell;
+                while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
+                    lc_0 = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
+                        as *mut ListCell;
                     true as libc::c_int
                 } else {
                     lc_0 = 0 as *mut ListCell;
                     false as libc::c_int
                 } != 0
                 {
-                    let mut cte_1: *mut CommonTableExpr = (*lc_0).ptr_value
-                        as *mut CommonTableExpr;
+                    let mut cte_1: *mut CommonTableExpr = (*lc_0).ptr_value as *mut CommonTableExpr;
                     makeDependencyGraphWalker((*cte_1).ctequery, cstate);
                     lc__state_0.i += 1;
                     lc__state_0.i;
@@ -2006,22 +1942,17 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                 raw_expression_tree_walker(
                     node,
                     ::core::mem::transmute::<
-                        Option::<
-                            unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
-                        >,
-                        Option::<unsafe extern "C" fn() -> bool>,
-                    >(
-                        Some(
-                            makeDependencyGraphWalker
-                                as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
-                        ),
-                    ),
+                        Option<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
+                        Option<unsafe extern "C" fn() -> bool>,
+                    >(Some(
+                        makeDependencyGraphWalker
+                            as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
+                    )),
                     cstate as *mut libc::c_void,
                 );
                 (*cstate).innerwiths = list_delete_first((*cstate).innerwiths);
             } else {
-                (*cstate)
-                    .innerwiths = lcons(
+                (*cstate).innerwiths = lcons(
                     0 as *mut libc::c_void as *mut List as *mut libc::c_void,
                     (*cstate).innerwiths,
                 );
@@ -2032,43 +1963,34 @@ unsafe extern "C" fn makeDependencyGraphWalker(
                     };
                     init
                 };
-                while if !(lc__state_1.l).is_null()
-                    && lc__state_1.i < (*lc__state_1.l).length
-                {
-                    lc_0 = &mut *((*lc__state_1.l).elements)
-                        .offset(lc__state_1.i as isize) as *mut ListCell;
+                while if !(lc__state_1.l).is_null() && lc__state_1.i < (*lc__state_1.l).length {
+                    lc_0 = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize)
+                        as *mut ListCell;
                     true as libc::c_int
                 } else {
                     lc_0 = 0 as *mut ListCell;
                     false as libc::c_int
                 } != 0
                 {
-                    let mut cte_2: *mut CommonTableExpr = (*lc_0).ptr_value
-                        as *mut CommonTableExpr;
+                    let mut cte_2: *mut CommonTableExpr = (*lc_0).ptr_value as *mut CommonTableExpr;
                     let mut cell1: *mut ListCell = 0 as *mut ListCell;
                     makeDependencyGraphWalker((*cte_2).ctequery, cstate);
                     cell1 = list_head((*cstate).innerwiths);
-                    (*cell1)
-                        .ptr_value = lappend(
-                        (*cell1).ptr_value as *mut List,
-                        cte_2 as *mut libc::c_void,
-                    ) as *mut libc::c_void;
+                    (*cell1).ptr_value =
+                        lappend((*cell1).ptr_value as *mut List, cte_2 as *mut libc::c_void)
+                            as *mut libc::c_void;
                     lc__state_1.i += 1;
                     lc__state_1.i;
                 }
                 raw_expression_tree_walker(
                     node,
                     ::core::mem::transmute::<
-                        Option::<
-                            unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
-                        >,
-                        Option::<unsafe extern "C" fn() -> bool>,
-                    >(
-                        Some(
-                            makeDependencyGraphWalker
-                                as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
-                        ),
-                    ),
+                        Option<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
+                        Option<unsafe extern "C" fn() -> bool>,
+                    >(Some(
+                        makeDependencyGraphWalker
+                            as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
+                    )),
                     cstate as *mut libc::c_void,
                 );
                 (*cstate).innerwiths = list_delete_first((*cstate).innerwiths);
@@ -2084,14 +2006,11 @@ unsafe extern "C" fn makeDependencyGraphWalker(
     return raw_expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                makeDependencyGraphWalker
-                    as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            makeDependencyGraphWalker as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
+        )),
         cstate as *mut libc::c_void,
     );
 }
@@ -2181,8 +2100,7 @@ unsafe extern "C" fn checkWellFormedRecursion(mut cstate: *mut CteState) {
                 let mut __error_1: libc::c_int = 0;
                 if errstart(elevel__1, 0 as *const libc::c_char) != 0 {
                     errmsg_internal(
-                        b"missing recursive reference\0" as *const u8
-                            as *const libc::c_char,
+                        b"missing recursive reference\0" as *const u8 as *const libc::c_char,
                     );
                     errfinish(
                         b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_cte.c\0"
@@ -2200,10 +2118,7 @@ unsafe extern "C" fn checkWellFormedRecursion(mut cstate: *mut CteState) {
                 (*cstate).innerwiths = 0 as *mut libc::c_void as *mut List;
                 (*cstate).selfrefcount = 0 as libc::c_int;
                 (*cstate).context = RECURSION_SUBLINK;
-                checkWellFormedRecursionWalker(
-                    (*(*stmt).withClause).ctes as *mut Node,
-                    cstate,
-                );
+                checkWellFormedRecursionWalker((*(*stmt).withClause).ctes as *mut Node, cstate);
             }
             if !((*stmt).sortClause).is_null() {
                 let elevel__2: libc::c_int = 21 as libc::c_int;
@@ -2246,8 +2161,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
     if node.is_null() {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_RangeVar as libc::c_int as libc::c_uint
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_RangeVar as libc::c_int as libc::c_uint
     {
         let mut rv: *mut RangeVar = node as *mut RangeVar;
         if ((*rv).schemaname).is_null() {
@@ -2261,8 +2175,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                 init
             };
             while if !(lc__state.l).is_null() && lc__state.i < (*lc__state.l).length {
-                lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize)
-                    as *mut ListCell;
+                lc = &mut *((*lc__state.l).elements).offset(lc__state.i as isize) as *mut ListCell;
                 true as libc::c_int
             } else {
                 lc = 0 as *mut ListCell;
@@ -2278,9 +2191,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                     };
                     init
                 };
-                while if !(lc2__state.l).is_null()
-                    && lc2__state.i < (*lc2__state.l).length
-                {
+                while if !(lc2__state.l).is_null() && lc2__state.i < (*lc2__state.l).length {
                     lc2 = &mut *((*lc2__state.l).elements).offset(lc2__state.i as isize)
                         as *mut ListCell;
                     true as libc::c_int
@@ -2289,8 +2200,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                     false as libc::c_int
                 } != 0
                 {
-                    let mut cte: *mut CommonTableExpr = (*lc2).ptr_value
-                        as *mut CommonTableExpr;
+                    let mut cte: *mut CommonTableExpr = (*lc2).ptr_value as *mut CommonTableExpr;
                     if strcmp((*rv).relname, (*cte).ctename) == 0 as libc::c_int {
                         return false;
                     }
@@ -2302,8 +2212,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
             }
             mycte = (*((*cstate).items).offset((*cstate).curitem as isize)).cte;
             if strcmp((*rv).relname, (*mycte).ctename) == 0 as libc::c_int {
-                if (*cstate).context as libc::c_uint
-                    != RECURSION_OK as libc::c_int as libc::c_uint
+                if (*cstate).context as libc::c_uint != RECURSION_OK as libc::c_int as libc::c_uint
                 {
                     let elevel_: libc::c_int = 21 as libc::c_int;
                     let mut __error: libc::c_int = 0;
@@ -2330,8 +2239,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
         let mut lc_0: *mut ListCell = 0 as *mut ListCell;
         if !((*stmt).withClause).is_null() {
             if (*(*stmt).withClause).recursive != 0 {
-                (*cstate)
-                    .innerwiths = lcons(
+                (*cstate).innerwiths = lcons(
                     (*(*stmt).withClause).ctes as *mut libc::c_void,
                     (*cstate).innerwiths,
                 );
@@ -2342,19 +2250,16 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                     };
                     init
                 };
-                while if !(lc__state_0.l).is_null()
-                    && lc__state_0.i < (*lc__state_0.l).length
-                {
-                    lc_0 = &mut *((*lc__state_0.l).elements)
-                        .offset(lc__state_0.i as isize) as *mut ListCell;
+                while if !(lc__state_0.l).is_null() && lc__state_0.i < (*lc__state_0.l).length {
+                    lc_0 = &mut *((*lc__state_0.l).elements).offset(lc__state_0.i as isize)
+                        as *mut ListCell;
                     true as libc::c_int
                 } else {
                     lc_0 = 0 as *mut ListCell;
                     false as libc::c_int
                 } != 0
                 {
-                    let mut cte_0: *mut CommonTableExpr = (*lc_0).ptr_value
-                        as *mut CommonTableExpr;
+                    let mut cte_0: *mut CommonTableExpr = (*lc_0).ptr_value as *mut CommonTableExpr;
                     checkWellFormedRecursionWalker((*cte_0).ctequery, cstate);
                     lc__state_0.i += 1;
                     lc__state_0.i;
@@ -2362,8 +2267,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                 checkWellFormedSelectStmt(stmt, cstate);
                 (*cstate).innerwiths = list_delete_first((*cstate).innerwiths);
             } else {
-                (*cstate)
-                    .innerwiths = lcons(
+                (*cstate).innerwiths = lcons(
                     0 as *mut libc::c_void as *mut List as *mut libc::c_void,
                     (*cstate).innerwiths,
                 );
@@ -2374,27 +2278,22 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                     };
                     init
                 };
-                while if !(lc__state_1.l).is_null()
-                    && lc__state_1.i < (*lc__state_1.l).length
-                {
-                    lc_0 = &mut *((*lc__state_1.l).elements)
-                        .offset(lc__state_1.i as isize) as *mut ListCell;
+                while if !(lc__state_1.l).is_null() && lc__state_1.i < (*lc__state_1.l).length {
+                    lc_0 = &mut *((*lc__state_1.l).elements).offset(lc__state_1.i as isize)
+                        as *mut ListCell;
                     true as libc::c_int
                 } else {
                     lc_0 = 0 as *mut ListCell;
                     false as libc::c_int
                 } != 0
                 {
-                    let mut cte_1: *mut CommonTableExpr = (*lc_0).ptr_value
-                        as *mut CommonTableExpr;
+                    let mut cte_1: *mut CommonTableExpr = (*lc_0).ptr_value as *mut CommonTableExpr;
                     let mut cell1: *mut ListCell = 0 as *mut ListCell;
                     checkWellFormedRecursionWalker((*cte_1).ctequery, cstate);
                     cell1 = list_head((*cstate).innerwiths);
-                    (*cell1)
-                        .ptr_value = lappend(
-                        (*cell1).ptr_value as *mut List,
-                        cte_1 as *mut libc::c_void,
-                    ) as *mut libc::c_void;
+                    (*cell1).ptr_value =
+                        lappend((*cell1).ptr_value as *mut List, cte_1 as *mut libc::c_void)
+                            as *mut libc::c_void;
                     lc__state_1.i += 1;
                     lc__state_1.i;
                 }
@@ -2411,8 +2310,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
     {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_JoinExpr as libc::c_int as libc::c_uint
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_JoinExpr as libc::c_int as libc::c_uint
     {
         let mut j: *mut JoinExpr = node as *mut JoinExpr;
         match (*j).jointype as libc::c_uint {
@@ -2423,9 +2321,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
             }
             1 => {
                 checkWellFormedRecursionWalker((*j).larg, cstate);
-                if save_context as libc::c_uint
-                    == RECURSION_OK as libc::c_int as libc::c_uint
-                {
+                if save_context as libc::c_uint == RECURSION_OK as libc::c_int as libc::c_uint {
                     (*cstate).context = RECURSION_OUTERJOIN;
                 }
                 checkWellFormedRecursionWalker((*j).rarg, cstate);
@@ -2433,9 +2329,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                 checkWellFormedRecursionWalker((*j).quals, cstate);
             }
             2 => {
-                if save_context as libc::c_uint
-                    == RECURSION_OK as libc::c_int as libc::c_uint
-                {
+                if save_context as libc::c_uint == RECURSION_OK as libc::c_int as libc::c_uint {
                     (*cstate).context = RECURSION_OUTERJOIN;
                 }
                 checkWellFormedRecursionWalker((*j).larg, cstate);
@@ -2444,9 +2338,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                 checkWellFormedRecursionWalker((*j).quals, cstate);
             }
             3 => {
-                if save_context as libc::c_uint
-                    == RECURSION_OK as libc::c_int as libc::c_uint
-                {
+                if save_context as libc::c_uint == RECURSION_OK as libc::c_int as libc::c_uint {
                     (*cstate).context = RECURSION_OUTERJOIN;
                 }
                 checkWellFormedRecursionWalker((*j).larg, cstate);
@@ -2459,8 +2351,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
                 let mut __error_1: libc::c_int = 0;
                 if errstart(elevel__1, 0 as *const libc::c_char) != 0 {
                     errmsg_internal(
-                        b"unrecognized join type: %d\0" as *const u8
-                            as *const libc::c_char,
+                        b"unrecognized join type: %d\0" as *const u8 as *const libc::c_char,
                         (*j).jointype as libc::c_int,
                     );
                     errfinish(
@@ -2477,9 +2368,7 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
         }
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_SubLink as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_SubLink as libc::c_int as libc::c_uint {
         let mut sl: *mut SubLink = node as *mut SubLink;
         (*cstate).context = RECURSION_SUBLINK;
         checkWellFormedRecursionWalker((*sl).subselect, cstate);
@@ -2490,14 +2379,12 @@ unsafe extern "C" fn checkWellFormedRecursionWalker(
     return raw_expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                checkWellFormedRecursionWalker
-                    as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            checkWellFormedRecursionWalker
+                as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
+        )),
         cstate as *mut libc::c_void,
     );
 }
@@ -2510,14 +2397,12 @@ unsafe extern "C" fn checkWellFormedSelectStmt(
         raw_expression_tree_walker(
             stmt as *mut Node,
             ::core::mem::transmute::<
-                Option::<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
-                Option::<unsafe extern "C" fn() -> bool>,
-            >(
-                Some(
-                    checkWellFormedRecursionWalker
-                        as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
-                ),
-            ),
+                Option<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
+                Option<unsafe extern "C" fn() -> bool>,
+            >(Some(
+                checkWellFormedRecursionWalker
+                    as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
+            )),
             cstate as *mut libc::c_void,
         );
     } else {
@@ -2526,16 +2411,12 @@ unsafe extern "C" fn checkWellFormedSelectStmt(
                 raw_expression_tree_walker(
                     stmt as *mut Node,
                     ::core::mem::transmute::<
-                        Option::<
-                            unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
-                        >,
-                        Option::<unsafe extern "C" fn() -> bool>,
-                    >(
-                        Some(
-                            checkWellFormedRecursionWalker
-                                as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
-                        ),
-                    ),
+                        Option<unsafe extern "C" fn(*mut Node, *mut CteState) -> bool>,
+                        Option<unsafe extern "C" fn() -> bool>,
+                    >(Some(
+                        checkWellFormedRecursionWalker
+                            as unsafe extern "C" fn(*mut Node, *mut CteState) -> bool,
+                    )),
                     cstate as *mut libc::c_void,
                 );
             }
@@ -2549,10 +2430,7 @@ unsafe extern "C" fn checkWellFormedSelectStmt(
                 checkWellFormedRecursionWalker((*stmt).sortClause as *mut Node, cstate);
                 checkWellFormedRecursionWalker((*stmt).limitOffset, cstate);
                 checkWellFormedRecursionWalker((*stmt).limitCount, cstate);
-                checkWellFormedRecursionWalker(
-                    (*stmt).lockingClause as *mut Node,
-                    cstate,
-                );
+                checkWellFormedRecursionWalker((*stmt).lockingClause as *mut Node, cstate);
             }
             3 => {
                 if (*stmt).all != 0 {
@@ -2565,10 +2443,7 @@ unsafe extern "C" fn checkWellFormedSelectStmt(
                 checkWellFormedRecursionWalker((*stmt).sortClause as *mut Node, cstate);
                 checkWellFormedRecursionWalker((*stmt).limitOffset, cstate);
                 checkWellFormedRecursionWalker((*stmt).limitCount, cstate);
-                checkWellFormedRecursionWalker(
-                    (*stmt).lockingClause as *mut Node,
-                    cstate,
-                );
+                checkWellFormedRecursionWalker((*stmt).lockingClause as *mut Node, cstate);
             }
             _ => {
                 let elevel_: libc::c_int = 21 as libc::c_int;

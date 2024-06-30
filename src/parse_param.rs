@@ -1,4 +1,12 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 // extern "C" {
 //     pub type RelationData;
@@ -756,24 +764,14 @@ pub struct CommonTableExpr {
 }
 pub type Relation = *mut RelationData;
 
-pub type CoerceParamHook = Option::<
-    unsafe extern "C" fn(
-        *mut ParseState,
-        *mut Param,
-        Oid,
-        i32,
-        libc::c_int,
-    ) -> *mut Node,
->;
-pub type ParseParamRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
->;
-pub type PostParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node,
->;
-pub type PreParseColumnRefHook = Option::<
-    unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node,
->;
+pub type CoerceParamHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;
+pub type ParseParamRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node>;
+pub type PostParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
+pub type PreParseColumnRefHook =
+    Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
 pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
@@ -858,16 +856,13 @@ pub unsafe extern "C" fn parse_fixed_parameters(
     mut paramTypes: *mut Oid,
     mut numParams: libc::c_int,
 ) {
-    let mut parstate: *mut FixedParamState = palloc(
-        ::core::mem::size_of::<FixedParamState>() as libc::c_ulong,
-    ) as *mut FixedParamState;
+    let mut parstate: *mut FixedParamState =
+        palloc(::core::mem::size_of::<FixedParamState>() as libc::c_ulong) as *mut FixedParamState;
     (*parstate).paramTypes = paramTypes;
     (*parstate).numParams = numParams;
     (*pstate).p_ref_hook_state = parstate as *mut libc::c_void;
-    (*pstate)
-        .p_paramref_hook = Some(
-        fixed_paramref_hook
-            as unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
+    (*pstate).p_paramref_hook = Some(
+        fixed_paramref_hook as unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
     );
 }
 #[no_mangle]
@@ -876,19 +871,15 @@ pub unsafe extern "C" fn parse_variable_parameters(
     mut paramTypes: *mut *mut Oid,
     mut numParams: *mut libc::c_int,
 ) {
-    let mut parstate: *mut VarParamState = palloc(
-        ::core::mem::size_of::<VarParamState>() as libc::c_ulong,
-    ) as *mut VarParamState;
+    let mut parstate: *mut VarParamState =
+        palloc(::core::mem::size_of::<VarParamState>() as libc::c_ulong) as *mut VarParamState;
     (*parstate).paramTypes = paramTypes;
     (*parstate).numParams = numParams;
     (*pstate).p_ref_hook_state = parstate as *mut libc::c_void;
-    (*pstate)
-        .p_paramref_hook = Some(
-        variable_paramref_hook
-            as unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
+    (*pstate).p_paramref_hook = Some(
+        variable_paramref_hook as unsafe extern "C" fn(*mut ParseState, *mut ParamRef) -> *mut Node,
     );
-    (*pstate)
-        .p_coerce_param_hook = Some(
+    (*pstate).p_coerce_param_hook = Some(
         variable_coerce_param_hook
             as unsafe extern "C" fn(
                 *mut ParseState,
@@ -903,13 +894,14 @@ unsafe extern "C" fn fixed_paramref_hook(
     mut pstate: *mut ParseState,
     mut pref: *mut ParamRef,
 ) -> *mut Node {
-    let mut parstate: *mut FixedParamState = (*pstate).p_ref_hook_state
-        as *mut FixedParamState;
+    let mut parstate: *mut FixedParamState = (*pstate).p_ref_hook_state as *mut FixedParamState;
     let mut paramno: libc::c_int = (*pref).number;
     let mut param: *mut Param = 0 as *mut Param;
-    if paramno <= 0 as libc::c_int || paramno > (*parstate).numParams
+    if paramno <= 0 as libc::c_int
+        || paramno > (*parstate).numParams
         || (*((*parstate).paramTypes).offset((paramno - 1 as libc::c_int) as isize)
-            != 0 as libc::c_int as Oid) as libc::c_int as bool == 0
+            != 0 as libc::c_int as Oid) as libc::c_int as bool
+            == 0
     {
         let elevel_: libc::c_int = 21 as libc::c_int;
         let mut __error: libc::c_int = 0;
@@ -924,9 +916,7 @@ unsafe extern "C" fn fixed_paramref_hook(
     }) as *mut Param;
     (*param).paramkind = PARAM_EXTERN;
     (*param).paramid = paramno;
-    (*param)
-        .paramtype = *((*parstate).paramTypes)
-        .offset((paramno - 1 as libc::c_int) as isize);
+    (*param).paramtype = *((*parstate).paramTypes).offset((paramno - 1 as libc::c_int) as isize);
     (*param).paramtypmod = -(1 as libc::c_int);
     (*param).paramcollid = get_typcollation((*param).paramtype);
     (*param).location = (*pref).location;
@@ -937,20 +927,17 @@ pub unsafe extern "C" fn check_variable_parameters(
     mut pstate: *mut ParseState,
     mut query: *mut Query,
 ) {
-    let mut parstate: *mut VarParamState = (*pstate).p_ref_hook_state
-        as *mut VarParamState;
+    let mut parstate: *mut VarParamState = (*pstate).p_ref_hook_state as *mut VarParamState;
     if *(*parstate).numParams > 0 as libc::c_int {
         query_tree_walker(
             query,
             ::core::mem::transmute::<
-                Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
-                Option::<unsafe extern "C" fn() -> bool>,
-            >(
-                Some(
-                    check_parameter_resolution_walker
-                        as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
-                ),
-            ),
+                Option<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
+                Option<unsafe extern "C" fn() -> bool>,
+            >(Some(
+                check_parameter_resolution_walker
+                    as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
+            )),
             pstate as *mut libc::c_void,
             0 as libc::c_int,
         );
@@ -963,15 +950,10 @@ unsafe extern "C" fn check_parameter_resolution_walker(
     if node.is_null() {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Param as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Param as libc::c_int as libc::c_uint {
         let mut param: *mut Param = node as *mut Param;
-        if (*param).paramkind as libc::c_uint
-            == PARAM_EXTERN as libc::c_int as libc::c_uint
-        {
-            let mut parstate: *mut VarParamState = (*pstate).p_ref_hook_state
-                as *mut VarParamState;
+        if (*param).paramkind as libc::c_uint == PARAM_EXTERN as libc::c_int as libc::c_uint {
+            let mut parstate: *mut VarParamState = (*pstate).p_ref_hook_state as *mut VarParamState;
             let mut paramno: libc::c_int = (*param).paramid;
             if paramno <= 0 as libc::c_int || paramno > *(*parstate).numParams {
                 let elevel_: libc::c_int = 21 as libc::c_int;
@@ -981,8 +963,7 @@ unsafe extern "C" fn check_parameter_resolution_walker(
                 }
             }
             if (*param).paramtype
-                != *(*(*parstate).paramTypes)
-                    .offset((paramno - 1 as libc::c_int) as isize)
+                != *(*(*parstate).paramTypes).offset((paramno - 1 as libc::c_int) as isize)
             {
                 let elevel__0: libc::c_int = 21 as libc::c_int;
                 let mut __error_0: libc::c_int = 0;
@@ -993,20 +974,16 @@ unsafe extern "C" fn check_parameter_resolution_walker(
         }
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Query as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Query as libc::c_int as libc::c_uint {
         return query_tree_walker(
             node as *mut Query,
             ::core::mem::transmute::<
-                Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
-                Option::<unsafe extern "C" fn() -> bool>,
-            >(
-                Some(
-                    check_parameter_resolution_walker
-                        as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
-                ),
-            ),
+                Option<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
+                Option<unsafe extern "C" fn() -> bool>,
+            >(Some(
+                check_parameter_resolution_walker
+                    as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
+            )),
             pstate as *mut libc::c_void,
             0 as libc::c_int,
         );
@@ -1014,14 +991,12 @@ unsafe extern "C" fn check_parameter_resolution_walker(
     return expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                check_parameter_resolution_walker
-                    as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            check_parameter_resolution_walker
+                as unsafe extern "C" fn(*mut Node, *mut ParseState) -> bool,
+        )),
         pstate as *mut libc::c_void,
     );
 }
@@ -1030,14 +1005,12 @@ pub unsafe extern "C" fn query_contains_extern_params(mut query: *mut Query) -> 
     return query_tree_walker(
         query,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool>,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                query_contains_extern_params_walker
-                    as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            query_contains_extern_params_walker
+                as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool,
+        )),
         0 as *mut libc::c_void,
         0 as libc::c_int,
     );
@@ -1049,31 +1022,23 @@ unsafe extern "C" fn query_contains_extern_params_walker(
     if node.is_null() {
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Param as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Param as libc::c_int as libc::c_uint {
         let mut param: *mut Param = node as *mut Param;
-        if (*param).paramkind as libc::c_uint
-            == PARAM_EXTERN as libc::c_int as libc::c_uint
-        {
+        if (*param).paramkind as libc::c_uint == PARAM_EXTERN as libc::c_int as libc::c_uint {
             return true;
         }
         return false;
     }
-    if (*(node as *const Node)).type_0 as libc::c_uint
-        == T_Query as libc::c_int as libc::c_uint
-    {
+    if (*(node as *const Node)).type_0 as libc::c_uint == T_Query as libc::c_int as libc::c_uint {
         return query_tree_walker(
             node as *mut Query,
             ::core::mem::transmute::<
-                Option::<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool>,
-                Option::<unsafe extern "C" fn() -> bool>,
-            >(
-                Some(
-                    query_contains_extern_params_walker
-                        as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool,
-                ),
-            ),
+                Option<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool>,
+                Option<unsafe extern "C" fn() -> bool>,
+            >(Some(
+                query_contains_extern_params_walker
+                    as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool,
+            )),
             context,
             0 as libc::c_int,
         );
@@ -1081,14 +1046,12 @@ unsafe extern "C" fn query_contains_extern_params_walker(
     return expression_tree_walker(
         node,
         ::core::mem::transmute::<
-            Option::<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool>,
-            Option::<unsafe extern "C" fn() -> bool>,
-        >(
-            Some(
-                query_contains_extern_params_walker
-                    as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool,
-            ),
-        ),
+            Option<unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool>,
+            Option<unsafe extern "C" fn() -> bool>,
+        >(Some(
+            query_contains_extern_params_walker
+                as unsafe extern "C" fn(*mut Node, *mut libc::c_void) -> bool,
+        )),
         context,
     );
 }
