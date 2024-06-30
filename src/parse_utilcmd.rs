@@ -237,7 +237,7 @@
 //     fn lookup_rowtype_tupdesc(type_id: Oid, typmod: i32) -> TupleDesc;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __i32_t = libc::c_int;
 pub type __darwin_size_t = libc::c_ulong;
 pub type __darwin_time_t = libc::c_long;
@@ -261,7 +261,7 @@ pub type bits8 = u8;
 pub type bits32 = u32;
 // pub type i64 = libc::c_long;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 pub type float4 = libc::c_float;
 pub type regproc = Oid;
@@ -994,7 +994,7 @@ pub type IndexScanDesc = *mut IndexScanDescData;
 pub type aminitparallelscan_function = Option::<
     unsafe extern "C" fn(*mut libc::c_void) -> (),
 >;
-pub type amestimateparallelscan_function = Option::<unsafe extern "C" fn() -> Size>;
+pub type amestimateparallelscan_function = Option::<unsafe extern "C" fn() -> usize>;
 pub type amrestrpos_function = Option::<unsafe extern "C" fn(IndexScanDesc) -> ()>;
 pub type ammarkpos_function = Option::<unsafe extern "C" fn(IndexScanDesc) -> ()>;
 pub type amendscan_function = Option::<unsafe extern "C" fn(IndexScanDesc) -> ()>;
@@ -1836,7 +1836,7 @@ pub struct ResultRelInfo {
     pub ri_FdwState: *mut libc::c_void,
     pub ri_usesFdwDirectModify: bool,
     pub ri_NumSlots: libc::c_int,
-    pub ri_BatchSize: libc::c_int,
+    pub ri_Batchusize: libc::c_int,
     pub ri_Slots: *mut *mut TupleTableSlot,
     pub ri_PlanSlots: *mut *mut TupleTableSlot,
     pub ri_WithCheckOptions: *mut List,
@@ -3300,11 +3300,11 @@ unsafe extern "C" fn transformColumnDefinition(
     mut cxt: *mut CreateStmtContext,
     mut column: *mut ColumnDef,
 ) {
-    let mut is_serial: bool = 0;
-    let mut saw_nullable: bool = 0;
-    let mut saw_default: bool = 0;
-    let mut saw_identity: bool = 0;
-    let mut saw_generated: bool = 0;
+    let mut is_serial: bool = false;
+    let mut saw_nullable: bool = false;
+    let mut saw_default: bool = false;
+    let mut saw_identity: bool = false;
+    let mut saw_generated: bool = false;
     let mut clist: *mut ListCell = 0 as *mut ListCell;
     (*cxt).columns = lappend((*cxt).columns, column as *mut libc::c_void);
     is_serial = false;
@@ -4774,7 +4774,7 @@ pub unsafe extern "C" fn transformPartitionBound(
             let mut expr: *mut Node = (*cell).ptr_value as *mut Node;
             let mut value: *mut Const = 0 as *mut Const;
             let mut cell2: *mut ListCell = 0 as *mut ListCell;
-            let mut duplicate: bool = 0;
+            let mut duplicate: bool = false;
             value = transformPartitionBoundValue(
                 pstate,
                 expr,

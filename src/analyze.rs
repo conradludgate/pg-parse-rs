@@ -28,7 +28,7 @@
 //         funcname: *const libc::c_char,
 //     );
 //     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-//     fn palloc0(size: Size) -> *mut libc::c_void;
+//     fn palloc0(size: usize) -> *mut libc::c_void;
 //     fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
 //     fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
 //     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
@@ -328,7 +328,7 @@
 //     fn get_parse_rowmark(qry: *mut Query, rtindex: Index) -> *mut RowMarkClause;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 // pub type usize = libc::c_ulong;
 // pub type isize = __darwin_size_t;
@@ -340,7 +340,7 @@ pub type __darwin_size_t = libc::c_ulong;
 // pub type u32 = libc::c_uint;
 pub type bits8 = u8;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 pub type float4 = libc::c_float;
 pub type regproc = Oid;
@@ -2253,7 +2253,7 @@ pub unsafe extern "C" fn transformStmt(
 pub unsafe extern "C" fn analyze_requires_snapshot(
     mut parseTree: *mut RawStmt,
 ) -> bool {
-    let mut result: bool = 0;
+    let mut result: bool = false;
     match (*((*parseTree).stmt as *const Node)).type_0 as libc::c_uint {
         234 | 235 | 236 | 237 | 238 => {
             result = true;
@@ -3271,7 +3271,7 @@ pub unsafe extern "C" fn makeSortGroupClauseForSetOp(
     }) as *mut SortGroupClause;
     let mut sortop: Oid = 0;
     let mut eqop: Oid = 0;
-    let mut hashable: bool = 0;
+    let mut hashable: bool = false;
     get_sort_group_operators(
         rescoltype,
         false,

@@ -85,7 +85,7 @@
 //     fn lookup_rowtype_tupdesc(type_id: Oid, typmod: i32) -> TupleDesc;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 // pub type usize = libc::c_ulong;
 // pub type bool = libc::c_uchar;
 pub type Pointer = *mut libc::c_char;
@@ -2075,7 +2075,7 @@ pub unsafe extern "C" fn select_common_typmod(
 #[no_mangle]
 pub unsafe extern "C" fn TypeCategory(mut type_0: Oid) -> TYPCATEGORY {
     let mut typcategory: libc::c_char = 0;
-    let mut typispreferred: bool = 0;
+    let mut typispreferred: bool = false;
     get_type_category_preferred(type_0, &mut typcategory, &mut typispreferred);
     return typcategory;
 }

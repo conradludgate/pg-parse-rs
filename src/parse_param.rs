@@ -3,8 +3,8 @@
 // extern "C" {
 //     pub type RelationData;
 //     pub type QueryEnvironment;
-//     fn repalloc(pointer: *mut libc::c_void, size: Size) -> *mut libc::c_void;
-//     fn palloc(size: Size) -> *mut libc::c_void;
+//     fn repalloc(pointer: *mut libc::c_void, size: usize) -> *mut libc::c_void;
+//     fn palloc(size: usize) -> *mut libc::c_void;
 //     fn memset(
 //         _: *mut libc::c_void,
 //         _: libc::c_int,
@@ -25,7 +25,7 @@
 //     fn get_typcollation(typid: Oid) -> Oid;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 // pub type isize = __darwin_size_t;
 // pub type bool = libc::c_uchar;
@@ -33,7 +33,7 @@ pub type __darwin_size_t = libc::c_ulong;
 // pub type i32 = libc::c_int;
 // pub type u32 = libc::c_uint;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 #[derive(Copy, Clone)]
 #[repr(C)]

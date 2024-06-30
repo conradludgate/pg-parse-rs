@@ -5,7 +5,7 @@
 //     static mut _DefaultRuneLocale: _RuneLocale;
 //     fn __maskrune(_: __darwin_ct_rune_t, _: libc::c_ulong) -> libc::c_int;
 //     fn __tolower(_: __darwin_ct_rune_t) -> __darwin_ct_rune_t;
-//     fn palloc(size: Size) -> *mut libc::c_void;
+//     fn palloc(size: usize) -> *mut libc::c_void;
 //     fn errmsg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
 //     fn errcode(sqlerrcode: libc::c_int) -> libc::c_int;
 //     fn errfinish(
@@ -29,7 +29,7 @@ pub type __darwin_wchar_t = libc::c_int;
 pub type __darwin_rune_t = __darwin_wchar_t;
 // pub type isize = __darwin_size_t;
 // pub type bool = libc::c_uchar;
-pub type Size = isize;
+// pub type usize = isize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct _RuneEntry {
@@ -127,8 +127,8 @@ pub unsafe extern "C" fn downcase_identifier(
 ) -> *mut libc::c_char {
     let mut result: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: libc::c_int = 0;
-    let mut enc_is_single_byte: bool = 0;
-    result = palloc((len + 1 as libc::c_int) as Size) as *mut libc::c_char;
+    let mut enc_is_single_byte: bool = false;
+    result = palloc((len + 1 as libc::c_int) as usize) as *mut libc::c_char;
     enc_is_single_byte = (pg_database_encoding_max_length() == 1 as libc::c_int)
         as libc::c_int as bool;
     i = 0 as libc::c_int;

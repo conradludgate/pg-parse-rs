@@ -10,7 +10,7 @@
 //     ) -> EphemeralNamedRelationMetadata;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 // pub type bool = libc::c_uchar;
 // pub type i16 = libc::c_short;
 // pub type i32 = libc::c_int;

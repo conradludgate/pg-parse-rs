@@ -34,8 +34,8 @@
 //         funcname: *const libc::c_char,
 //     );
 //     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-//     fn palloc(size: Size) -> *mut libc::c_void;
-//     fn palloc0(size: Size) -> *mut libc::c_void;
+//     fn palloc(size: usize) -> *mut libc::c_void;
+//     fn palloc0(size: usize) -> *mut libc::c_void;
 //     fn pfree(pointer: *mut libc::c_void);
 //     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
 //     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;
@@ -336,7 +336,7 @@
 //     ) -> *mut catclist;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __i32_t = libc::c_int;
 pub type __darwin_size_t = libc::c_ulong;
 pub type __darwin_time_t = libc::c_long;
@@ -358,7 +358,7 @@ pub struct timeval {
 pub type bits8 = u8;
 // pub type i64 = libc::c_long;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 pub type float4 = libc::c_float;
 pub type regproc = Oid;
@@ -1183,7 +1183,7 @@ pub struct IndexScanDescData {
 pub struct ParallelIndexScanDescData {
     pub ps_relid: Oid,
     pub ps_indexid: Oid,
-    pub ps_offset: Size,
+    pub ps_offset: usize,
     pub ps_snapshot_data: [libc::c_char; 0],
 }
 #[derive(Copy, Clone)]
@@ -1241,7 +1241,7 @@ pub const SNAPSHOT_MVCC: SnapshotType = 0;
 pub type aminitparallelscan_function = Option::<
     unsafe extern "C" fn(*mut libc::c_void) -> (),
 >;
-pub type amestimateparallelscan_function = Option::<unsafe extern "C" fn() -> Size>;
+pub type amestimateparallelscan_function = Option::<unsafe extern "C" fn() -> usize>;
 pub type amrestrpos_function = Option::<unsafe extern "C" fn(IndexScanDesc) -> ()>;
 pub type ammarkpos_function = Option::<unsafe extern "C" fn(IndexScanDesc) -> ()>;
 pub type amendscan_function = Option::<unsafe extern "C" fn(IndexScanDesc) -> ()>;
@@ -2216,7 +2216,7 @@ pub struct ResultRelInfo {
     pub ri_FdwState: *mut libc::c_void,
     pub ri_usesFdwDirectModify: bool,
     pub ri_NumSlots: libc::c_int,
-    pub ri_BatchSize: libc::c_int,
+    pub ri_Batchusize: libc::c_int,
     pub ri_Slots: *mut *mut TupleTableSlot,
     pub ri_PlanSlots: *mut *mut TupleTableSlot,
     pub ri_WithCheckOptions: *mut List,
@@ -2580,9 +2580,9 @@ pub struct TableAmRoutine {
     pub scan_getnextslot_tidrange: Option::<
         unsafe extern "C" fn(TableScanDesc, ScanDirection, *mut TupleTableSlot) -> bool,
     >,
-    pub parallelscan_estimate: Option::<unsafe extern "C" fn(Relation) -> Size>,
+    pub parallelscan_estimate: Option::<unsafe extern "C" fn(Relation) -> usize>,
     pub parallelscan_initialize: Option::<
-        unsafe extern "C" fn(Relation, ParallelTableScanDesc) -> Size,
+        unsafe extern "C" fn(Relation, ParallelTableScanDesc) -> usize,
     >,
     pub parallelscan_reinitialize: Option::<
         unsafe extern "C" fn(Relation, ParallelTableScanDesc) -> (),
@@ -2823,7 +2823,7 @@ pub struct TsmRoutine {
     pub parameterTypes: *mut List,
     pub repeatable_across_queries: bool,
     pub repeatable_across_scans: bool,
-    pub SampleScanGetSampleSize: SampleScanGetSampleSize_function,
+    pub SampleScanGetSampleusize: SampleScanGetSampleusize_function,
     pub InitSampleScan: InitSampleScan_function,
     pub BeginSampleScan: BeginSampleScan_function,
     pub NextSampleBlock: NextSampleBlock_function,
@@ -2845,7 +2845,7 @@ pub type BeginSampleScan_function = Option::<
 pub type InitSampleScan_function = Option::<
     unsafe extern "C" fn(*mut SampleScanState, libc::c_int) -> (),
 >;
-pub type SampleScanGetSampleSize_function = Option::<
+pub type SampleScanGetSampleusize_function = Option::<
     unsafe extern "C" fn(
         *mut PlannerInfo,
         *mut RelOptInfo,
@@ -2881,7 +2881,7 @@ pub struct ParallelTableScanDescData {
     pub phs_relid: Oid,
     pub phs_syncscan: bool,
     pub phs_snapshot_any: bool,
-    pub phs_snapshot_off: Size,
+    pub phs_snapshot_off: usize,
 }
 pub type TableScanDesc = *mut TableScanDescData;
 pub type ForkNumber = libc::c_int;
@@ -3895,7 +3895,7 @@ unsafe extern "C" fn transformRangeFunction(
     let mut funcexprs: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut funcnames: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut coldeflists: *mut List = 0 as *mut libc::c_void as *mut List;
-    let mut is_lateral: bool = 0;
+    let mut is_lateral: bool = false;
     let mut lc: *mut ListCell = 0 as *mut ListCell;
     (*pstate).p_lateral_active = true;
     let mut current_block_32: u64;
@@ -4093,7 +4093,7 @@ unsafe extern "C" fn transformRangeTableFunc(
     }) as *mut TableFunc;
     let mut constructName: *const libc::c_char = 0 as *const libc::c_char;
     let mut docType: Oid = 0;
-    let mut is_lateral: bool = 0;
+    let mut is_lateral: bool = false;
     let mut col: *mut ListCell = 0 as *mut ListCell;
     let mut names: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
     let mut colno: libc::c_int = 0;
@@ -5638,7 +5638,7 @@ pub unsafe extern "C" fn transformDistinctOnClause(
 ) -> *mut List {
     let mut result: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut sortgrouprefs: *mut List = 0 as *mut libc::c_void as *mut List;
-    let mut skipped_sortitem: bool = 0;
+    let mut skipped_sortitem: bool = false;
     let mut lc: *mut ListCell = 0 as *mut ListCell;
     let mut lc2: *mut ListCell = 0 as *mut ListCell;
     let mut lc__state: ForEachState = {

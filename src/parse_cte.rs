@@ -16,7 +16,7 @@
 //     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
 //     fn abort() -> !;
 //     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
-//     fn palloc0(size: Size) -> *mut libc::c_void;
+//     fn palloc0(size: usize) -> *mut libc::c_void;
 //     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
 //     fn bms_is_empty(a: *const Bitmapset) -> bool;
 //     fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
@@ -77,7 +77,7 @@
 //     fn lookup_type_cache(type_id: Oid, flags: libc::c_int) -> *mut TypeCacheEntry;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 // pub type usize = libc::c_ulong;
 // pub type isize = __darwin_size_t;
@@ -87,7 +87,7 @@ pub type __darwin_size_t = libc::c_ulong;
 // pub type u16 = libc::c_ushort;
 // pub type u32 = libc::c_uint;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 #[derive(Copy, Clone)]
 #[repr(C)]

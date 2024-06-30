@@ -173,7 +173,7 @@
 //     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut i32) -> Oid;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 // pub type usize = libc::c_ulong;
 // pub type isize = __darwin_size_t;
@@ -185,7 +185,7 @@ pub type __darwin_size_t = libc::c_ulong;
 // pub type u32 = libc::c_uint;
 pub type bits8 = u8;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 pub type float4 = libc::c_float;
 pub type regproc = Oid;
@@ -223,7 +223,7 @@ pub struct MemoryContextData {
     pub type_0: NodeTag,
     pub isReset: bool,
     pub allowInCritSection: bool,
-    pub mem_allocated: Size,
+    pub mem_allocated: usize,
     pub methods: *const MemoryContextMethods,
     pub parent: MemoryContext,
     pub firstchild: MemoryContext,
@@ -247,15 +247,15 @@ pub type MemoryContext = *mut MemoryContextData;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct MemoryContextMethods {
-    pub alloc: Option::<unsafe extern "C" fn(MemoryContext, Size) -> *mut libc::c_void>,
+    pub alloc: Option::<unsafe extern "C" fn(MemoryContext, usize) -> *mut libc::c_void>,
     pub free_p: Option::<unsafe extern "C" fn(MemoryContext, *mut libc::c_void) -> ()>,
     pub realloc: Option::<
-        unsafe extern "C" fn(MemoryContext, *mut libc::c_void, Size) -> *mut libc::c_void,
+        unsafe extern "C" fn(MemoryContext, *mut libc::c_void, usize) -> *mut libc::c_void,
     >,
     pub reset: Option::<unsafe extern "C" fn(MemoryContext) -> ()>,
     pub delete_context: Option::<unsafe extern "C" fn(MemoryContext) -> ()>,
     pub get_chunk_space: Option::<
-        unsafe extern "C" fn(MemoryContext, *mut libc::c_void) -> Size,
+        unsafe extern "C" fn(MemoryContext, *mut libc::c_void) -> usize,
     >,
     pub is_empty: Option::<unsafe extern "C" fn(MemoryContext) -> bool>,
     pub stats: Option::<
@@ -270,10 +270,10 @@ pub struct MemoryContextMethods {
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct MemoryContextCounters {
-    pub nblocks: Size,
-    pub freechunks: Size,
-    pub totalspace: Size,
-    pub freespace: Size,
+    pub nblocks: usize,
+    pub freechunks: usize,
+    pub totalspace: usize,
+    pub freespace: usize,
 }
 pub type MemoryStatsPrintFunc = Option::<
     unsafe extern "C" fn(MemoryContext, *mut libc::c_void, *const libc::c_char) -> (),
@@ -1840,7 +1840,7 @@ pub unsafe extern "C" fn transformTargetList(
     mut exprKind: ParseExprKind,
 ) -> *mut List {
     let mut p_target: *mut List = 0 as *mut libc::c_void as *mut List;
-    let mut expand_star: bool = 0;
+    let mut expand_star: bool = false;
     let mut o_target: *mut ListCell = 0 as *mut ListCell;
     expand_star = (exprKind as libc::c_uint
         != EXPR_KIND_UPDATE_SOURCE as libc::c_int as libc::c_uint) as libc::c_int

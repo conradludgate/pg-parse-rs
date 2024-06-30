@@ -16,7 +16,7 @@
 //     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
 //     fn psprintf(fmt: *const libc::c_char, _: ...) -> *mut libc::c_char;
 //     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
-//     fn palloc(size: Size) -> *mut libc::c_void;
+//     fn palloc(size: usize) -> *mut libc::c_void;
 //     fn pfree(pointer: *mut libc::c_void);
 //     fn errcontext_msg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
 //     fn set_errcontext_domain(domain: *const libc::c_char) -> libc::c_int;
@@ -68,7 +68,7 @@
 //     fn ReleaseSysCache(tuple: HeapTuple);
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 // pub type usize = libc::c_ulong;
 // pub type isize = __darwin_size_t;
@@ -80,7 +80,7 @@ pub type __darwin_size_t = libc::c_ulong;
 // pub type u32 = libc::c_uint;
 pub type bits8 = u8;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 pub type regproc = Oid;
 pub type TransactionId = u32;

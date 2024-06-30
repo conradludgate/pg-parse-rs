@@ -41,7 +41,7 @@
 //     fn get_typcollation(typid: Oid) -> Oid;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 // pub type bool = libc::c_uchar;
 // pub type i16 = libc::c_short;
 // pub type i32 = libc::c_int;
@@ -1230,7 +1230,7 @@ unsafe extern "C" fn assign_ordered_set_collations(
     mut aggref: *mut Aggref,
     mut loccontext: *mut assign_collations_context,
 ) {
-    let mut merge_sort_collations: bool = 0;
+    let mut merge_sort_collations: bool = false;
     let mut lc: *mut ListCell = 0 as *mut ListCell;
     merge_sort_collations = (list_length((*aggref).args) == 1 as libc::c_int
         && get_func_variadictype((*aggref).aggfnoid) == 0 as libc::c_int as Oid)
@@ -1268,7 +1268,7 @@ unsafe extern "C" fn assign_hypothetical_collations(
 ) {
     let mut h_cell: *mut ListCell = list_head((*aggref).aggdirectargs);
     let mut s_cell: *mut ListCell = list_head((*aggref).args);
-    let mut merge_sort_collations: bool = 0;
+    let mut merge_sort_collations: bool = false;
     let mut extra_args: libc::c_int = 0;
     merge_sort_collations = (list_length((*aggref).args) == 1 as libc::c_int
         && get_func_variadictype((*aggref).aggfnoid) == 0 as libc::c_int as Oid)

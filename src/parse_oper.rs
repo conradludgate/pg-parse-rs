@@ -112,7 +112,7 @@
 //     fn lookup_type_cache(type_id: Oid, flags: libc::c_int) -> *mut TypeCacheEntry;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 // pub type usize = libc::c_ulong;
 // pub type isize = __darwin_size_t;
@@ -124,7 +124,7 @@ pub type __darwin_size_t = libc::c_ulong;
 // pub type u32 = libc::c_uint;
 pub type bits8 = u8;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 pub type regproc = Oid;
 pub type TransactionId = u32;
@@ -1154,19 +1154,19 @@ pub struct ParseCallbackState {
     pub errcallback: ErrorContextCallback,
 }
 pub type HashValueFunc = Option::<
-    unsafe extern "C" fn(*const libc::c_void, Size) -> u32,
+    unsafe extern "C" fn(*const libc::c_void, usize) -> u32,
 >;
 pub type HashCompareFunc = Option::<
-    unsafe extern "C" fn(*const libc::c_void, *const libc::c_void, Size) -> libc::c_int,
+    unsafe extern "C" fn(*const libc::c_void, *const libc::c_void, usize) -> libc::c_int,
 >;
 pub type HashCopyFunc = Option::<
     unsafe extern "C" fn(
         *mut libc::c_void,
         *const libc::c_void,
-        Size,
+        usize,
     ) -> *mut libc::c_void,
 >;
-pub type HashAllocFunc = Option::<unsafe extern "C" fn(Size) -> *mut libc::c_void>;
+pub type HashAllocFunc = Option::<unsafe extern "C" fn(usize) -> *mut libc::c_void>;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HASHELEMENT {
@@ -1180,8 +1180,8 @@ pub struct HASHCTL {
     pub ssize: libc::c_long,
     pub dsize: libc::c_long,
     pub max_dsize: libc::c_long,
-    pub keysize: Size,
-    pub entrysize: Size,
+    pub keysize: usize,
+    pub entrysize: usize,
     pub hash: HashValueFunc,
     pub match_0: HashCompareFunc,
     pub keycopy: HashCopyFunc,
@@ -1481,7 +1481,7 @@ pub unsafe extern "C" fn get_sort_group_operators(
     let mut lt_opr: Oid = 0;
     let mut eq_opr: Oid = 0;
     let mut gt_opr: Oid = 0;
-    let mut hashable: bool = 0;
+    let mut hashable: bool = false;
     if !isHashable.is_null() {
         cache_flags = 0x2 as libc::c_int | 0x1 as libc::c_int | 0x4 as libc::c_int
             | 0x10 as libc::c_int;
@@ -1579,7 +1579,7 @@ pub unsafe extern "C" fn oper(
         right_arg: 0,
         search_path: [0; 16],
     };
-    let mut key_ok: bool = 0;
+    let mut key_ok: bool = false;
     let mut fdresult: FuncDetailCode = FUNCDETAIL_NOTFOUND;
     let mut tup: HeapTuple = 0 as HeapTuple;
     key_ok = make_oper_cache_key(pstate, &mut key, opname, ltypeId, rtypeId, location);
@@ -1708,7 +1708,7 @@ pub unsafe extern "C" fn left_oper(
         right_arg: 0,
         search_path: [0; 16],
     };
-    let mut key_ok: bool = 0;
+    let mut key_ok: bool = false;
     let mut fdresult: FuncDetailCode = FUNCDETAIL_NOTFOUND;
     let mut tup: HeapTuple = 0 as HeapTuple;
     key_ok = make_oper_cache_key(

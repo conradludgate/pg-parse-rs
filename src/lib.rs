@@ -1,3 +1,5 @@
+pub type Oid = u32;
+
 #![feature(extern_types, linkage)]
 extern "C" {
     pub type MemoryContextData;
@@ -33,8 +35,8 @@ extern "C" {
         funcname: *const libc::c_char,
     );
     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-    fn palloc(size: Size) -> *mut libc::c_void;
-    fn palloc0(size: Size) -> *mut libc::c_void;
+    fn palloc(size: usize) -> *mut libc::c_void;
+    fn palloc0(size: usize) -> *mut libc::c_void;
     fn pfree(pointer: *mut libc::c_void);
     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
     fn list_make1_impl(t: NodeTag, datum1: ListCell) -> *mut List;

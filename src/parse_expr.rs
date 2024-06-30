@@ -18,7 +18,7 @@
 //         funcname: *const libc::c_char,
 //     );
 //     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-//     fn palloc(size: Size) -> *mut libc::c_void;
+//     fn palloc(size: usize) -> *mut libc::c_void;
 //     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
 //     fn bms_add_member(a: *mut Bitmapset, x: libc::c_int) -> *mut Bitmapset;
 //     fn bms_int_members(a: *mut Bitmapset, b: *const Bitmapset) -> *mut Bitmapset;
@@ -212,7 +212,7 @@
 //     ) -> *mut libc::c_char;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 // pub type usize = libc::c_ulong;
 // pub type isize = __darwin_size_t;
@@ -221,7 +221,7 @@ pub type __darwin_size_t = libc::c_ulong;
 // pub type i32 = libc::c_int;
 // pub type u32 = libc::c_uint;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 pub type Datum = usize;
 #[derive(Copy, Clone)]
@@ -3208,7 +3208,7 @@ unsafe extern "C" fn transformArrayExpr(
     let mut newcoercedelems: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut element: *mut ListCell = 0 as *mut ListCell;
     let mut coerce_type: Oid = 0;
-    let mut coerce_hard: bool = 0;
+    let mut coerce_hard: bool = false;
     (*newa).multidims = false;
     let mut element__state: ForEachState = {
         let mut init = ForEachState {

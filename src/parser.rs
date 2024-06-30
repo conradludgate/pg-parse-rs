@@ -17,8 +17,8 @@
 //     fn errmsg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
 //     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
 //     fn errhint(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-//     fn palloc(size: Size) -> *mut libc::c_void;
-//     fn repalloc(pointer: *mut libc::c_void, size: Size) -> *mut libc::c_void;
+//     fn palloc(size: usize) -> *mut libc::c_void;
+//     fn repalloc(pointer: *mut libc::c_void, size: usize) -> *mut libc::c_void;
 //     fn pg_unicode_to_server(c: pg_wchar, s: *mut libc::c_uchar);
 //     fn base_yyparse(yyscanner: core_yyscan_t) -> libc::c_int;
 //     fn parser_init(yyext: *mut base_yy_extra_type);
@@ -51,7 +51,7 @@
 //     fn scanner_isspace(ch: libc::c_char) -> bool;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __u32_t = libc::c_uint;
 pub type __darwin_ct_rune_t = libc::c_int;
 pub type __darwin_size_t = libc::c_ulong;
@@ -61,7 +61,7 @@ pub type __darwin_rune_t = __darwin_wchar_t;
 // pub type bool = libc::c_uchar;
 // pub type i32 = libc::c_int;
 // pub type u16 = libc::c_ushort;
-pub type Size = isize;
+// pub type usize = isize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct _RuneEntry {
@@ -946,7 +946,7 @@ pub union core_YYSTYPE {
 #[repr(C)]
 pub struct core_yy_extra_type {
     pub scanbuf: *mut libc::c_char,
-    pub scanbuflen: Size,
+    pub scanbuflen: usize,
     pub keywordlist: *const ScanKeywordList,
     pub keyword_tokens: *const u16,
     pub backslash_quote: libc::c_int,

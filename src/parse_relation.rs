@@ -27,8 +27,8 @@
 //         funcname: *const libc::c_char,
 //     );
 //     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
-//     fn palloc(size: Size) -> *mut libc::c_void;
-//     fn palloc0(size: Size) -> *mut libc::c_void;
+//     fn palloc(size: usize) -> *mut libc::c_void;
+//     fn palloc0(size: usize) -> *mut libc::c_void;
 //     fn pstrdup(in_0: *const libc::c_char) -> *mut libc::c_char;
 //     fn copyObjectImpl(obj: *const libc::c_void) -> *mut libc::c_void;
 //     fn lappend(list: *mut List, datum: *mut libc::c_void) -> *mut List;
@@ -172,7 +172,7 @@
 //     ) -> libc::c_int;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 // pub type usize = libc::c_ulong;
 // pub type isize = __darwin_size_t;
@@ -184,7 +184,7 @@ pub type __darwin_size_t = libc::c_ulong;
 // pub type u32 = libc::c_uint;
 pub type bits8 = u8;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 pub type float4 = libc::c_float;
 pub type regproc = Oid;
@@ -230,7 +230,7 @@ pub struct MemoryContextData {
     pub type_0: NodeTag,
     pub isReset: bool,
     pub allowInCritSection: bool,
-    pub mem_allocated: Size,
+    pub mem_allocated: usize,
     pub methods: *const MemoryContextMethods,
     pub parent: MemoryContext,
     pub firstchild: MemoryContext,
@@ -254,15 +254,15 @@ pub type MemoryContext = *mut MemoryContextData;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct MemoryContextMethods {
-    pub alloc: Option::<unsafe extern "C" fn(MemoryContext, Size) -> *mut libc::c_void>,
+    pub alloc: Option::<unsafe extern "C" fn(MemoryContext, usize) -> *mut libc::c_void>,
     pub free_p: Option::<unsafe extern "C" fn(MemoryContext, *mut libc::c_void) -> ()>,
     pub realloc: Option::<
-        unsafe extern "C" fn(MemoryContext, *mut libc::c_void, Size) -> *mut libc::c_void,
+        unsafe extern "C" fn(MemoryContext, *mut libc::c_void, usize) -> *mut libc::c_void,
     >,
     pub reset: Option::<unsafe extern "C" fn(MemoryContext) -> ()>,
     pub delete_context: Option::<unsafe extern "C" fn(MemoryContext) -> ()>,
     pub get_chunk_space: Option::<
-        unsafe extern "C" fn(MemoryContext, *mut libc::c_void) -> Size,
+        unsafe extern "C" fn(MemoryContext, *mut libc::c_void) -> usize,
     >,
     pub is_empty: Option::<unsafe extern "C" fn(MemoryContext) -> bool>,
     pub stats: Option::<
@@ -277,10 +277,10 @@ pub struct MemoryContextMethods {
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct MemoryContextCounters {
-    pub nblocks: Size,
-    pub freechunks: Size,
-    pub totalspace: Size,
-    pub freespace: Size,
+    pub nblocks: usize,
+    pub freechunks: usize,
+    pub totalspace: usize,
+    pub freespace: usize,
 }
 pub type MemoryStatsPrintFunc = Option::<
     unsafe extern "C" fn(MemoryContext, *mut libc::c_void, *const libc::c_char) -> (),
@@ -4472,7 +4472,7 @@ pub unsafe extern "C" fn get_rte_attribute_is_dropped(
     mut rte: *mut RangeTblEntry,
     mut attnum: AttrNumber,
 ) -> bool {
-    let mut result: bool = 0;
+    let mut result: bool = false;
     match (*rte).rtekind as libc::c_uint {
         0 => {
             let mut tp: HeapTuple = 0 as *mut HeapTupleData;

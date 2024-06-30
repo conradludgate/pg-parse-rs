@@ -15,7 +15,7 @@
 //     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
 //     fn errposition(cursorpos: libc::c_int) -> libc::c_int;
 //     static mut error_context_stack: *mut ErrorContextCallback;
-//     fn palloc0(size: Size) -> *mut libc::c_void;
+//     fn palloc0(size: usize) -> *mut libc::c_void;
 //     fn pfree(pointer: *mut libc::c_void);
 //     fn i64GetDatum(X: i64) -> Datum;
 //     fn table_close(relation: Relation, lockmode: LOCKMODE);
@@ -37,7 +37,7 @@
 //     fn getBaseTypeAndTypmod(typid: Oid, typmod: *mut i32) -> Oid;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 pub type __darwin_size_t = libc::c_ulong;
 // pub type usize = libc::c_ulong;
 // pub type isize = __darwin_size_t;
@@ -47,7 +47,7 @@ pub type __darwin_size_t = libc::c_ulong;
 // pub type u32 = libc::c_uint;
 // pub type i64 = libc::c_long;
 // pub type uint64 = libc::c_ulong;
-pub type Size = isize;
+// pub type usize = isize;
 pub type Index = libc::c_uint;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1112,7 +1112,7 @@ pub unsafe extern "C" fn make_const(
     let mut val64: i64 = 0;
     let mut typeid: Oid = 0;
     let mut typelen: libc::c_int = 0;
-    let mut typebyval: bool = 0;
+    let mut typebyval: bool = false;
     let mut pcbstate: ParseCallbackState = ParseCallbackState {
         pstate: 0 as *mut ParseState,
         location: 0,

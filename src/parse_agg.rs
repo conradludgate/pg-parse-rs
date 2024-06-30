@@ -106,7 +106,7 @@
 //     ) -> Oid;
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 // pub type bool = libc::c_uchar;
 // pub type i16 = libc::c_short;
 // pub type i32 = libc::c_int;
@@ -1389,7 +1389,7 @@ unsafe extern "C" fn check_agglevels_and_constraints(
     let mut location: libc::c_int = -(1 as libc::c_int);
     let mut p_levelsup: *mut Index = 0 as *mut Index;
     let mut err: *const libc::c_char = 0 as *const libc::c_char;
-    let mut errkind: bool = 0;
+    let mut errkind: bool = false;
     let mut isAgg: bool = ((*(expr as *const Node)).type_0 as libc::c_uint
         == T_Aggref as libc::c_int as libc::c_uint) as libc::c_int as bool;
     if isAgg != 0 {
@@ -1850,7 +1850,7 @@ unsafe extern "C" fn check_agg_arguments_walker(
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_Query as libc::c_int as libc::c_uint
     {
-        let mut result: bool = 0;
+        let mut result: bool = false;
         (*context).sublevels_up += 1;
         (*context).sublevels_up;
         result = query_tree_walker(
@@ -1908,7 +1908,7 @@ pub unsafe extern "C" fn transformWindowFuncCall(
     mut windef: *mut WindowDef,
 ) {
     let mut err: *const libc::c_char = 0 as *const libc::c_char;
-    let mut errkind: bool = 0;
+    let mut errkind: bool = false;
     if (*pstate).p_hasWindowFuncs as libc::c_int != 0
         && contain_windowfuncs((*wfunc).args as *mut Node) as libc::c_int != 0
     {
@@ -2154,11 +2154,11 @@ pub unsafe extern "C" fn parseCheckAggregates(
     let mut gset_common: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut groupClauses: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut groupClauseCommonVars: *mut List = 0 as *mut libc::c_void as *mut List;
-    let mut have_non_var_grouping: bool = 0;
+    let mut have_non_var_grouping: bool = false;
     let mut func_grouped_rels: *mut List = 0 as *mut libc::c_void as *mut List;
     let mut l: *mut ListCell = 0 as *mut ListCell;
-    let mut hasJoinRTEs: bool = 0;
-    let mut hasSelfRefRTEs: bool = 0;
+    let mut hasJoinRTEs: bool = false;
+    let mut hasSelfRefRTEs: bool = false;
     let mut clause: *mut Node = 0 as *mut Node;
     if !((*qry).groupingSets).is_null() {
         let mut gsets: *mut List = expand_grouping_sets(
@@ -2396,7 +2396,7 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
     {
         let mut agg: *mut Aggref = node as *mut Aggref;
         if (*agg).agglevelsup as libc::c_int == (*context).sublevels_up {
-            let mut result: bool = 0;
+            let mut result: bool = false;
             (*context).in_agg_direct_args = true;
             result = check_ungrouped_columns_walker(
                 (*agg).aggdirectargs as *mut Node,
@@ -2535,7 +2535,7 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_Query as libc::c_int as libc::c_uint
     {
-        let mut result_0: bool = 0;
+        let mut result_0: bool = false;
         (*context).sublevels_up += 1;
         (*context).sublevels_up;
         result_0 = query_tree_walker(
@@ -2636,7 +2636,7 @@ unsafe extern "C" fn finalize_grouping_exprs_walker(
     {
         let mut agg: *mut Aggref = node as *mut Aggref;
         if (*agg).agglevelsup as libc::c_int == (*context).sublevels_up {
-            let mut result: bool = 0;
+            let mut result: bool = false;
             (*context).in_agg_direct_args = true;
             result = finalize_grouping_exprs_walker(
                 (*agg).aggdirectargs as *mut Node,
@@ -2774,7 +2774,7 @@ unsafe extern "C" fn finalize_grouping_exprs_walker(
     if (*(node as *const Node)).type_0 as libc::c_uint
         == T_Query as libc::c_int as libc::c_uint
     {
-        let mut result_0: bool = 0;
+        let mut result_0: bool = false;
         (*context).sublevels_up += 1;
         (*context).sublevels_up;
         result_0 = query_tree_walker(

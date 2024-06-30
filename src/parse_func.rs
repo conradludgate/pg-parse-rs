@@ -156,7 +156,7 @@
 //     fn ReleaseSysCache(tuple: HeapTuple);
 // }
 use super::*;
-pub type Oid = libc::c_uint;
+// pub type Oid = libc::c_uint;
 // pub type usize = libc::c_ulong;
 // pub type bool = libc::c_uchar;
 pub type Pointer = *mut libc::c_char;
@@ -1894,7 +1894,7 @@ pub unsafe extern "C" fn check_srf_call_placement(
     mut location: libc::c_int,
 ) {
     let mut err: *const libc::c_char = 0 as *const libc::c_char;
-    let mut errkind: bool = 0;
+    let mut errkind: bool = false;
     err = 0 as *const libc::c_char;
     errkind = false;
     match (*pstate).p_expr_kind as libc::c_uint {
