@@ -759,7 +759,7 @@ pub const CMD_INSERT: CmdType = 3;
 pub const CMD_UPDATE: CmdType = 2;
 pub const CMD_SELECT: CmdType = 1;
 pub const CMD_UNKNOWN: CmdType = 0;
-pub type JoinType = libc::c_uint;
+// pub type JoinType = libc::c_uint;
 pub const JOIN_UNIQUE_INNER: JoinType = 7;
 pub const JOIN_UNIQUE_OUTER: JoinType = 6;
 pub const JOIN_ANTI: JoinType = 5;
@@ -787,15 +787,15 @@ pub union ListCell {
     pub int_value: libc::c_int,
     pub oid_value: Oid,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct List {
-    pub type_0: NodeTag,
-    pub length: libc::c_int,
-    pub max_length: libc::c_int,
-    pub elements: *mut ListCell,
-    pub initial_elements: [ListCell; 0],
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct List {
+//     pub type_0: NodeTag,
+//     pub length: libc::c_int,
+//     pub max_length: libc::c_int,
+//     pub elements: *mut ListCell,
+//     pub initial_elements: [ListCell; 0],
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ForEachState {
@@ -1391,7 +1391,7 @@ pub type PostParseColumnRefHook =
     Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
 pub type PreParseColumnRefHook =
     Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
-pub type ParseExprKind = libc::c_uint;
+// pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
 pub const EXPR_KIND_COPY_WHERE: ParseExprKind = 39;
@@ -1445,18 +1445,18 @@ pub struct ParseNamespaceItem {
     pub p_lateral_only: bool,
     pub p_lateral_ok: bool,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseNamespaceColumn {
-    pub p_varno: Index,
-    pub p_varattno: AttrNumber,
-    pub p_vartype: Oid,
-    pub p_vartypmod: i32,
-    pub p_varcollid: Oid,
-    pub p_varnosyn: Index,
-    pub p_varattnosyn: AttrNumber,
-    pub p_dontexpand: bool,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct ParseNamespaceColumn {
+//     pub p_varno: Index,
+//     pub p_varattno: AttrNumber,
+//     pub p_vartype: Oid,
+//     pub p_vartypmod: i32,
+//     pub p_varcollid: Oid,
+//     pub p_varnosyn: Index,
+//     pub p_varattnosyn: AttrNumber,
+//     pub p_dontexpand: bool,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ParseCallbackState {

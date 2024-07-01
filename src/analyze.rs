@@ -933,7 +933,7 @@ pub const CMD_INSERT: CmdType = 3;
 pub const CMD_UPDATE: CmdType = 2;
 pub const CMD_SELECT: CmdType = 1;
 pub const CMD_UNKNOWN: CmdType = 0;
-pub type JoinType = libc::c_uint;
+// pub type JoinType = libc::c_uint;
 pub const JOIN_UNIQUE_INNER: JoinType = 7;
 pub const JOIN_UNIQUE_OUTER: JoinType = 6;
 pub const JOIN_ANTI: JoinType = 5;
@@ -1967,7 +1967,7 @@ pub type PostParseColumnRefHook =
     Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef, *mut Node) -> *mut Node>;
 pub type PreParseColumnRefHook =
     Option<unsafe extern "C" fn(*mut ParseState, *mut ColumnRef) -> *mut Node>;
-pub type ParseExprKind = libc::c_uint;
+// pub type ParseExprKind = libc::c_uint;
 pub const EXPR_KIND_CYCLE_MARK: ParseExprKind = 41;
 pub const EXPR_KIND_GENERATED_COLUMN: ParseExprKind = 40;
 pub const EXPR_KIND_COPY_WHERE: ParseExprKind = 39;

@@ -130,15 +130,15 @@ pub struct ErrorContextCallback {
     pub arg: *mut libc::c_void,
 }
 pub type pg_wchar = libc::c_uint;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct List {
-    pub type_0: NodeTag,
-    pub length: libc::c_int,
-    pub max_length: libc::c_int,
-    pub elements: *mut ListCell,
-    pub initial_elements: [ListCell; 0],
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct List {
+//     pub type_0: NodeTag,
+//     pub length: libc::c_int,
+//     pub max_length: libc::c_int,
+//     pub elements: *mut ListCell,
+//     pub initial_elements: [ListCell; 0],
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub union ListCell {
@@ -578,7 +578,7 @@ pub const T_Invalid: NodeTag = 0;
 pub struct Node {
     pub type_0: NodeTag,
 }
-pub type JoinType = libc::c_uint;
+// pub type JoinType = libc::c_uint;
 pub const JOIN_UNIQUE_INNER: JoinType = 7;
 pub const JOIN_UNIQUE_OUTER: JoinType = 6;
 pub const JOIN_ANTI: JoinType = 5;
