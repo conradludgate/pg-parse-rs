@@ -824,7 +824,7 @@ pub struct EphemeralNamedRelationMetadataData {
     pub enrtuples: libc::c_double,
 }
 pub type EphemeralNamedRelationMetadata = *mut EphemeralNamedRelationMetadataData;
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 
 pub type CoerceParamHook =
     Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;

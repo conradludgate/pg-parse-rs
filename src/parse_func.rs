@@ -638,7 +638,7 @@ pub const T_ProjectionInfo: NodeTag = 3;
 pub const T_ExprContext: NodeTag = 2;
 pub const T_IndexInfo: NodeTag = 1;
 pub const T_Invalid: NodeTag = 0;
-pub type Datum = usize;
+// pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct BlockIdData {
@@ -1076,19 +1076,19 @@ pub struct Query {
     pub stmt_location: libc::c_int,
     pub stmt_len: libc::c_int,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct TypeName {
-    pub type_0: NodeTag,
-    pub names: *mut List,
-    pub typeOid: Oid,
-    pub setof: bool,
-    pub pct_type: bool,
-    pub typmods: *mut List,
-    pub typemod: i32,
-    pub arrayBounds: *mut List,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct TypeName {
+//     pub type_0: NodeTag,
+//     pub names: *mut List,
+//     pub typeOid: Oid,
+//     pub setof: bool,
+//     pub pct_type: bool,
+//     pub typmods: *mut List,
+//     pub typemod: i32,
+//     pub arrayBounds: *mut List,
+//     pub location: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ColumnRef {
@@ -1296,7 +1296,7 @@ pub struct ObjectWithArgs {
     pub objargs: *mut List,
     pub args_unspecified: bool,
 }
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct FormData_pg_aggregate {

@@ -679,19 +679,19 @@ pub type SortByNulls = libc::c_uint;
 pub const SORTBY_NULLS_LAST: SortByNulls = 2;
 pub const SORTBY_NULLS_FIRST: SortByNulls = 1;
 pub const SORTBY_NULLS_DEFAULT: SortByNulls = 0;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct TypeName {
-    pub type_0: NodeTag,
-    pub names: *mut List,
-    pub typeOid: Oid,
-    pub setof: bool,
-    pub pct_type: bool,
-    pub typmods: *mut List,
-    pub typemod: i32,
-    pub arrayBounds: *mut List,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct TypeName {
+//     pub type_0: NodeTag,
+//     pub names: *mut List,
+//     pub typeOid: Oid,
+//     pub setof: bool,
+//     pub pct_type: bool,
+//     pub typmods: *mut List,
+//     pub typemod: i32,
+//     pub arrayBounds: *mut List,
+//     pub location: libc::c_int,
+// }
 pub type RoleSpecType = libc::c_uint;
 pub const ROLESPEC_PUBLIC: RoleSpecType = 4;
 pub const ROLESPEC_SESSION_USER: RoleSpecType = 3;

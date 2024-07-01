@@ -1022,7 +1022,7 @@ pub struct CommonTableExpr {
     pub ctecoltypmods: *mut List,
     pub ctecolcollations: *mut List,
 }
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 
 pub type CoerceParamHook =
     Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;

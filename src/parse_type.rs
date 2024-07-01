@@ -106,7 +106,7 @@ pub struct ErrorContextCallback {
     pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
-pub type Datum = usize;
+// pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct BlockIdData {
@@ -817,19 +817,19 @@ pub struct Query {
     pub stmt_location: libc::c_int,
     pub stmt_len: libc::c_int,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct TypeName {
-    pub type_0: NodeTag,
-    pub names: *mut List,
-    pub typeOid: Oid,
-    pub setof: bool,
-    pub pct_type: bool,
-    pub typmods: *mut List,
-    pub typemod: i32,
-    pub arrayBounds: *mut List,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct TypeName {
+//     pub type_0: NodeTag,
+//     pub names: *mut List,
+//     pub typeOid: Oid,
+//     pub setof: bool,
+//     pub pct_type: bool,
+//     pub typmods: *mut List,
+//     pub typemod: i32,
+//     pub arrayBounds: *mut List,
+//     pub location: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ColumnRef {
@@ -986,7 +986,7 @@ pub struct CommonTableExpr {
     pub ctecoltypmods: *mut List,
     pub ctecolcollations: *mut List,
 }
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ArrayType {

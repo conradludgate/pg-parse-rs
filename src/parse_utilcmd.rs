@@ -321,7 +321,7 @@ pub struct ErrorContextCallback {
     pub arg: *mut libc::c_void,
 }
 pub type MemoryContext = *mut MemoryContextData;
-pub type Datum = usize;
+// pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct NullableDatum {
@@ -1010,7 +1010,7 @@ pub type amrescan_function =
     Option<unsafe extern "C" fn(IndexScanDesc, ScanKey, libc::c_int, ScanKey, libc::c_int) -> ()>;
 pub type ambeginscan_function =
     Option<unsafe extern "C" fn(Relation, libc::c_int, libc::c_int) -> IndexScanDesc>;
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 pub type amadjustmembers_function =
     Option<unsafe extern "C" fn(Oid, Oid, *mut List, *mut List) -> ()>;
 pub type amvalidate_function = Option<unsafe extern "C" fn(Oid) -> bool>;
@@ -2242,19 +2242,19 @@ pub type SortByNulls = libc::c_uint;
 pub const SORTBY_NULLS_LAST: SortByNulls = 2;
 pub const SORTBY_NULLS_FIRST: SortByNulls = 1;
 pub const SORTBY_NULLS_DEFAULT: SortByNulls = 0;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct TypeName {
-    pub type_0: NodeTag,
-    pub names: *mut List,
-    pub typeOid: Oid,
-    pub setof: bool,
-    pub pct_type: bool,
-    pub typmods: *mut List,
-    pub typemod: i32,
-    pub arrayBounds: *mut List,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct TypeName {
+//     pub type_0: NodeTag,
+//     pub names: *mut List,
+//     pub typeOid: Oid,
+//     pub setof: bool,
+//     pub pct_type: bool,
+//     pub typmods: *mut List,
+//     pub typemod: i32,
+//     pub arrayBounds: *mut List,
+//     pub location: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct A_Const {

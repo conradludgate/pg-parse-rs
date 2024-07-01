@@ -388,7 +388,7 @@ pub struct ErrorContextCallback {
     pub arg: *mut libc::c_void,
 }
 pub type MemoryContext = *mut MemoryContextData;
-pub type Datum = usize;
+// pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct NullableDatum {
@@ -1922,7 +1922,7 @@ pub struct RelFileNode {
     pub dbNode: Oid,
     pub relNode: Oid,
 }
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ParseState {

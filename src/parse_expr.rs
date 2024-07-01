@@ -231,7 +231,7 @@ pub type __darwin_size_t = libc::c_ulong;
 // pub type uint64 = libc::c_ulong;
 // pub type usize = isize;
 pub type Index = libc::c_uint;
-pub type Datum = usize;
+// pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct List {
@@ -1188,19 +1188,19 @@ pub struct Query {
     pub stmt_location: libc::c_int,
     pub stmt_len: libc::c_int,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct TypeName {
-    pub type_0: NodeTag,
-    pub names: *mut List,
-    pub typeOid: Oid,
-    pub setof: bool,
-    pub pct_type: bool,
-    pub typmods: *mut List,
-    pub typemod: i32,
-    pub arrayBounds: *mut List,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct TypeName {
+//     pub type_0: NodeTag,
+//     pub names: *mut List,
+//     pub typeOid: Oid,
+//     pub setof: bool,
+//     pub pct_type: bool,
+//     pub typmods: *mut List,
+//     pub typemod: i32,
+//     pub arrayBounds: *mut List,
+//     pub location: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ColumnRef {
@@ -1447,7 +1447,7 @@ pub struct CommonTableExpr {
     pub ctecoltypmods: *mut List,
     pub ctecolcollations: *mut List,
 }
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 
 pub type CoerceParamHook =
     Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;

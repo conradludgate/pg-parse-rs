@@ -407,7 +407,7 @@ pub struct ErrorContextCallback {
     pub arg: *mut libc::c_void,
 }
 pub type MemoryContext = *mut MemoryContextData;
-pub type Datum = usize;
+// pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct NullableDatum {
@@ -1199,7 +1199,7 @@ pub struct ParallelIndexScanDescData {
 pub struct IndexFetchTableData {
     pub rel: Relation,
 }
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 pub type IndexTuple = *mut IndexTupleData;
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -3059,19 +3059,19 @@ pub type SortByNulls = libc::c_uint;
 pub const SORTBY_NULLS_LAST: SortByNulls = 2;
 pub const SORTBY_NULLS_FIRST: SortByNulls = 1;
 pub const SORTBY_NULLS_DEFAULT: SortByNulls = 0;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct TypeName {
-    pub type_0: NodeTag,
-    pub names: *mut List,
-    pub typeOid: Oid,
-    pub setof: bool,
-    pub pct_type: bool,
-    pub typmods: *mut List,
-    pub typemod: i32,
-    pub arrayBounds: *mut List,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct TypeName {
+//     pub type_0: NodeTag,
+//     pub names: *mut List,
+//     pub typeOid: Oid,
+//     pub setof: bool,
+//     pub pct_type: bool,
+//     pub typmods: *mut List,
+//     pub typemod: i32,
+//     pub arrayBounds: *mut List,
+//     pub location: libc::c_int,
+// }
 pub type A_Expr_Kind = libc::c_uint;
 pub const AEXPR_NOT_BETWEEN_SYM: A_Expr_Kind = 13;
 pub const AEXPR_BETWEEN_SYM: A_Expr_Kind = 12;

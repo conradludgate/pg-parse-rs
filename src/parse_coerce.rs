@@ -139,7 +139,7 @@ pub struct ErrorContextCallback {
     pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
-pub type Datum = usize;
+// pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct BlockIdData {
@@ -1122,7 +1122,7 @@ pub struct TupleDescData {
     pub attrs: [FormData_pg_attribute; 0],
 }
 pub type TupleDesc = *mut TupleDescData;
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct FormData_pg_cast {

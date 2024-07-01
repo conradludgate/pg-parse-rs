@@ -169,11 +169,11 @@ pub unsafe extern "C" fn truncate_identifier(
             let mut __error: libc::c_int = 0;
             if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                 errcode(
-                    ('4' as i32 - '0' as i32 & 0x3f as libc::c_int)
-                        + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int) << 6 as libc::c_int)
-                        + (('6' as i32 - '0' as i32 & 0x3f as libc::c_int) << 12 as libc::c_int)
-                        + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int) << 18 as libc::c_int)
-                        + (('2' as i32 - '0' as i32 & 0x3f as libc::c_int) << 24 as libc::c_int),
+                    ((4) & 0x3f as libc::c_int)
+                        + (((2) & 0x3f as libc::c_int) << 6 as libc::c_int)
+                        + (((6) & 0x3f as libc::c_int) << 12 as libc::c_int)
+                        + (((2) & 0x3f as libc::c_int) << 18 as libc::c_int)
+                        + (((2) & 0x3f as libc::c_int) << 24 as libc::c_int),
                 );
                 errmsg(
                     b"identifier \"%s\" will be truncated to \"%.*s\"\0" as *const u8

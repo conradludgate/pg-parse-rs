@@ -104,7 +104,7 @@ pub struct nameData {
 }
 pub type NameData = nameData;
 pub type MemoryContext = *mut MemoryContextData;
-pub type Datum = usize;
+// pub type Datum = usize;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct NullableDatum {
@@ -1034,7 +1034,7 @@ pub struct TupleDescData {
     pub attrs: [FormData_pg_attribute; 0],
 }
 pub type TupleDesc = *mut TupleDescData;
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 
 pub type CoerceParamHook =
     Option<unsafe extern "C" fn(*mut ParseState, *mut Param, Oid, i32, libc::c_int) -> *mut Node>;

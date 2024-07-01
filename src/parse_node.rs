@@ -64,7 +64,7 @@ pub struct ErrorContextCallback {
     pub callback: Option<unsafe extern "C" fn(*mut libc::c_void) -> ()>,
     pub arg: *mut libc::c_void,
 }
-pub type Datum = usize;
+// pub type Datum = usize;
 pub type AttrNumber = i16;
 pub type NodeTag = libc::c_uint;
 pub const T_SupportRequestIndexCondition: NodeTag = 425;
@@ -646,7 +646,7 @@ pub struct OnConflictExpr {
     pub exclRelTlist: *mut List,
 }
 pub type LOCKMODE = libc::c_int;
-pub type Relation = *mut RelationData;
+// pub type Relation = *mut RelationData;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Value {
