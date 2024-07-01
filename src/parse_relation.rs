@@ -818,12 +818,12 @@ pub type Form_pg_attribute = *mut FormData_pg_attribute;
 pub struct Node {
     pub type_0: NodeTag,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct Bitmapset {
-    pub nwords: libc::c_int,
-    pub words: [bitmapword; 0],
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct Bitmapset {
+//     pub nwords: libc::c_int,
+//     pub words: [bitmapword; 0],
+// }
 pub type bitmapword = u32;
 pub type CmdType = libc::c_uint;
 pub const CMD_NOTHING: CmdType = 6;
@@ -850,13 +850,13 @@ pub type LimitOption = libc::c_uint;
 pub const LIMIT_OPTION_DEFAULT: LimitOption = 2;
 pub const LIMIT_OPTION_WITH_TIES: LimitOption = 1;
 pub const LIMIT_OPTION_COUNT: LimitOption = 0;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub union ListCell {
-    pub ptr_value: *mut libc::c_void,
-    pub int_value: libc::c_int,
-    pub oid_value: Oid,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub union ListCell {
+//     pub ptr_value: *mut libc::c_void,
+//     pub int_value: libc::c_int,
+//     pub oid_value: Oid,
+// }
 // #[derive(Copy, Clone)]
 // #[repr(C)]
 // pub struct List {
@@ -1311,17 +1311,17 @@ pub const EXPR_KIND_JOIN_USING: ParseExprKind = 3;
 pub const EXPR_KIND_JOIN_ON: ParseExprKind = 2;
 pub const EXPR_KIND_OTHER: ParseExprKind = 1;
 pub const EXPR_KIND_NONE: ParseExprKind = 0;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseNamespaceItem {
-    pub p_rte: *mut RangeTblEntry,
-    pub p_rtindex: libc::c_int,
-    pub p_nscolumns: *mut ParseNamespaceColumn,
-    pub p_rel_visible: bool,
-    pub p_cols_visible: bool,
-    pub p_lateral_only: bool,
-    pub p_lateral_ok: bool,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct ParseNamespaceItem {
+//     pub p_rte: *mut RangeTblEntry,
+//     pub p_rtindex: libc::c_int,
+//     pub p_nscolumns: *mut ParseNamespaceColumn,
+//     pub p_rel_visible: bool,
+//     pub p_cols_visible: bool,
+//     pub p_lateral_only: bool,
+//     pub p_lateral_ok: bool,
+// }
 // #[derive(Copy, Clone)]
 // #[repr(C)]
 // pub struct ParseNamespaceColumn {

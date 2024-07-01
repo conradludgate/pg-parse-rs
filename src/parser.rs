@@ -139,13 +139,13 @@ pub type pg_wchar = libc::c_uint;
 //     pub elements: *mut ListCell,
 //     pub initial_elements: [ListCell; 0],
 // }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub union ListCell {
-    pub ptr_value: *mut libc::c_void,
-    pub int_value: libc::c_int,
-    pub oid_value: Oid,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub union ListCell {
+//     pub ptr_value: *mut libc::c_void,
+//     pub int_value: libc::c_int,
+//     pub oid_value: Oid,
+// }
 pub type NodeTag = libc::c_uint;
 pub const T_SupportRequestIndexCondition: NodeTag = 425;
 pub const T_SupportRequestRows: NodeTag = 424;
