@@ -270,7 +270,7 @@ pub type bits32 = u32;
 // pub type i64 = libc::c_long;
 // pub type uint64 = libc::c_ulong;
 // pub type usize = isize;
-pub type Index = libc::c_uint;
+// pub type Index = libc::c_uint;
 pub type float4 = libc::c_float;
 pub type regproc = Oid;
 pub type RegProcedure = regproc;
@@ -332,446 +332,20 @@ pub type ScanDirection = libc::c_int;
 pub const ForwardScanDirection: ScanDirection = 1;
 pub const NoMovementScanDirection: ScanDirection = 0;
 pub const BackwardScanDirection: ScanDirection = -1;
-pub type AttrNumber = i16;
+// pub type AttrNumber = i16;
 pub type StrategyNumber = u16;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct Node {
-    pub type_0: NodeTag,
-}
-pub type NodeTag = libc::c_uint;
-pub const T_SupportRequestIndexCondition: NodeTag = 425;
-pub const T_SupportRequestRows: NodeTag = 424;
-pub const T_SupportRequestCost: NodeTag = 423;
-pub const T_SupportRequestSelectivity: NodeTag = 422;
-pub const T_SupportRequestSimplify: NodeTag = 421;
-pub const T_CallContext: NodeTag = 420;
-pub const T_ForeignKeyCacheInfo: NodeTag = 419;
-pub const T_TsmRoutine: NodeTag = 418;
-pub const T_TableAmRoutine: NodeTag = 417;
-pub const T_IndexAmRoutine: NodeTag = 416;
-pub const T_FdwRoutine: NodeTag = 415;
-pub const T_InlineCodeBlock: NodeTag = 414;
-pub const T_TIDBitmap: NodeTag = 413;
-pub const T_WindowObjectData: NodeTag = 412;
-pub const T_ReturnSetInfo: NodeTag = 411;
-pub const T_EventTriggerData: NodeTag = 410;
-pub const T_TriggerData: NodeTag = 409;
-pub const T_SQLCmd: NodeTag = 408;
-pub const T_TimeLineHistoryCmd: NodeTag = 407;
-pub const T_StartReplicationCmd: NodeTag = 406;
-pub const T_DropReplicationSlotCmd: NodeTag = 405;
-pub const T_CreateReplicationSlotCmd: NodeTag = 404;
-pub const T_BaseBackupCmd: NodeTag = 403;
-pub const T_IdentifySystemCmd: NodeTag = 402;
-pub const T_VacuumRelation: NodeTag = 401;
-pub const T_PartitionCmd: NodeTag = 400;
-pub const T_PartitionRangeDatum: NodeTag = 399;
-pub const T_PartitionBoundSpec: NodeTag = 398;
-pub const T_PartitionSpec: NodeTag = 397;
-pub const T_PartitionElem: NodeTag = 396;
-pub const T_TriggerTransition: NodeTag = 395;
-pub const T_RoleSpec: NodeTag = 394;
-pub const T_CommonTableExpr: NodeTag = 393;
-pub const T_CTECycleClause: NodeTag = 392;
-pub const T_CTESearchClause: NodeTag = 391;
-pub const T_OnConflictClause: NodeTag = 390;
-pub const T_InferClause: NodeTag = 389;
-pub const T_WithClause: NodeTag = 388;
-pub const T_XmlSerialize: NodeTag = 387;
-pub const T_RowMarkClause: NodeTag = 386;
-pub const T_LockingClause: NodeTag = 385;
-pub const T_FunctionParameter: NodeTag = 384;
-pub const T_TableLikeClause: NodeTag = 383;
-pub const T_CreateOpClassItem: NodeTag = 382;
-pub const T_AccessPriv: NodeTag = 381;
-pub const T_ObjectWithArgs: NodeTag = 380;
-pub const T_WindowClause: NodeTag = 379;
-pub const T_GroupingSet: NodeTag = 378;
-pub const T_SortGroupClause: NodeTag = 377;
-pub const T_WithCheckOption: NodeTag = 376;
-pub const T_TableSampleClause: NodeTag = 375;
-pub const T_RangeTblFunction: NodeTag = 374;
-pub const T_RangeTblEntry: NodeTag = 373;
-pub const T_DefElem: NodeTag = 372;
-pub const T_Constraint: NodeTag = 371;
-pub const T_IndexElem: NodeTag = 370;
-pub const T_ColumnDef: NodeTag = 369;
-pub const T_TypeName: NodeTag = 368;
-pub const T_RangeTableFuncCol: NodeTag = 367;
-pub const T_RangeTableFunc: NodeTag = 366;
-pub const T_RangeTableSample: NodeTag = 365;
-pub const T_RangeFunction: NodeTag = 364;
-pub const T_RangeSubselect: NodeTag = 363;
-pub const T_WindowDef: NodeTag = 362;
-pub const T_SortBy: NodeTag = 361;
-pub const T_CollateClause: NodeTag = 360;
-pub const T_TypeCast: NodeTag = 359;
-pub const T_MultiAssignRef: NodeTag = 358;
-pub const T_ResTarget: NodeTag = 357;
-pub const T_A_ArrayExpr: NodeTag = 356;
-pub const T_A_Indirection: NodeTag = 355;
-pub const T_A_Indices: NodeTag = 354;
-pub const T_A_Star: NodeTag = 353;
-pub const T_FuncCall: NodeTag = 352;
-pub const T_A_Const: NodeTag = 351;
-pub const T_ParamRef: NodeTag = 350;
-pub const T_ColumnRef: NodeTag = 349;
-pub const T_A_Expr: NodeTag = 348;
-pub const T_AlterStatsStmt: NodeTag = 347;
-pub const T_CallStmt: NodeTag = 346;
-pub const T_AlterCollationStmt: NodeTag = 345;
-pub const T_CreateStatsStmt: NodeTag = 344;
-pub const T_DropSubscriptionStmt: NodeTag = 343;
-pub const T_AlterSubscriptionStmt: NodeTag = 342;
-pub const T_CreateSubscriptionStmt: NodeTag = 341;
-pub const T_AlterPublicationStmt: NodeTag = 340;
-pub const T_CreatePublicationStmt: NodeTag = 339;
-pub const T_CreateAmStmt: NodeTag = 338;
-pub const T_CreateTransformStmt: NodeTag = 337;
-pub const T_AlterPolicyStmt: NodeTag = 336;
-pub const T_CreatePolicyStmt: NodeTag = 335;
-pub const T_AlterSystemStmt: NodeTag = 334;
-pub const T_ReplicaIdentityStmt: NodeTag = 333;
-pub const T_RefreshMatViewStmt: NodeTag = 332;
-pub const T_AlterEventTrigStmt: NodeTag = 331;
-pub const T_CreateEventTrigStmt: NodeTag = 330;
-pub const T_AlterExtensionContentsStmt: NodeTag = 329;
-pub const T_AlterExtensionStmt: NodeTag = 328;
-pub const T_CreateExtensionStmt: NodeTag = 327;
-pub const T_ImportForeignSchemaStmt: NodeTag = 326;
-pub const T_CreateForeignTableStmt: NodeTag = 325;
-pub const T_SecLabelStmt: NodeTag = 324;
-pub const T_AlterTableMoveAllStmt: NodeTag = 323;
-pub const T_AlterTableSpaceOptionsStmt: NodeTag = 322;
-pub const T_DropUserMappingStmt: NodeTag = 321;
-pub const T_AlterUserMappingStmt: NodeTag = 320;
-pub const T_CreateUserMappingStmt: NodeTag = 319;
-pub const T_AlterForeignServerStmt: NodeTag = 318;
-pub const T_CreateForeignServerStmt: NodeTag = 317;
-pub const T_AlterFdwStmt: NodeTag = 316;
-pub const T_CreateFdwStmt: NodeTag = 315;
-pub const T_AlterTSConfigurationStmt: NodeTag = 314;
-pub const T_AlterTSDictionaryStmt: NodeTag = 313;
-pub const T_AlterEnumStmt: NodeTag = 312;
-pub const T_CreateRangeStmt: NodeTag = 311;
-pub const T_CreateEnumStmt: NodeTag = 310;
-pub const T_CompositeTypeStmt: NodeTag = 309;
-pub const T_ReassignOwnedStmt: NodeTag = 308;
-pub const T_DropOwnedStmt: NodeTag = 307;
-pub const T_AlterTypeStmt: NodeTag = 306;
-pub const T_AlterOperatorStmt: NodeTag = 305;
-pub const T_AlterOwnerStmt: NodeTag = 304;
-pub const T_AlterObjectSchemaStmt: NodeTag = 303;
-pub const T_AlterObjectDependsStmt: NodeTag = 302;
-pub const T_DropTableSpaceStmt: NodeTag = 301;
-pub const T_CreateTableSpaceStmt: NodeTag = 300;
-pub const T_DeclareCursorStmt: NodeTag = 299;
-pub const T_DeallocateStmt: NodeTag = 298;
-pub const T_ExecuteStmt: NodeTag = 297;
-pub const T_PrepareStmt: NodeTag = 296;
-pub const T_AlterOpFamilyStmt: NodeTag = 295;
-pub const T_CreateOpFamilyStmt: NodeTag = 294;
-pub const T_CreateOpClassStmt: NodeTag = 293;
-pub const T_CreateCastStmt: NodeTag = 292;
-pub const T_CreateConversionStmt: NodeTag = 291;
-pub const T_AlterRoleSetStmt: NodeTag = 290;
-pub const T_AlterDatabaseSetStmt: NodeTag = 289;
-pub const T_AlterDatabaseStmt: NodeTag = 288;
-pub const T_CreateSchemaStmt: NodeTag = 287;
-pub const T_CheckPointStmt: NodeTag = 286;
-pub const T_ReindexStmt: NodeTag = 285;
-pub const T_ConstraintsSetStmt: NodeTag = 284;
-pub const T_LockStmt: NodeTag = 283;
-pub const T_DropRoleStmt: NodeTag = 282;
-pub const T_AlterRoleStmt: NodeTag = 281;
-pub const T_CreateRoleStmt: NodeTag = 280;
-pub const T_CreatePLangStmt: NodeTag = 279;
-pub const T_CreateTrigStmt: NodeTag = 278;
-pub const T_DiscardStmt: NodeTag = 277;
-pub const T_VariableShowStmt: NodeTag = 276;
-pub const T_VariableSetStmt: NodeTag = 275;
-pub const T_AlterSeqStmt: NodeTag = 274;
-pub const T_CreateSeqStmt: NodeTag = 273;
-pub const T_CreateTableAsStmt: NodeTag = 272;
-pub const T_ExplainStmt: NodeTag = 271;
-pub const T_VacuumStmt: NodeTag = 270;
-pub const T_DropdbStmt: NodeTag = 269;
-pub const T_CreatedbStmt: NodeTag = 268;
-pub const T_CreateDomainStmt: NodeTag = 267;
-pub const T_LoadStmt: NodeTag = 266;
-pub const T_ViewStmt: NodeTag = 265;
-pub const T_TransactionStmt: NodeTag = 264;
-pub const T_UnlistenStmt: NodeTag = 263;
-pub const T_ListenStmt: NodeTag = 262;
-pub const T_NotifyStmt: NodeTag = 261;
-pub const T_RuleStmt: NodeTag = 260;
-pub const T_RenameStmt: NodeTag = 259;
-pub const T_DoStmt: NodeTag = 258;
-pub const T_AlterFunctionStmt: NodeTag = 257;
-pub const T_CreateFunctionStmt: NodeTag = 256;
-pub const T_IndexStmt: NodeTag = 255;
-pub const T_FetchStmt: NodeTag = 254;
-pub const T_CommentStmt: NodeTag = 253;
-pub const T_TruncateStmt: NodeTag = 252;
-pub const T_DropStmt: NodeTag = 251;
-pub const T_DefineStmt: NodeTag = 250;
-pub const T_CreateStmt: NodeTag = 249;
-pub const T_CopyStmt: NodeTag = 248;
-pub const T_ClusterStmt: NodeTag = 247;
-pub const T_ClosePortalStmt: NodeTag = 246;
-pub const T_AlterDefaultPrivilegesStmt: NodeTag = 245;
-pub const T_GrantRoleStmt: NodeTag = 244;
-pub const T_GrantStmt: NodeTag = 243;
-pub const T_SetOperationStmt: NodeTag = 242;
-pub const T_AlterDomainStmt: NodeTag = 241;
-pub const T_AlterTableCmd: NodeTag = 240;
-pub const T_AlterTableStmt: NodeTag = 239;
-pub const T_PLAssignStmt: NodeTag = 238;
-pub const T_SelectStmt: NodeTag = 237;
-pub const T_UpdateStmt: NodeTag = 236;
-pub const T_DeleteStmt: NodeTag = 235;
-pub const T_InsertStmt: NodeTag = 234;
-pub const T_PlannedStmt: NodeTag = 233;
-pub const T_Query: NodeTag = 232;
-pub const T_RawStmt: NodeTag = 231;
-pub const T_ExtensibleNode: NodeTag = 230;
-pub const T_OidList: NodeTag = 229;
-pub const T_IntList: NodeTag = 228;
-pub const T_List: NodeTag = 227;
-pub const T_Null: NodeTag = 226;
-pub const T_BitString: NodeTag = 225;
-pub const T_String: NodeTag = 224;
-pub const T_Float: NodeTag = 223;
-pub const T_Integer: NodeTag = 222;
-pub const T_Value: NodeTag = 221;
-pub const T_GenerationContext: NodeTag = 220;
-pub const T_SlabContext: NodeTag = 219;
-pub const T_AllocSetContext: NodeTag = 218;
-pub const T_MemoryContext: NodeTag = 217;
-pub const T_StatisticExtInfo: NodeTag = 216;
-pub const T_GroupingSetData: NodeTag = 215;
-pub const T_RollupData: NodeTag = 214;
-pub const T_PlannerParamItem: NodeTag = 213;
-pub const T_MinMaxAggInfo: NodeTag = 212;
-pub const T_PlaceHolderInfo: NodeTag = 211;
-pub const T_AppendRelInfo: NodeTag = 210;
-pub const T_SpecialJoinInfo: NodeTag = 209;
-pub const T_PlaceHolderVar: NodeTag = 208;
-pub const T_IndexClause: NodeTag = 207;
-pub const T_RestrictInfo: NodeTag = 206;
-pub const T_PathTarget: NodeTag = 205;
-pub const T_PathKey: NodeTag = 204;
-pub const T_EquivalenceMember: NodeTag = 203;
-pub const T_EquivalenceClass: NodeTag = 202;
-pub const T_LimitPath: NodeTag = 201;
-pub const T_ModifyTablePath: NodeTag = 200;
-pub const T_LockRowsPath: NodeTag = 199;
-pub const T_RecursiveUnionPath: NodeTag = 198;
-pub const T_SetOpPath: NodeTag = 197;
-pub const T_WindowAggPath: NodeTag = 196;
-pub const T_MinMaxAggPath: NodeTag = 195;
-pub const T_GroupingSetsPath: NodeTag = 194;
-pub const T_AggPath: NodeTag = 193;
-pub const T_UpperUniquePath: NodeTag = 192;
-pub const T_GroupPath: NodeTag = 191;
-pub const T_IncrementalSortPath: NodeTag = 190;
-pub const T_SortPath: NodeTag = 189;
-pub const T_ProjectSetPath: NodeTag = 188;
-pub const T_ProjectionPath: NodeTag = 187;
-pub const T_GatherMergePath: NodeTag = 186;
-pub const T_GatherPath: NodeTag = 185;
-pub const T_UniquePath: NodeTag = 184;
-pub const T_MaterialPath: NodeTag = 183;
-pub const T_GroupResultPath: NodeTag = 182;
-pub const T_MergeAppendPath: NodeTag = 181;
-pub const T_AppendPath: NodeTag = 180;
-pub const T_HashPath: NodeTag = 179;
-pub const T_MergePath: NodeTag = 178;
-pub const T_NestPath: NodeTag = 177;
-pub const T_CustomPath: NodeTag = 176;
-pub const T_ForeignPath: NodeTag = 175;
-pub const T_SubqueryScanPath: NodeTag = 174;
-pub const T_TidRangePath: NodeTag = 173;
-pub const T_TidPath: NodeTag = 172;
-pub const T_BitmapOrPath: NodeTag = 171;
-pub const T_BitmapAndPath: NodeTag = 170;
-pub const T_BitmapHeapPath: NodeTag = 169;
-pub const T_IndexPath: NodeTag = 168;
-pub const T_Path: NodeTag = 167;
-pub const T_ParamPathInfo: NodeTag = 166;
-pub const T_ForeignKeyOptInfo: NodeTag = 165;
-pub const T_IndexOptInfo: NodeTag = 164;
-pub const T_RelOptInfo: NodeTag = 163;
-pub const T_PlannerGlobal: NodeTag = 162;
-pub const T_PlannerInfo: NodeTag = 161;
-pub const T_DomainConstraintState: NodeTag = 160;
-pub const T_SubPlanState: NodeTag = 159;
-pub const T_SetExprState: NodeTag = 158;
-pub const T_WindowFuncExprState: NodeTag = 157;
-pub const T_ExprState: NodeTag = 156;
-pub const T_IntoClause: NodeTag = 155;
-pub const T_OnConflictExpr: NodeTag = 154;
-pub const T_FromExpr: NodeTag = 153;
-pub const T_JoinExpr: NodeTag = 152;
-pub const T_RangeTblRef: NodeTag = 151;
-pub const T_TargetEntry: NodeTag = 150;
-pub const T_InferenceElem: NodeTag = 149;
-pub const T_NextValueExpr: NodeTag = 148;
-pub const T_CurrentOfExpr: NodeTag = 147;
-pub const T_SetToDefault: NodeTag = 146;
-pub const T_CoerceToDomainValue: NodeTag = 145;
-pub const T_CoerceToDomain: NodeTag = 144;
-pub const T_BooleanTest: NodeTag = 143;
-pub const T_NullTest: NodeTag = 142;
-pub const T_XmlExpr: NodeTag = 141;
-pub const T_SQLValueFunction: NodeTag = 140;
-pub const T_MinMaxExpr: NodeTag = 139;
-pub const T_CoalesceExpr: NodeTag = 138;
-pub const T_RowCompareExpr: NodeTag = 137;
-pub const T_RowExpr: NodeTag = 136;
-pub const T_ArrayExpr: NodeTag = 135;
-pub const T_CaseTestExpr: NodeTag = 134;
-pub const T_CaseWhen: NodeTag = 133;
-pub const T_CaseExpr: NodeTag = 132;
-pub const T_CollateExpr: NodeTag = 131;
-pub const T_ConvertRowtypeExpr: NodeTag = 130;
-pub const T_ArrayCoerceExpr: NodeTag = 129;
-pub const T_CoerceViaIO: NodeTag = 128;
-pub const T_RelabelType: NodeTag = 127;
-pub const T_FieldStore: NodeTag = 126;
-pub const T_FieldSelect: NodeTag = 125;
-pub const T_AlternativeSubPlan: NodeTag = 124;
-pub const T_SubPlan: NodeTag = 123;
-pub const T_SubLink: NodeTag = 122;
-pub const T_BoolExpr: NodeTag = 121;
-pub const T_ScalarArrayOpExpr: NodeTag = 120;
-pub const T_NullIfExpr: NodeTag = 119;
-pub const T_DistinctExpr: NodeTag = 118;
-pub const T_OpExpr: NodeTag = 117;
-pub const T_NamedArgExpr: NodeTag = 116;
-pub const T_FuncExpr: NodeTag = 115;
-pub const T_SubscriptingRef: NodeTag = 114;
-pub const T_WindowFunc: NodeTag = 113;
-pub const T_GroupingFunc: NodeTag = 112;
-pub const T_Aggref: NodeTag = 111;
-pub const T_Param: NodeTag = 110;
-pub const T_Const: NodeTag = 109;
-pub const T_Var: NodeTag = 108;
-pub const T_Expr: NodeTag = 107;
-pub const T_TableFunc: NodeTag = 106;
-pub const T_RangeVar: NodeTag = 105;
-pub const T_Alias: NodeTag = 104;
-pub const T_LimitState: NodeTag = 103;
-pub const T_LockRowsState: NodeTag = 102;
-pub const T_SetOpState: NodeTag = 101;
-pub const T_HashState: NodeTag = 100;
-pub const T_GatherMergeState: NodeTag = 99;
-pub const T_GatherState: NodeTag = 98;
-pub const T_UniqueState: NodeTag = 97;
-pub const T_WindowAggState: NodeTag = 96;
-pub const T_AggState: NodeTag = 95;
-pub const T_GroupState: NodeTag = 94;
-pub const T_IncrementalSortState: NodeTag = 93;
-pub const T_SortState: NodeTag = 92;
-pub const T_MaterialState: NodeTag = 91;
-pub const T_HashJoinState: NodeTag = 90;
-pub const T_MergeJoinState: NodeTag = 89;
-pub const T_NestLoopState: NodeTag = 88;
-pub const T_JoinState: NodeTag = 87;
-pub const T_CustomScanState: NodeTag = 86;
-pub const T_ForeignScanState: NodeTag = 85;
-pub const T_WorkTableScanState: NodeTag = 84;
-pub const T_NamedTuplestoreScanState: NodeTag = 83;
-pub const T_CteScanState: NodeTag = 82;
-pub const T_ValuesScanState: NodeTag = 81;
-pub const T_TableFuncScanState: NodeTag = 80;
-pub const T_FunctionScanState: NodeTag = 79;
-pub const T_SubqueryScanState: NodeTag = 78;
-pub const T_TidRangeScanState: NodeTag = 77;
-pub const T_TidScanState: NodeTag = 76;
-pub const T_BitmapHeapScanState: NodeTag = 75;
-pub const T_BitmapIndexScanState: NodeTag = 74;
-pub const T_IndexOnlyScanState: NodeTag = 73;
-pub const T_IndexScanState: NodeTag = 72;
-pub const T_SampleScanState: NodeTag = 71;
-pub const T_SeqScanState: NodeTag = 70;
-pub const T_ScanState: NodeTag = 69;
-pub const T_BitmapOrState: NodeTag = 68;
-pub const T_BitmapAndState: NodeTag = 67;
-pub const T_RecursiveUnionState: NodeTag = 66;
-pub const T_MergeAppendState: NodeTag = 65;
-pub const T_AppendState: NodeTag = 64;
-pub const T_ModifyTableState: NodeTag = 63;
-pub const T_ProjectSetState: NodeTag = 62;
-pub const T_ResultState: NodeTag = 61;
-pub const T_PlanState: NodeTag = 60;
-pub const T_PlanInvalItem: NodeTag = 59;
-pub const T_PartitionPruneStepCombine: NodeTag = 58;
-pub const T_PartitionPruneStepOp: NodeTag = 57;
-pub const T_PartitionedRelPruneInfo: NodeTag = 56;
-pub const T_PartitionPruneInfo: NodeTag = 55;
-pub const T_PlanRowMark: NodeTag = 54;
-pub const T_NestLoopParam: NodeTag = 53;
-pub const T_Limit: NodeTag = 52;
-pub const T_LockRows: NodeTag = 51;
-pub const T_SetOp: NodeTag = 50;
-pub const T_Hash: NodeTag = 49;
-pub const T_GatherMerge: NodeTag = 48;
-pub const T_Gather: NodeTag = 47;
-pub const T_Unique: NodeTag = 46;
-pub const T_WindowAgg: NodeTag = 45;
-pub const T_Agg: NodeTag = 44;
-pub const T_Group: NodeTag = 43;
-pub const T_IncrementalSort: NodeTag = 42;
-pub const T_Sort: NodeTag = 41;
-pub const T_Material: NodeTag = 40;
-pub const T_HashJoin: NodeTag = 39;
-pub const T_MergeJoin: NodeTag = 38;
-pub const T_NestLoop: NodeTag = 37;
-pub const T_Join: NodeTag = 36;
-pub const T_CustomScan: NodeTag = 35;
-pub const T_ForeignScan: NodeTag = 34;
-pub const T_WorkTableScan: NodeTag = 33;
-pub const T_NamedTuplestoreScan: NodeTag = 32;
-pub const T_CteScan: NodeTag = 31;
-pub const T_TableFuncScan: NodeTag = 30;
-pub const T_ValuesScan: NodeTag = 29;
-pub const T_FunctionScan: NodeTag = 28;
-pub const T_SubqueryScan: NodeTag = 27;
-pub const T_TidRangeScan: NodeTag = 26;
-pub const T_TidScan: NodeTag = 25;
-pub const T_BitmapHeapScan: NodeTag = 24;
-pub const T_BitmapIndexScan: NodeTag = 23;
-pub const T_IndexOnlyScan: NodeTag = 22;
-pub const T_IndexScan: NodeTag = 21;
-pub const T_SampleScan: NodeTag = 20;
-pub const T_SeqScan: NodeTag = 19;
-pub const T_Scan: NodeTag = 18;
-pub const T_BitmapOr: NodeTag = 17;
-pub const T_BitmapAnd: NodeTag = 16;
-pub const T_RecursiveUnion: NodeTag = 15;
-pub const T_MergeAppend: NodeTag = 14;
-pub const T_Append: NodeTag = 13;
-pub const T_ModifyTable: NodeTag = 12;
-pub const T_ProjectSet: NodeTag = 11;
-pub const T_Result: NodeTag = 10;
-pub const T_Plan: NodeTag = 9;
-pub const T_TupleTableSlot: NodeTag = 8;
-pub const T_EState: NodeTag = 7;
-pub const T_ResultRelInfo: NodeTag = 6;
-pub const T_OnConflictSetState: NodeTag = 5;
-pub const T_JunkFilter: NodeTag = 4;
-pub const T_ProjectionInfo: NodeTag = 3;
-pub const T_ExprContext: NodeTag = 2;
-pub const T_IndexInfo: NodeTag = 1;
-pub const T_Invalid: NodeTag = 0;
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct Node {
+//     pub type_0: NodeTag,
+// }
+
 pub type fmNodePtr = *mut Node;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct Expr {
-    pub type_0: NodeTag,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct Expr {
+//     pub type_0: NodeTag,
+// }
 // #[derive(Copy, Clone)]
 // #[repr(C)]
 // pub struct List {
@@ -847,7 +421,7 @@ pub struct ItemPointerData_Inner {
 const ItemPointerData_PADDING: usize =
     ::core::mem::size_of::<ItemPointerData>() - ::core::mem::size_of::<ItemPointerData_Inner>();
 pub type ItemPointer = *mut ItemPointerData;
-pub type LOCKMODE = libc::c_int;
+// pub type LOCKMODE = libc::c_int;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct FormData_pg_attribute {
@@ -2208,12 +1782,12 @@ pub struct RangeTblRef {
     pub type_0: NodeTag,
     pub rtindex: libc::c_int,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct Value {
-    pub type_0: NodeTag,
-    pub val: ValUnion,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct Value {
+//     pub type_0: NodeTag,
+//     pub val: ValUnion,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub union ValUnion {
@@ -2756,13 +2330,13 @@ pub struct ArrayType {
     pub dataoffset: i32,
     pub elemtype: Oid,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ParseCallbackState {
-    pub pstate: *mut ParseState,
-    pub location: libc::c_int,
-    pub errcallback: ErrorContextCallback,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct ParseCallbackState {
+//     pub pstate: *mut ParseState,
+//     pub location: libc::c_int,
+//     pub errcallback: ErrorContextCallback,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct FormData_pg_am {
@@ -3177,7 +2751,7 @@ unsafe extern "C" fn generateSerialExtraStmts(
     }
     seqstmt = ({
         let mut _result: *mut Node = 0 as *mut Node;
-        (*_result).type_0 = T_CreateSeqStmt;
+        (*_result).tag = T_CreateSeqStmt;
         _result
     }) as *mut CreateSeqStmt;
     (*seqstmt).for_identity = for_identity;
@@ -3202,7 +2776,7 @@ unsafe extern "C" fn generateSerialExtraStmts(
     (*column).identitySequence = (*seqstmt).sequence;
     altseqstmt = ({
         let mut _result: *mut Node = 0 as *mut Node;
-        (*_result).type_0 = T_AlterSeqStmt;
+        (*_result).tag = T_AlterSeqStmt;
         _result
     }) as *mut AlterSeqStmt;
     (*altseqstmt).sequence = makeRangeVar(snamespace, sname, -(1 as libc::c_int));
@@ -3229,7 +2803,7 @@ unsafe extern "C" fn generateSerialExtraStmts(
         },
     );
     (*altseqstmt).for_identity = for_identity;
-    if col_exists != 0 {
+    if col_exists {
         (*cxt).blist = lappend((*cxt).blist, altseqstmt as *mut libc::c_void);
     } else {
         (*cxt).alist = lappend((*cxt).alist, altseqstmt as *mut libc::c_void);
@@ -3294,7 +2868,7 @@ unsafe extern "C" fn transformColumnDefinition(
     if !((*column).typeName).is_null() {
         transformColumnType(cxt, column);
     }
-    if is_serial != 0 {
+    if is_serial {
         let mut snamespace: *mut libc::c_char = 0 as *mut libc::c_char;
         let mut sname: *mut libc::c_char = 0 as *mut libc::c_char;
         let mut qstring: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -3315,15 +2889,15 @@ unsafe extern "C" fn transformColumnDefinition(
         qstring = quote_qualified_identifier(snamespace, sname);
         snamenode = ({
             let mut _result: *mut Node = 0 as *mut Node;
-            (*_result).type_0 = T_A_Const;
+            (*_result).tag = T_A_Const;
             _result
         }) as *mut A_Const;
-        (*snamenode).val.type_0 = T_String;
+        (*snamenode).val.tag = T_String;
         (*snamenode).val.val.str_0 = qstring;
         (*snamenode).location = -(1 as libc::c_int);
         castnode = ({
             let mut _result: *mut Node = 0 as *mut Node;
-            (*_result).type_0 = T_TypeCast;
+            (*_result).tag = T_TypeCast;
             _result
         }) as *mut TypeCast;
         (*castnode).typeName =
@@ -3343,7 +2917,7 @@ unsafe extern "C" fn transformColumnDefinition(
         );
         constraint = ({
             let mut _result: *mut Node = 0 as *mut Node;
-            (*_result).type_0 = T_Constraint;
+            (*_result).tag = T_Constraint;
             _result
         }) as *mut Constraint;
         (*constraint).contype = CONSTR_DEFAULT;
@@ -3353,7 +2927,7 @@ unsafe extern "C" fn transformColumnDefinition(
         (*column).constraints = lappend((*column).constraints, constraint as *mut libc::c_void);
         constraint = ({
             let mut _result: *mut Node = 0 as *mut Node;
-            (*_result).type_0 = T_Constraint;
+            (*_result).tag = T_Constraint;
             _result
         }) as *mut Constraint;
         (*constraint).contype = CONSTR_NOTNULL;
@@ -3408,7 +2982,7 @@ unsafe extern "C" fn transformColumnDefinition(
                 current_block_145 = 11957990509374275265;
             }
             2 => {
-                if saw_default != 0 {
+                if saw_default {
                     let elevel__2: libc::c_int = 21 as libc::c_int;
                     let mut __error_2: libc::c_int = 0;
                     if elevel__2 >= 21 as libc::c_int {
@@ -3422,7 +2996,7 @@ unsafe extern "C" fn transformColumnDefinition(
             3 => {
                 let mut ctype: Type = 0 as *mut HeapTupleData;
                 let mut typeOid: Oid = 0;
-                if (*cxt).ofType != 0 {
+                if (*cxt).ofType {
                     let elevel__3: libc::c_int = 21 as libc::c_int;
                     let mut __error_3: libc::c_int = 0;
                     if elevel__3 >= 21 as libc::c_int {
@@ -3442,7 +3016,7 @@ unsafe extern "C" fn transformColumnDefinition(
                     as Form_pg_type))
                     .oid;
                 ReleaseSysCache(ctype);
-                if saw_identity != 0 {
+                if saw_identity {
                     let elevel__5: libc::c_int = 21 as libc::c_int;
                     let mut __error_5: libc::c_int = 0;
                     if elevel__5 >= 21 as libc::c_int {
@@ -3465,7 +3039,7 @@ unsafe extern "C" fn transformColumnDefinition(
                 current_block_145 = 11957990509374275265;
             }
             4 => {
-                if (*cxt).ofType != 0 {
+                if (*cxt).ofType {
                     let elevel__6: libc::c_int = 21 as libc::c_int;
                     let mut __error_6: libc::c_int = 0;
                     if elevel__6 >= 21 as libc::c_int {
@@ -3479,7 +3053,7 @@ unsafe extern "C" fn transformColumnDefinition(
                         abort();
                     }
                 }
-                if saw_generated != 0 {
+                if saw_generated {
                     let elevel__8: libc::c_int = 21 as libc::c_int;
                     let mut __error_8: libc::c_int = 0;
                     if elevel__8 >= 21 as libc::c_int {
@@ -3496,7 +3070,7 @@ unsafe extern "C" fn transformColumnDefinition(
                 current_block_145 = 11957990509374275265;
             }
             6 => {
-                if (*cxt).isforeign != 0 {
+                if (*cxt).isforeign {
                     let elevel__9: libc::c_int = 21 as libc::c_int;
                     let mut __error_9: libc::c_int = 0;
                     if elevel__9 >= 21 as libc::c_int {
@@ -3529,7 +3103,7 @@ unsafe extern "C" fn transformColumnDefinition(
                 current_block_145 = 11957990509374275265;
             }
             9 => {
-                if (*cxt).isforeign != 0 {
+                if (*cxt).isforeign {
                     let elevel__12: libc::c_int = 21 as libc::c_int;
                     let mut __error_12: libc::c_int = 0;
                     if elevel__12 >= 21 as libc::c_int {
@@ -3572,7 +3146,7 @@ unsafe extern "C" fn transformColumnDefinition(
         }
         match current_block_145 {
             1003796805849494897 => {
-                if (*cxt).isforeign != 0 {
+                if (*cxt).isforeign {
                     let elevel__10: libc::c_int = 21 as libc::c_int;
                     let mut __error_10: libc::c_int = 0;
                     if elevel__10 >= 21 as libc::c_int {
@@ -3621,7 +3195,7 @@ unsafe extern "C" fn transformColumnDefinition(
         let mut cmd: *mut AlterTableCmd = 0 as *mut AlterTableCmd;
         cmd = ({
             let mut _result: *mut Node = 0 as *mut Node;
-            (*_result).type_0 = T_AlterTableCmd;
+            (*_result).tag = T_AlterTableCmd;
             _result
         }) as *mut AlterTableCmd;
         (*cmd).subtype = AT_AlterColumnGenericOptions;
@@ -3631,7 +3205,7 @@ unsafe extern "C" fn transformColumnDefinition(
         (*cmd).missing_ok = false;
         stmt = ({
             let mut _result: *mut Node = 0 as *mut Node;
-            (*_result).type_0 = T_AlterTableStmt;
+            (*_result).tag = T_AlterTableStmt;
             _result
         }) as *mut AlterTableStmt;
         (*stmt).relation = (*cxt).relation;
@@ -3647,7 +3221,7 @@ unsafe extern "C" fn transformTableConstraint(
 ) {
     match (*constraint).contype as libc::c_uint {
         6 => {
-            if (*cxt).isforeign != 0 {
+            if (*cxt).isforeign {
                 let elevel_: libc::c_int = 21 as libc::c_int;
                 let mut __error: libc::c_int = 0;
                 if elevel_ >= 21 as libc::c_int {
@@ -3657,7 +3231,7 @@ unsafe extern "C" fn transformTableConstraint(
             (*cxt).ixconstraints = lappend((*cxt).ixconstraints, constraint as *mut libc::c_void);
         }
         7 => {
-            if (*cxt).isforeign != 0 {
+            if (*cxt).isforeign {
                 let elevel__0: libc::c_int = 21 as libc::c_int;
                 let mut __error_0: libc::c_int = 0;
                 if elevel__0 >= 21 as libc::c_int {
@@ -3667,14 +3241,14 @@ unsafe extern "C" fn transformTableConstraint(
             (*cxt).ixconstraints = lappend((*cxt).ixconstraints, constraint as *mut libc::c_void);
         }
         8 => {
-            if (*cxt).isforeign != 0 {
+            if (*cxt).isforeign {
                 let elevel__1: libc::c_int = 21 as libc::c_int;
                 let mut __error_1: libc::c_int = 0;
                 if elevel__1 >= 21 as libc::c_int {
                     abort();
                 }
             }
-            if (*cxt).ispartitioned != 0 {
+            if (*cxt).ispartitioned {
                 let elevel__2: libc::c_int = 21 as libc::c_int;
                 let mut __error_2: libc::c_int = 0;
                 if elevel__2 >= 21 as libc::c_int {
@@ -3687,7 +3261,7 @@ unsafe extern "C" fn transformTableConstraint(
             (*cxt).ckconstraints = lappend((*cxt).ckconstraints, constraint as *mut libc::c_void);
         }
         9 => {
-            if (*cxt).isforeign != 0 {
+            if (*cxt).isforeign {
                 let elevel__3: libc::c_int = 21 as libc::c_int;
                 let mut __error_3: libc::c_int = 0;
                 if elevel__3 >= 21 as libc::c_int {
@@ -3760,7 +3334,7 @@ unsafe extern "C" fn transformOfType(
         if !((*attr).attisdropped != 0) {
             n = ({
                 let mut _result: *mut Node = 0 as *mut Node;
-                (*_result).type_0 = T_ColumnDef;
+                (*_result).tag = T_ColumnDef;
                 _result
             }) as *mut ColumnDef;
             (*n).colname = pstrdup(((*attr).attname.data).as_mut_ptr());
@@ -3983,7 +3557,7 @@ unsafe extern "C" fn transformIndexConstraints(mut cxt: *mut CreateStmtContext) 
                     k__state.i;
                 }
             }
-            if keep != 0 {
+            if keep {
                 finalindexlist = lappend(finalindexlist, index as *mut libc::c_void);
             }
         }
@@ -4003,7 +3577,7 @@ unsafe extern "C" fn transformCheckConstraints(
     if ((*cxt).ckconstraints).is_null() {
         return;
     }
-    if skipValidation != 0 {
+    if skipValidation {
         let mut ckclist__state: ForEachState = {
             let mut init = ForEachState {
                 l: (*cxt).ckconstraints,
@@ -4037,7 +3611,7 @@ unsafe extern "C" fn transformFKConstraints(
     if ((*cxt).fkconstraints).is_null() {
         return;
     }
-    if skipValidation != 0 {
+    if skipValidation {
         let mut fkclist__state: ForEachState = {
             let mut init = ForEachState {
                 l: (*cxt).fkconstraints,
@@ -4061,10 +3635,10 @@ unsafe extern "C" fn transformFKConstraints(
             fkclist__state.i;
         }
     }
-    if isAddConstraint == 0 {
+    if !isAddConstraint {
         let mut alterstmt: *mut AlterTableStmt = ({
             let mut _result: *mut Node = 0 as *mut Node;
-            (*_result).type_0 = T_AlterTableStmt;
+            (*_result).tag = T_AlterTableStmt;
             _result
         }) as *mut AlterTableStmt;
         (*alterstmt).relation = (*cxt).relation;
@@ -4091,7 +3665,7 @@ unsafe extern "C" fn transformFKConstraints(
             let mut constraint_0: *mut Constraint = (*fkclist).ptr_value as *mut Constraint;
             let mut altercmd: *mut AlterTableCmd = ({
                 let mut _result: *mut Node = 0 as *mut Node;
-                (*_result).type_0 = T_AlterTableCmd;
+                (*_result).tag = T_AlterTableCmd;
                 _result
             }) as *mut AlterTableCmd;
             (*altercmd).subtype = AT_AddConstraint;
@@ -4114,7 +3688,7 @@ pub unsafe extern "C" fn transformIndexStmt(
     let mut nsitem: *mut ParseNamespaceItem = 0 as *mut ParseNamespaceItem;
     let mut l: *mut ListCell = 0 as *mut ListCell;
     let mut rel: Relation = 0 as *mut RelationData;
-    if (*stmt).transformed != 0 {
+    if (*stmt).transformed {
         return stmt;
     }
     stmt = copyObjectImpl(stmt as *const libc::c_void) as *mut IndexStmt;
@@ -4195,7 +3769,7 @@ unsafe extern "C" fn transformConstraintAttrs(
     } != 0
     {
         let mut con: *mut Constraint = (*clist).ptr_value as *mut Constraint;
-        if !((*(con as *const Node)).type_0 as libc::c_uint
+        if !((*(con as *const Node)).tag as libc::c_uint
             == T_Constraint as libc::c_int as libc::c_uint)
         {
             let elevel_: libc::c_int = 21 as libc::c_int;
@@ -4203,7 +3777,7 @@ unsafe extern "C" fn transformConstraintAttrs(
             if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                 errmsg_internal(
                     b"unrecognized node type: %d\0" as *const u8 as *const libc::c_char,
-                    (*(con as *const Node)).type_0 as libc::c_int,
+                    (*(con as *const Node)).tag as libc::c_int,
                 );
                 errfinish(
                     b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_utilcmd.c\0"
@@ -4234,7 +3808,7 @@ unsafe extern "C" fn transformConstraintAttrs(
                         abort();
                     }
                 }
-                if saw_deferrability != 0 {
+                if saw_deferrability {
                     let elevel__1: libc::c_int = 21 as libc::c_int;
                     let mut __error_1: libc::c_int = 0;
                     if elevel__1 >= 21 as libc::c_int {
@@ -4261,7 +3835,7 @@ unsafe extern "C" fn transformConstraintAttrs(
                         abort();
                     }
                 }
-                if saw_deferrability != 0 {
+                if saw_deferrability {
                     let elevel__3: libc::c_int = 21 as libc::c_int;
                     let mut __error_3: libc::c_int = 0;
                     if elevel__3 >= 21 as libc::c_int {
@@ -4297,7 +3871,7 @@ unsafe extern "C" fn transformConstraintAttrs(
                         abort();
                     }
                 }
-                if saw_initially != 0 {
+                if saw_initially {
                     let elevel__6: libc::c_int = 21 as libc::c_int;
                     let mut __error_6: libc::c_int = 0;
                     if elevel__6 >= 21 as libc::c_int {
@@ -4333,7 +3907,7 @@ unsafe extern "C" fn transformConstraintAttrs(
                         abort();
                     }
                 }
-                if saw_initially != 0 {
+                if saw_initially {
                     let elevel__9: libc::c_int = 21 as libc::c_int;
                     let mut __error_9: libc::c_int = 0;
                     if elevel__9 >= 21 as libc::c_int {
@@ -4418,7 +3992,7 @@ pub unsafe extern "C" fn transformCreateSchemaStmt(mut stmt: *mut CreateSchemaSt
     } != 0
     {
         let mut element: *mut Node = (*elements).ptr_value as *mut Node;
-        match (*(element as *const Node)).type_0 as libc::c_uint {
+        match (*(element as *const Node)).tag as libc::c_uint {
             273 => {
                 let mut elp: *mut CreateSeqStmt = element as *mut CreateSeqStmt;
                 setSchemaName(cxt.schemaname, &mut (*(*elp).sequence).schemaname);
@@ -4453,7 +4027,7 @@ pub unsafe extern "C" fn transformCreateSchemaStmt(mut stmt: *mut CreateSchemaSt
                 if errstart(elevel_, 0 as *const libc::c_char) != 0 {
                     errmsg_internal(
                         b"unrecognized node type: %d\0" as *const u8 as *const libc::c_char,
-                        (*(element as *const Node)).type_0 as libc::c_int,
+                        (*(element as *const Node)).tag as libc::c_int,
                     );
                     errfinish(
                         b"/Users/conrad/Documents/code/pg-parse-rs/postgres/parser/parse_utilcmd.c\0"
@@ -4531,7 +4105,7 @@ pub unsafe extern "C" fn transformPartitionBound(
     let mut partnatts: libc::c_int = get_partition_natts(key);
     let mut partexprs: *mut List = get_partition_exprs(key);
     result_spec = copyObjectImpl(spec as *const libc::c_void) as *mut PartitionBoundSpec;
-    if (*spec).is_default != 0 {
+    if (*spec).is_default {
         if strategy as libc::c_int == 'h' as i32 {
             let elevel_: libc::c_int = 21 as libc::c_int;
             let mut __error: libc::c_int = 0;
@@ -4737,14 +4311,14 @@ unsafe extern "C" fn transformPartitionRangeBounds(
     {
         let mut expr: *mut Node = (*lc).ptr_value as *mut Node;
         let mut prd: *mut PartitionRangeDatum = 0 as *mut PartitionRangeDatum;
-        if (*(expr as *const Node)).type_0 as libc::c_uint
+        if (*(expr as *const Node)).tag as libc::c_uint
             == T_ColumnRef as libc::c_int as libc::c_uint
         {
             let mut cref: *mut ColumnRef = expr as *mut ColumnRef;
             let mut cname: *mut libc::c_char = 0 as *mut libc::c_char;
             if list_length((*cref).fields) == 1 as libc::c_int
                 && (*((*list_nth_cell((*cref).fields, 0 as libc::c_int)).ptr_value as *const Node))
-                    .type_0 as libc::c_uint
+                    .tag as libc::c_uint
                     == T_String as libc::c_int as libc::c_uint
             {
                 cname = (*((*list_nth_cell((*cref).fields, 0 as libc::c_int)).ptr_value
@@ -4758,7 +4332,7 @@ unsafe extern "C" fn transformPartitionRangeBounds(
                 {
                     prd = ({
                         let mut _result: *mut Node = 0 as *mut Node;
-                        (*_result).type_0 = T_PartitionRangeDatum;
+                        (*_result).tag = T_PartitionRangeDatum;
                         _result
                     }) as *mut PartitionRangeDatum;
                     (*prd).kind = PARTITION_RANGE_DATUM_MINVALUE;
@@ -4768,7 +4342,7 @@ unsafe extern "C" fn transformPartitionRangeBounds(
                 {
                     prd = ({
                         let mut _result: *mut Node = 0 as *mut Node;
-                        (*_result).type_0 = T_PartitionRangeDatum;
+                        (*_result).tag = T_PartitionRangeDatum;
                         _result
                     }) as *mut PartitionRangeDatum;
                     (*prd).kind = PARTITION_RANGE_DATUM_MAXVALUE;
@@ -4812,7 +4386,7 @@ unsafe extern "C" fn transformPartitionRangeBounds(
                 coltypmod,
                 partcollation,
             );
-            if (*value).constisnull != 0 {
+            if (*value).constisnull {
                 let elevel_: libc::c_int = 21 as libc::c_int;
                 let mut __error: libc::c_int = 0;
                 if elevel_ >= 21 as libc::c_int {
@@ -4821,7 +4395,7 @@ unsafe extern "C" fn transformPartitionRangeBounds(
             }
             prd = ({
                 let mut _result: *mut Node = 0 as *mut Node;
-                (*_result).type_0 = T_PartitionRangeDatum;
+                (*_result).tag = T_PartitionRangeDatum;
                 _result
             }) as *mut PartitionRangeDatum;
             (*prd).kind = PARTITION_RANGE_DATUM_VALUE;
@@ -4909,12 +4483,11 @@ unsafe extern "C" fn transformPartitionBoundValue(
             abort();
         }
     }
-    if !((*(value as *const Node)).type_0 as libc::c_uint == T_Const as libc::c_int as libc::c_uint)
-    {
+    if !((*(value as *const Node)).tag as libc::c_uint == T_Const as libc::c_int as libc::c_uint) {
         assign_expr_collations(pstate, value);
         value = expression_planner(value as *mut Expr) as *mut Node;
         value = evaluate_expr(value as *mut Expr, colType, colTypmod, partCollation) as *mut Node;
-        if !((*(value as *const Node)).type_0 as libc::c_uint
+        if !((*(value as *const Node)).tag as libc::c_uint
             == T_Const as libc::c_int as libc::c_uint)
         {
             let elevel__0: libc::c_int = 21 as libc::c_int;

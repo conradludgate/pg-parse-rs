@@ -164,17 +164,11 @@ pub unsafe extern "C" fn truncate_identifier(
 ) {
     if len >= 64 as libc::c_int {
         len = pg_mbcliplen(ident, len, 64 as libc::c_int - 1 as libc::c_int);
-        if warn != 0 {
+        if warn {
             let elevel_: libc::c_int = 18 as libc::c_int;
             let mut __error: libc::c_int = 0;
             if errstart(elevel_, 0 as *const libc::c_char) != 0 {
-                errcode(
-                    ((4) & 0x3f as libc::c_int)
-                        + (((2) & 0x3f as libc::c_int) << 6 as libc::c_int)
-                        + (((6) & 0x3f as libc::c_int) << 12 as libc::c_int)
-                        + (((2) & 0x3f as libc::c_int) << 18 as libc::c_int)
-                        + (((2) & 0x3f as libc::c_int) << 24 as libc::c_int),
-                );
+                errcode(ERRCODE_NAME_TOO_LONG);
                 errmsg(
                     b"identifier \"%s\" will be truncated to \"%.*s\"\0" as *const u8
                         as *const libc::c_char,

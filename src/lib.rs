@@ -31,7 +31,9 @@ extern "C" {
     fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
     fn errstart(elevel: libc::c_int, domain: *const libc::c_char) -> bool;
     fn errfinish(filename: *const libc::c_char, lineno: libc::c_int, funcname: *const libc::c_char);
+    fn errhint(fmt: *const libc::c_char, _: ...) -> libc::c_int;
     fn errmsg_internal(fmt: *const libc::c_char, _: ...) -> libc::c_int;
+    fn errmsg(fmt: *const libc::c_char, _: ...) -> libc::c_int;
     fn palloc(size: usize) -> *mut libc::c_void;
     fn palloc0(size: usize) -> *mut libc::c_void;
     fn pfree(pointer: *mut libc::c_void);
@@ -67,7 +69,7 @@ extern "C" {
     ) -> *mut Bitmapset;
     fn check_stack_depth();
     fn makeSimpleA_Expr(
-        kind: A_Expr_Kind,
+        kind: ExprKind,
         name: *mut libc::c_char,
         lexpr: *mut Node,
         rexpr: *mut Node,
@@ -325,6 +327,7 @@ pub type Relation = *mut RelationData;
 pub type ParseExprKind = i32;
 pub type JoinType = libc::c_uint;
 
+#[derive(Copy, Clone)]
 #[repr(C)]
 #[allow(non_camel_case_types)]
 enum NodeTag {
@@ -832,6 +835,7 @@ pub struct Node {
 }
 
 mod analyze;
+mod errcodes;
 mod gram;
 mod parse_agg;
 mod parse_clause;
@@ -852,6 +856,7 @@ mod parser;
 mod scansup;
 
 use analyze::*;
+use errcodes::*;
 use gram::*;
 use parse_agg::*;
 use parse_clause::*;
