@@ -327,7 +327,7 @@ pub type Relation = *mut RelationData;
 pub type ParseExprKind = i32;
 pub type JoinType = libc::c_uint;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 #[repr(C)]
 #[allow(non_camel_case_types)]
 enum NodeTag {

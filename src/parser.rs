@@ -165,30 +165,30 @@ pub type OnConflictAction = libc::c_uint;
 pub const ONCONFLICT_UPDATE: OnConflictAction = 2;
 pub const ONCONFLICT_NOTHING: OnConflictAction = 1;
 pub const ONCONFLICT_NONE: OnConflictAction = 0;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct Alias {
-    pub type_0: NodeTag,
-    pub aliasname: *mut libc::c_char,
-    pub colnames: *mut List,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct Alias {
+//     pub type_0: NodeTag,
+//     pub aliasname: *mut libc::c_char,
+//     pub colnames: *mut List,
+// }
 pub type OnCommitAction = libc::c_uint;
 pub const ONCOMMIT_DROP: OnCommitAction = 3;
 pub const ONCOMMIT_DELETE_ROWS: OnCommitAction = 2;
 pub const ONCOMMIT_PRESERVE_ROWS: OnCommitAction = 1;
 pub const ONCOMMIT_NOOP: OnCommitAction = 0;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct RangeVar {
-    pub type_0: NodeTag,
-    pub catalogname: *mut libc::c_char,
-    pub schemaname: *mut libc::c_char,
-    pub relname: *mut libc::c_char,
-    pub inh: bool,
-    pub relpersistence: libc::c_char,
-    pub alias: *mut Alias,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct RangeVar {
+//     pub type_0: NodeTag,
+//     pub catalogname: *mut libc::c_char,
+//     pub schemaname: *mut libc::c_char,
+//     pub relname: *mut libc::c_char,
+//     pub inh: bool,
+//     pub relpersistence: libc::c_char,
+//     pub alias: *mut Alias,
+//     pub location: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct IntoClause {
@@ -280,19 +280,19 @@ pub struct RoleSpec {
     pub rolename: *mut libc::c_char,
     pub location: libc::c_int,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct WindowDef {
-    pub type_0: NodeTag,
-    pub name: *mut libc::c_char,
-    pub refname: *mut libc::c_char,
-    pub partitionClause: *mut List,
-    pub orderClause: *mut List,
-    pub frameOptions: libc::c_int,
-    pub startOffset: *mut Node,
-    pub endOffset: *mut Node,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct WindowDef {
+//     pub type_0: NodeTag,
+//     pub name: *mut libc::c_char,
+//     pub refname: *mut libc::c_char,
+//     pub partitionClause: *mut List,
+//     pub orderClause: *mut List,
+//     pub frameOptions: libc::c_int,
+//     pub startOffset: *mut Node,
+//     pub endOffset: *mut Node,
+//     pub location: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct A_Indices {
@@ -301,15 +301,15 @@ pub struct A_Indices {
     pub lidx: *mut Node,
     pub uidx: *mut Node,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct ResTarget {
-    pub type_0: NodeTag,
-    pub name: *mut libc::c_char,
-    pub indirection: *mut List,
-    pub val: *mut Node,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct ResTarget {
+//     pub type_0: NodeTag,
+//     pub name: *mut libc::c_char,
+//     pub indirection: *mut List,
+//     pub val: *mut Node,
+//     pub location: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct SortBy {
@@ -338,73 +338,73 @@ pub const DEFELEM_DROP: DefElemAction = 3;
 pub const DEFELEM_ADD: DefElemAction = 2;
 pub const DEFELEM_SET: DefElemAction = 1;
 pub const DEFELEM_UNSPEC: DefElemAction = 0;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct DefElem {
-    pub type_0: NodeTag,
-    pub defnamespace: *mut libc::c_char,
-    pub defname: *mut libc::c_char,
-    pub arg: *mut Node,
-    pub defaction: DefElemAction,
-    pub location: libc::c_int,
-}
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct PartitionElem {
-    pub type_0: NodeTag,
-    pub name: *mut libc::c_char,
-    pub expr: *mut Node,
-    pub collation: *mut List,
-    pub opclass: *mut List,
-    pub location: libc::c_int,
-}
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct PartitionSpec {
-    pub type_0: NodeTag,
-    pub strategy: *mut libc::c_char,
-    pub partParams: *mut List,
-    pub location: libc::c_int,
-}
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct WithClause {
-    pub type_0: NodeTag,
-    pub ctes: *mut List,
-    pub recursive: bool,
-    pub location: libc::c_int,
-}
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct InferClause {
-    pub type_0: NodeTag,
-    pub indexElems: *mut List,
-    pub whereClause: *mut Node,
-    pub conname: *mut libc::c_char,
-    pub location: libc::c_int,
-}
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct OnConflictClause {
-    pub type_0: NodeTag,
-    pub action: OnConflictAction,
-    pub infer: *mut InferClause,
-    pub targetList: *mut List,
-    pub whereClause: *mut Node,
-    pub location: libc::c_int,
-}
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct InsertStmt {
-    pub type_0: NodeTag,
-    pub relation: *mut RangeVar,
-    pub cols: *mut List,
-    pub selectStmt: *mut Node,
-    pub onConflictClause: *mut OnConflictClause,
-    pub returningList: *mut List,
-    pub withClause: *mut WithClause,
-    pub override_0: OverridingKind,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct DefElem {
+//     pub type_0: NodeTag,
+//     pub defnamespace: *mut libc::c_char,
+//     pub defname: *mut libc::c_char,
+//     pub arg: *mut Node,
+//     pub defaction: DefElemAction,
+//     pub location: libc::c_int,
+// }
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct PartitionElem {
+//     pub type_0: NodeTag,
+//     pub name: *mut libc::c_char,
+//     pub expr: *mut Node,
+//     pub collation: *mut List,
+//     pub opclass: *mut List,
+//     pub location: libc::c_int,
+// }
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct PartitionSpec {
+//     pub type_0: NodeTag,
+//     pub strategy: *mut libc::c_char,
+//     pub partParams: *mut List,
+//     pub location: libc::c_int,
+// }
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct WithClause {
+//     pub type_0: NodeTag,
+//     pub ctes: *mut List,
+//     pub recursive: bool,
+//     pub location: libc::c_int,
+// }
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct InferClause {
+//     pub type_0: NodeTag,
+//     pub indexElems: *mut List,
+//     pub whereClause: *mut Node,
+//     pub conname: *mut libc::c_char,
+//     pub location: libc::c_int,
+// }
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct OnConflictClause {
+//     pub type_0: NodeTag,
+//     pub action: OnConflictAction,
+//     pub infer: *mut InferClause,
+//     pub targetList: *mut List,
+//     pub whereClause: *mut Node,
+//     pub location: libc::c_int,
+// }
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct InsertStmt {
+//     pub type_0: NodeTag,
+//     pub relation: *mut RangeVar,
+//     pub cols: *mut List,
+//     pub selectStmt: *mut Node,
+//     pub onConflictClause: *mut OnConflictClause,
+//     pub returningList: *mut List,
+//     pub withClause: *mut WithClause,
+//     pub override_0: OverridingKind,
+// }
 pub type ObjectType = libc::c_uint;
 pub const OBJECT_VIEW: ObjectType = 49;
 pub const OBJECT_USER_MAPPING: ObjectType = 48;
@@ -634,18 +634,15 @@ pub unsafe extern "C" fn isxdigit(mut _c: libc::c_int) -> libc::c_int {
 }
 #[inline]
 unsafe extern "C" fn is_valid_unicode_codepoint(mut c: pg_wchar) -> bool {
-    return (c > 0 as libc::c_int as pg_wchar && c <= 0x10ffff as libc::c_int as pg_wchar)
-        as libc::c_int as bool;
+    (c > 0 as libc::c_int as pg_wchar && c <= 0x10ffff as libc::c_int as pg_wchar)
 }
 #[inline]
 unsafe extern "C" fn is_utf16_surrogate_first(mut c: pg_wchar) -> bool {
-    return (c >= 0xd800 as libc::c_int as pg_wchar && c <= 0xdbff as libc::c_int as pg_wchar)
-        as libc::c_int as bool;
+    (c >= 0xd800 as libc::c_int as pg_wchar && c <= 0xdbff as libc::c_int as pg_wchar)
 }
 #[inline]
 unsafe extern "C" fn is_utf16_surrogate_second(mut c: pg_wchar) -> bool {
-    return (c >= 0xdc00 as libc::c_int as pg_wchar && c <= 0xdfff as libc::c_int as pg_wchar)
-        as libc::c_int as bool;
+    (c >= 0xdc00 as libc::c_int as pg_wchar && c <= 0xdfff as libc::c_int as pg_wchar)
 }
 #[inline]
 unsafe extern "C" fn surrogate_pair_to_codepoint(

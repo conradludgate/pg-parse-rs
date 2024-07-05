@@ -172,30 +172,30 @@ pub struct ForEachState {
     pub l: *const List,
     pub i: libc::c_int,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct Alias {
-    pub type_0: NodeTag,
-    pub aliasname: *mut libc::c_char,
-    pub colnames: *mut List,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct Alias {
+//     pub type_0: NodeTag,
+//     pub aliasname: *mut libc::c_char,
+//     pub colnames: *mut List,
+// }
 pub type OnCommitAction = libc::c_uint;
 pub const ONCOMMIT_DROP: OnCommitAction = 3;
 pub const ONCOMMIT_DELETE_ROWS: OnCommitAction = 2;
 pub const ONCOMMIT_PRESERVE_ROWS: OnCommitAction = 1;
 pub const ONCOMMIT_NOOP: OnCommitAction = 0;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct RangeVar {
-    pub type_0: NodeTag,
-    pub catalogname: *mut libc::c_char,
-    pub schemaname: *mut libc::c_char,
-    pub relname: *mut libc::c_char,
-    pub inh: bool,
-    pub relpersistence: libc::c_char,
-    pub alias: *mut Alias,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct RangeVar {
+//     pub type_0: NodeTag,
+//     pub catalogname: *mut libc::c_char,
+//     pub schemaname: *mut libc::c_char,
+//     pub relname: *mut libc::c_char,
+//     pub inh: bool,
+//     pub relpersistence: libc::c_char,
+//     pub alias: *mut Alias,
+//     pub location: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct TableFunc {
@@ -336,48 +336,48 @@ pub const QSRC_INSTEAD_RULE: QuerySource = 2;
 pub const QSRC_PARSER: QuerySource = 1;
 pub const QSRC_ORIGINAL: QuerySource = 0;
 pub type AclMode = u32;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct Query {
-    pub type_0: NodeTag,
-    pub commandType: CmdType,
-    pub querySource: QuerySource,
-    pub queryId: uint64,
-    pub canSetTag: bool,
-    pub utilityStmt: *mut Node,
-    pub resultRelation: libc::c_int,
-    pub hasAggs: bool,
-    pub hasWindowFuncs: bool,
-    pub hasTargetSRFs: bool,
-    pub hasSubLinks: bool,
-    pub hasDistinctOn: bool,
-    pub hasRecursive: bool,
-    pub hasModifyingCTE: bool,
-    pub hasForUpdate: bool,
-    pub hasRowSecurity: bool,
-    pub cteList: *mut List,
-    pub rtable: *mut List,
-    pub jointree: *mut FromExpr,
-    pub targetList: *mut List,
-    pub override_0: OverridingKind,
-    pub onConflict: *mut OnConflictExpr,
-    pub returningList: *mut List,
-    pub groupClause: *mut List,
-    pub groupingSets: *mut List,
-    pub havingQual: *mut Node,
-    pub windowClause: *mut List,
-    pub distinctClause: *mut List,
-    pub sortClause: *mut List,
-    pub limitOffset: *mut Node,
-    pub limitCount: *mut Node,
-    pub limitOption: LimitOption,
-    pub rowMarks: *mut List,
-    pub setOperations: *mut Node,
-    pub constraintDeps: *mut List,
-    pub withCheckOptions: *mut List,
-    pub stmt_location: libc::c_int,
-    pub stmt_len: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct Query {
+//     pub type_0: NodeTag,
+//     pub commandType: CmdType,
+//     pub querySource: QuerySource,
+//     pub queryId: uint64,
+//     pub canSetTag: bool,
+//     pub utilityStmt: *mut Node,
+//     pub resultRelation: libc::c_int,
+//     pub hasAggs: bool,
+//     pub hasWindowFuncs: bool,
+//     pub hasTargetSRFs: bool,
+//     pub hasSubLinks: bool,
+//     pub hasDistinctOn: bool,
+//     pub hasRecursive: bool,
+//     pub hasModifyingCTE: bool,
+//     pub hasForUpdate: bool,
+//     pub hasRowSecurity: bool,
+//     pub cteList: *mut List,
+//     pub rtable: *mut List,
+//     pub jointree: *mut FromExpr,
+//     pub targetList: *mut List,
+//     pub override_0: OverridingKind,
+//     pub onConflict: *mut OnConflictExpr,
+//     pub returningList: *mut List,
+//     pub groupClause: *mut List,
+//     pub groupingSets: *mut List,
+//     pub havingQual: *mut Node,
+//     pub windowClause: *mut List,
+//     pub distinctClause: *mut List,
+//     pub sortClause: *mut List,
+//     pub limitOffset: *mut Node,
+//     pub limitCount: *mut Node,
+//     pub limitOption: LimitOption,
+//     pub rowMarks: *mut List,
+//     pub setOperations: *mut Node,
+//     pub constraintDeps: *mut List,
+//     pub withCheckOptions: *mut List,
+//     pub stmt_location: libc::c_int,
+//     pub stmt_len: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ColumnRef {
@@ -451,14 +451,14 @@ pub struct TableSampleClause {
     pub args: *mut List,
     pub repeatable: *mut Expr,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct WithClause {
-    pub type_0: NodeTag,
-    pub ctes: *mut List,
-    pub recursive: bool,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct WithClause {
+//     pub type_0: NodeTag,
+//     pub ctes: *mut List,
+//     pub recursive: bool,
+//     pub location: libc::c_int,
+// }
 pub type CTEMaterialize = libc::c_uint;
 pub const CTEMaterializeNever: CTEMaterialize = 2;
 pub const CTEMaterializeAlways: CTEMaterialize = 1;
@@ -487,24 +487,24 @@ pub struct CTECycleClause {
     pub cycle_mark_collation: Oid,
     pub cycle_mark_neop: Oid,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct CommonTableExpr {
-    pub type_0: NodeTag,
-    pub ctename: *mut libc::c_char,
-    pub aliascolnames: *mut List,
-    pub ctematerialized: CTEMaterialize,
-    pub ctequery: *mut Node,
-    pub search_clause: *mut CTESearchClause,
-    pub cycle_clause: *mut CTECycleClause,
-    pub location: libc::c_int,
-    pub cterecursive: bool,
-    pub cterefcount: libc::c_int,
-    pub ctecolnames: *mut List,
-    pub ctecoltypes: *mut List,
-    pub ctecoltypmods: *mut List,
-    pub ctecolcollations: *mut List,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct CommonTableExpr {
+//     pub type_0: NodeTag,
+//     pub ctename: *mut libc::c_char,
+//     pub aliascolnames: *mut List,
+//     pub ctematerialized: CTEMaterialize,
+//     pub ctequery: *mut Node,
+//     pub search_clause: *mut CTESearchClause,
+//     pub cycle_clause: *mut CTECycleClause,
+//     pub location: libc::c_int,
+//     pub cterecursive: bool,
+//     pub cterefcount: libc::c_int,
+//     pub ctecolnames: *mut List,
+//     pub ctecoltypes: *mut List,
+//     pub ctecoltypmods: *mut List,
+//     pub ctecolcollations: *mut List,
+// }
 pub type SetOperation = libc::c_uint;
 pub const SETOP_EXCEPT: SetOperation = 3;
 pub const SETOP_INTERSECT: SetOperation = 2;
@@ -895,10 +895,9 @@ pub unsafe extern "C" fn transformWithClause(
         let mut i: libc::c_int = 0;
         cstate.pstate = pstate;
         cstate.numitems = list_length((*withClause).ctes);
-        cstate.items = palloc0(
-            (cstate.numitems as libc::c_ulong)
-                .wrapping_mul(::core::mem::size_of::<CteItem>() as libc::c_ulong),
-        ) as *mut CteItem;
+        cstate.items =
+            palloc0((cstate.numitems as usize).wrapping_mul(::core::mem::size_of::<CteItem>()))
+                as *mut CteItem;
         i = 0 as libc::c_int;
         let mut lc__state_0: ForEachState = {
             let mut init = ForEachState {
@@ -1018,7 +1017,7 @@ unsafe extern "C" fn analyzeCTE(mut pstate: *mut ParseState, mut cte: *mut Commo
         }
     }
     (*query).canSetTag = false;
-    if (*cte).cterecursive == 0 {
+    if !(*cte).cterecursive {
         analyzeCTETargetList(
             pstate,
             cte,
@@ -1064,7 +1063,7 @@ unsafe extern "C" fn analyzeCTE(mut pstate: *mut ParseState, mut cte: *mut Commo
         {
             let mut te: *mut TargetEntry = (*lctlist).ptr_value as *mut TargetEntry;
             let mut texpr: *mut Node = 0 as *mut Node;
-            if !((*te).resjunk != 0) {
+            if !(*te).resjunk {
                 varattno += 1;
                 varattno;
                 if lctyp.is_null() || lctypmod.is_null() || lccoll.is_null() {

@@ -1167,7 +1167,7 @@ pub struct OnConflictExpr {
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Value {
-    pub type_0: NodeTag,
+    pub tag: NodeTag,
     pub val: ValUnion,
 }
 #[derive(Copy, Clone)]

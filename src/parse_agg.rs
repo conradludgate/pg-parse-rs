@@ -622,13 +622,13 @@ pub struct ForBothState {
 }
 pub type list_sort_comparator =
     Option<unsafe extern "C" fn(*const ListCell, *const ListCell) -> libc::c_int>;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct Alias {
-    pub type_0: NodeTag,
-    pub aliasname: *mut libc::c_char,
-    pub colnames: *mut List,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct Alias {
+//     pub type_0: NodeTag,
+//     pub aliasname: *mut libc::c_char,
+//     pub colnames: *mut List,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct TableFunc {
@@ -731,7 +731,7 @@ pub struct WindowFunc {
     pub winagg: bool,
     pub location: libc::c_int,
 }
-pub type CoercionForm = libc::c_uint;
+// pub type CoercionForm = libc::c_uint;
 pub const COERCE_SQL_SYNTAX: CoercionForm = 3;
 pub const COERCE_IMPLICIT_CAST: CoercionForm = 2;
 pub const COERCE_EXPLICIT_CAST: CoercionForm = 1;
@@ -815,48 +815,48 @@ pub const SORTBY_NULLS_LAST: SortByNulls = 2;
 pub const SORTBY_NULLS_FIRST: SortByNulls = 1;
 pub const SORTBY_NULLS_DEFAULT: SortByNulls = 0;
 pub type AclMode = u32;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct Query {
-    pub type_0: NodeTag,
-    pub commandType: CmdType,
-    pub querySource: QuerySource,
-    pub queryId: uint64,
-    pub canSetTag: bool,
-    pub utilityStmt: *mut Node,
-    pub resultRelation: libc::c_int,
-    pub hasAggs: bool,
-    pub hasWindowFuncs: bool,
-    pub hasTargetSRFs: bool,
-    pub hasSubLinks: bool,
-    pub hasDistinctOn: bool,
-    pub hasRecursive: bool,
-    pub hasModifyingCTE: bool,
-    pub hasForUpdate: bool,
-    pub hasRowSecurity: bool,
-    pub cteList: *mut List,
-    pub rtable: *mut List,
-    pub jointree: *mut FromExpr,
-    pub targetList: *mut List,
-    pub override_0: OverridingKind,
-    pub onConflict: *mut OnConflictExpr,
-    pub returningList: *mut List,
-    pub groupClause: *mut List,
-    pub groupingSets: *mut List,
-    pub havingQual: *mut Node,
-    pub windowClause: *mut List,
-    pub distinctClause: *mut List,
-    pub sortClause: *mut List,
-    pub limitOffset: *mut Node,
-    pub limitCount: *mut Node,
-    pub limitOption: LimitOption,
-    pub rowMarks: *mut List,
-    pub setOperations: *mut Node,
-    pub constraintDeps: *mut List,
-    pub withCheckOptions: *mut List,
-    pub stmt_location: libc::c_int,
-    pub stmt_len: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct Query {
+//     pub type_0: NodeTag,
+//     pub commandType: CmdType,
+//     pub querySource: QuerySource,
+//     pub queryId: uint64,
+//     pub canSetTag: bool,
+//     pub utilityStmt: *mut Node,
+//     pub resultRelation: libc::c_int,
+//     pub hasAggs: bool,
+//     pub hasWindowFuncs: bool,
+//     pub hasTargetSRFs: bool,
+//     pub hasSubLinks: bool,
+//     pub hasDistinctOn: bool,
+//     pub hasRecursive: bool,
+//     pub hasModifyingCTE: bool,
+//     pub hasForUpdate: bool,
+//     pub hasRowSecurity: bool,
+//     pub cteList: *mut List,
+//     pub rtable: *mut List,
+//     pub jointree: *mut FromExpr,
+//     pub targetList: *mut List,
+//     pub override_0: OverridingKind,
+//     pub onConflict: *mut OnConflictExpr,
+//     pub returningList: *mut List,
+//     pub groupClause: *mut List,
+//     pub groupingSets: *mut List,
+//     pub havingQual: *mut Node,
+//     pub windowClause: *mut List,
+//     pub distinctClause: *mut List,
+//     pub sortClause: *mut List,
+//     pub limitOffset: *mut Node,
+//     pub limitCount: *mut Node,
+//     pub limitOption: LimitOption,
+//     pub rowMarks: *mut List,
+//     pub setOperations: *mut Node,
+//     pub constraintDeps: *mut List,
+//     pub withCheckOptions: *mut List,
+//     pub stmt_location: libc::c_int,
+//     pub stmt_len: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct ColumnRef {
@@ -871,19 +871,19 @@ pub struct ParamRef {
     pub number: libc::c_int,
     pub location: libc::c_int,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct WindowDef {
-    pub type_0: NodeTag,
-    pub name: *mut libc::c_char,
-    pub refname: *mut libc::c_char,
-    pub partitionClause: *mut List,
-    pub orderClause: *mut List,
-    pub frameOptions: libc::c_int,
-    pub startOffset: *mut Node,
-    pub endOffset: *mut Node,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct WindowDef {
+//     pub type_0: NodeTag,
+//     pub name: *mut libc::c_char,
+//     pub refname: *mut libc::c_char,
+//     pub partitionClause: *mut List,
+//     pub orderClause: *mut List,
+//     pub frameOptions: libc::c_int,
+//     pub startOffset: *mut Node,
+//     pub endOffset: *mut Node,
+//     pub location: libc::c_int,
+// }
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct SortBy {
@@ -953,30 +953,30 @@ pub struct TableSampleClause {
     pub args: *mut List,
     pub repeatable: *mut Expr,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct SortGroupClause {
-    pub type_0: NodeTag,
-    pub tleSortGroupRef: Index,
-    pub eqop: Oid,
-    pub sortop: Oid,
-    pub nulls_first: bool,
-    pub hashable: bool,
-}
-pub type GroupingSetKind = libc::c_uint;
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct SortGroupClause {
+//     pub type_0: NodeTag,
+//     pub tleSortGroupRef: Index,
+//     pub eqop: Oid,
+//     pub sortop: Oid,
+//     pub nulls_first: bool,
+//     pub hashable: bool,
+// }
+// pub type GroupingSetKind = libc::c_uint;
 pub const GROUPING_SET_SETS: GroupingSetKind = 4;
 pub const GROUPING_SET_CUBE: GroupingSetKind = 3;
 pub const GROUPING_SET_ROLLUP: GroupingSetKind = 2;
 pub const GROUPING_SET_SIMPLE: GroupingSetKind = 1;
 pub const GROUPING_SET_EMPTY: GroupingSetKind = 0;
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct GroupingSet {
-    pub type_0: NodeTag,
-    pub kind: GroupingSetKind,
-    pub content: *mut List,
-    pub location: libc::c_int,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct GroupingSet {
+//     pub type_0: NodeTag,
+//     pub kind: GroupingSetKind,
+//     pub content: *mut List,
+//     pub location: libc::c_int,
+// }
 pub type CTEMaterialize = libc::c_uint;
 pub const CTEMaterializeNever: CTEMaterialize = 2;
 pub const CTEMaterializeAlways: CTEMaterialize = 1;
@@ -1005,24 +1005,24 @@ pub struct CTECycleClause {
     pub cycle_mark_collation: Oid,
     pub cycle_mark_neop: Oid,
 }
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct CommonTableExpr {
-    pub type_0: NodeTag,
-    pub ctename: *mut libc::c_char,
-    pub aliascolnames: *mut List,
-    pub ctematerialized: CTEMaterialize,
-    pub ctequery: *mut Node,
-    pub search_clause: *mut CTESearchClause,
-    pub cycle_clause: *mut CTECycleClause,
-    pub location: libc::c_int,
-    pub cterecursive: bool,
-    pub cterefcount: libc::c_int,
-    pub ctecolnames: *mut List,
-    pub ctecoltypes: *mut List,
-    pub ctecoltypmods: *mut List,
-    pub ctecolcollations: *mut List,
-}
+// #[derive(Copy, Clone)]
+// #[repr(C)]
+// pub struct CommonTableExpr {
+//     pub type_0: NodeTag,
+//     pub ctename: *mut libc::c_char,
+//     pub aliascolnames: *mut List,
+//     pub ctematerialized: CTEMaterialize,
+//     pub ctequery: *mut Node,
+//     pub search_clause: *mut CTESearchClause,
+//     pub cycle_clause: *mut CTECycleClause,
+//     pub location: libc::c_int,
+//     pub cterecursive: bool,
+//     pub cterefcount: libc::c_int,
+//     pub ctecolnames: *mut List,
+//     pub ctecoltypes: *mut List,
+//     pub ctecoltypmods: *mut List,
+//     pub ctecolcollations: *mut List,
+// }
 // pub type Relation = *mut RelationData;
 
 pub type CoerceParamHook =
@@ -1267,7 +1267,7 @@ pub unsafe extern "C" fn transformAggregateCall(
             } != 0
             {
                 let mut sortcl: *mut SortGroupClause = (*lc).ptr_value as *mut SortGroupClause;
-                if ((*sortcl).sortop != 0 as libc::c_int as Oid) as libc::c_int as bool == 0 {
+                if (*sortcl).sortop == 0 {
                     let mut expr: *mut Node = get_sortgroupclause_expr(sortcl, tlist);
                     let elevel_: libc::c_int = 21 as libc::c_int;
                     let mut __error: libc::c_int = 0;
@@ -1344,9 +1344,7 @@ unsafe extern "C" fn check_agglevels_and_constraints(
     let mut p_levelsup: *mut Index = 0 as *mut Index;
     let mut err: *const libc::c_char = 0 as *const libc::c_char;
     let mut errkind: bool = false;
-    let mut isAgg: bool = ((*(expr as *const Node)).tag as libc::c_uint
-        == T_Aggref as libc::c_int as libc::c_uint) as libc::c_int
-        as bool;
+    let mut isAgg: bool = (*(expr as *const Node)).tag == T_Aggref;
     if isAgg {
         let mut agg: *mut Aggref = expr as *mut Aggref;
         directargs = (*agg).aggdirectargs;
@@ -2229,13 +2227,13 @@ unsafe extern "C" fn check_ungrouped_columns(
     let mut context: check_ungrouped_columns_context = check_ungrouped_columns_context {
         pstate: 0 as *mut ParseState,
         qry: 0 as *mut Query,
-        hasJoinRTEs: 0,
+        hasJoinRTEs: false,
         groupClauses: 0 as *mut List,
         groupClauseCommonVars: 0 as *mut List,
-        have_non_var_grouping: 0,
+        have_non_var_grouping: false,
         func_grouped_rels: 0 as *mut *mut List,
         sublevels_up: 0,
-        in_agg_direct_args: 0,
+        in_agg_direct_args: false,
     };
     context.pstate = pstate;
     context.qry = qry;
@@ -2303,8 +2301,7 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
             if equal(
                 node as *const libc::c_void,
                 (*tle).expr as *const libc::c_void,
-            ) != 0
-            {
+            ) {
                 return false;
             }
             gl__state.i += 1;
@@ -2318,7 +2315,7 @@ unsafe extern "C" fn check_ungrouped_columns_walker(
         if (*var).varlevelsup != (*context).sublevels_up as Index {
             return false;
         }
-        if (*context).have_non_var_grouping == 0 || (*context).sublevels_up != 0 as libc::c_int {
+        if !(*context).have_non_var_grouping || (*context).sublevels_up != 0 {
             let mut gl__state_0: ForEachState = {
                 let mut init = ForEachState {
                     l: (*context).groupClauses,
